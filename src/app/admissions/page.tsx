@@ -52,7 +52,7 @@ export default function AdmissionsPage() {
       <div className="bg-gradient-to-r from-[#000080] to-[#4169E1] py-16 text-center text-white">
         <h1 className="text-4xl font-black mb-3">Admission Application</h1>
         <p className="text-blue-200 max-w-xl mx-auto">
-          2025/2026 Academic Session • Nursery, Primary, JSS &amp; SSS
+          2026/2027 Academic Session • Nursery, Primary, JSS &amp; SSS
         </p>
       </div>
 

@@ -254,7 +254,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Admissions</span>
-          <h2 className="mt-2 text-4xl font-black text-white mb-4">Now Enrolling for 2025/2026</h2>
+          <h2 className="mt-2 text-4xl font-black text-white mb-4">Now Enrolling for 2026/2027</h2>
           <p className="text-blue-200 mb-12 max-w-xl mx-auto">
             Secure your child's place in one of Oyo State's finest schools. Apply online in minutes — no paper forms needed.
           </p>
