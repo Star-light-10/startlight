@@ -336,8 +336,8 @@ export default function HomePage() {
               <div className="space-y-4">
                 {[
                   { icon: "📍", label: "Address", value: "Oke-Medina, Boroboro Area, Oyo State, Nigeria" },
-                  { icon: "📞", label: "Phone", value: "+234 (0) 800 000 0000" },
-                  { icon: "📧", label: "Email", value: "info@starlightmodelschool.edu.ng" },
+                  { icon: "📞", label: "Phone", value: "08138967797, 08056809200" },
+                  { icon: "📧", label: "Email", value: "starlightmodelschool10@gmail.com" },
                   { icon: "🕐", label: "Office Hours", value: "Monday – Friday: 8:00 AM – 4:00 PM" },
                 ].map((c) => (
                   <div key={c.label} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">

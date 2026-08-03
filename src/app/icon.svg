@@ -11,7 +11,8 @@
   </defs>
   <path d="M60 8 L108 28 L108 65 Q108 95 60 115 Q12 95 12 65 L12 28 Z" fill="url(#sg)" />
   <path d="M60 16 L100 33 L100 64 Q100 90 60 107 Q20 90 20 64 L20 33 Z" fill="#0a0a5c" />
-  <polygon points="60,25 68,48 92,48 73,61 80,84 60,71 40,84 47,61 28,48 52,48" fill="url(#stg)" />
+  <path d="M 55 25 A 22 22 0 1 0 77 47 A 26 26 0 1 1 55 25 Z" fill="url(#stg)" />
+  <polygon points="70,35 73,43 81,43 74,48 77,56 70,51 63,56 66,48 59,43 67,43" fill="url(#stg)" transform="scale(0.8) translate(25, 10)" />
   <path d="M38 82 L60 76 L82 82 L82 95 L60 89 L38 95 Z" fill="white" opacity="0.9" />
   <line x1="60" y1="76" x2="60" y2="89" stroke="#000080" stroke-width="1" />
 </svg>

@@ -195,11 +195,9 @@ export default function AdmissionsPage() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Religion</label>
-                <select className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
-                  <option value="">Select</option>
-                  <option>Christianity</option>
-                  <option>Islam</option>
-                  <option>Others</option>
+                <select defaultValue="Islam" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
+                  <option value="Islam">Islam</option>
+                  <option value="Others">Others</option>
                 </select>
               </div>
             </div>
