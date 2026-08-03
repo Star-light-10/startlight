@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { StarlightLogo } from "@/components/starlight-logo";
 
 export const metadata: Metadata = {
   title: "Starlight Model School | Oke-Medina, Boroboro, Oyo State",
@@ -16,9 +17,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center shadow-lg">
-                <span className="text-white font-black text-lg">★</span>
-              </div>
+              <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
               <div>
                 <p className="font-black text-[#000080] dark:text-white text-sm leading-none">STARLIGHT</p>
                 <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest uppercase">Model School</p>
@@ -140,9 +139,7 @@ export default function HomePage() {
             <div className="hidden lg:flex justify-center">
               <div className="relative">
                 <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-[#FFA500]/20 to-[#000080]/50 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col items-center justify-center gap-4 p-8">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#FFA500] to-[#FFD700] flex items-center justify-center shadow-lg shadow-[#FFA500]/50">
-                    <span className="text-4xl font-black text-white">★</span>
-                  </div>
+                  <StarlightLogo className="w-20 h-20 drop-shadow-2xl" />
                   <p className="text-white font-black text-xl text-center">STARLIGHT MODEL SCHOOL</p>
                   <p className="text-blue-200 text-sm text-center">Oke-Medina, Boroboro Area, Oyo State, Nigeria</p>
                   <div className="w-full h-px bg-white/20 my-2" />
@@ -374,9 +371,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center">
-                  <span className="text-white font-black text-lg">★</span>
-                </div>
+                <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
                 <div>
                   <p className="font-black text-white text-sm">STARLIGHT MODEL SCHOOL</p>
                   <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest">Oke-Medina, Boroboro, Oyo State</p>

@@ -36,13 +36,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {/* Global Header with logo */}
-        <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-3">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-3">
-            <StarlightLogo className="w-10 h-10" />
-            <h1 className="font-black text-[#000080] dark:text-white text-lg">Starlight Model School</h1>
-          </div>
-        </header>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -51,12 +44,6 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
-        {/* Footer */}
-        <footer className="bg-gray-950 text-white py-6 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs">
-            © {new Date().getFullYear()} Starlight Model School. All rights reserved.
-          </div>
-        </footer>
       </body>
     </html>
   );
