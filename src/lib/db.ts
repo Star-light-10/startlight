@@ -1,21 +1,11 @@
-import { Pool } from 'pg'
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
-  const connectionString = process.env.DATABASE_URL
-  
-  if (!connectionString) {
-    // Return a dummy client or throw an error for build time, but we just want to avoid crashing at build
-    return new PrismaClient()
-  }
-
-  const pool = new Pool({ connectionString })
-  const adapter = new PrismaPg(pool)
-  return new PrismaClient({ adapter })
+  return new PrismaClient()
 }
 
 declare global {
+  // eslint-disable-next-line no-var
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>
 }
 
