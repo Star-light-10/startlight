@@ -1,14 +1,14 @@
 import NextAuth from "next-auth"
 import authConfig from "./auth.config"
-
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
-export const { auth: middleware } = NextAuth({
+const { auth } = NextAuth({
   ...authConfig,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const role = auth?.user?.role
+      const role = (auth?.user as { role?: string })?.role
       const path = nextUrl.pathname
 
       // Protect /dashboard and /admin routes
@@ -47,6 +47,8 @@ export const { auth: middleware } = NextAuth({
     },
   },
 })
+
+export default auth
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
