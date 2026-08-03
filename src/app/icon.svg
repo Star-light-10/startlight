@@ -1,0 +1,17 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000080" />
+      <stop offset="100%" stop-color="#4169E1" />
+    </linearGradient>
+    <linearGradient id="stg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA500" />
+      <stop offset="100%" stop-color="#FFD700" />
+    </linearGradient>
+  </defs>
+  <path d="M60 8 L108 28 L108 65 Q108 95 60 115 Q12 95 12 65 L12 28 Z" fill="url(#sg)" />
+  <path d="M60 16 L100 33 L100 64 Q100 90 60 107 Q20 90 20 64 L20 33 Z" fill="#0a0a5c" />
+  <polygon points="60,25 68,48 92,48 73,61 80,84 60,71 40,84 47,61 28,48 52,48" fill="url(#stg)" />
+  <path d="M38 82 L60 76 L82 82 L82 95 L60 89 L38 95 Z" fill="white" opacity="0.9" />
+  <line x1="60" y1="76" x2="60" y2="89" stroke="#000080" stroke-width="1" />
+</svg>

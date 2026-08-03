@@ -1,12 +1,33 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+"use client"
 
-export const metadata: Metadata = {
-  title: "Admissions – Starlight Model School",
-  description: "Apply for admission to Starlight Model School, Oke-Medina, Boroboro, Oyo State. Nursery, Primary, JSS and SSS admissions open.",
-};
+import { useState, useRef } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { StarlightLogo } from "@/components/starlight-logo"
 
 export default function AdmissionsPage() {
+  const [passportPreview, setPassportPreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handlePassportUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size must be less than 2MB")
+        return
+      }
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image file (JPG, PNG)")
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPassportPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
@@ -14,9 +35,7 @@ export default function AdmissionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center shadow">
-                <span className="text-white font-black">★</span>
-              </div>
+              <StarlightLogo className="w-9 h-9" />
               <div>
                 <p className="font-black text-[#000080] dark:text-white text-xs">STARLIGHT MODEL SCHOOL</p>
                 <p className="text-[9px] text-[#FFA500] font-semibold tracking-widest">Admissions Portal</p>
@@ -59,17 +78,59 @@ export default function AdmissionsPage() {
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Personal Information</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-            Please fill in the applicant's correct details. Fields marked * are required.
+            Please fill in the applicant&apos;s correct details. Fields marked * are required.
           </p>
 
           <form className="space-y-6">
             {/* Passport Photo Upload */}
             <div className="flex justify-center mb-8">
               <div className="relative">
-                <div className="w-28 h-28 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-[#000080] transition-colors">
-                  <span className="text-3xl">📷</span>
-                  <span className="text-xs text-gray-400 mt-1 text-center px-2">Upload Passport Photo</span>
-                </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  id="passport-upload"
+                  onChange={handlePassportUpload}
+                />
+                <label
+                  htmlFor="passport-upload"
+                  className="block cursor-pointer"
+                >
+                  {passportPreview ? (
+                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-[#000080] shadow-lg group">
+                      <Image
+                        src={passportPreview}
+                        alt="Passport preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">Change Photo</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-28 h-28 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center hover:border-[#000080] hover:bg-blue-50 dark:hover:bg-gray-700 transition-all">
+                      <svg className="w-8 h-8 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="text-[10px] text-gray-400 text-center px-2 font-medium">Upload Passport</span>
+                    </div>
+                  )}
+                </label>
+                {passportPreview && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPassportPreview(null)
+                      if (fileInputRef.current) fileInputRef.current.value = ""
+                    }}
+                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 shadow-lg transition-colors"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             </div>
 
