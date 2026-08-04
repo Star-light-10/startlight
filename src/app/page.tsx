@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { StarlightLogo } from "@/components/starlight-logo";
 
 export const metadata: Metadata = {
@@ -63,6 +64,13 @@ export default function HomePage() {
           background: "linear-gradient(135deg, #000080 0%, #1a1a6e 30%, #0a0a50 60%, #000033 100%)",
         }}
       >
+        <Image
+          src="/images/school-1.jpg"
+          alt="School Background"
+          fill
+          className="object-cover opacity-10 mix-blend-screen pointer-events-none"
+          priority
+        />
         {/* Animated Background Circles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 right-10 w-72 h-72 bg-[#FFA500]/10 rounded-full blur-3xl animate-pulse" />
@@ -242,6 +250,50 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CAMPUS LIFE GALLERY ===== */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-900" id="gallery">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Campus Life</span>
+            <h2 className="mt-2 text-3xl md:text-4xl font-black text-gray-900 dark:text-white">
+              Experience Starlight
+            </h2>
+            <p className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+              A glimpse into our vibrant school environment, state-of-the-art facilities, and the daily lives of our brilliant students.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { src: "/images/school-2.jpg", alt: "Students in class", span: "md:col-span-2 lg:col-span-2 lg:row-span-2" },
+              { src: "/images/school-3.jpg", alt: "School building", span: "md:col-span-1" },
+              { src: "/images/school-4.jpg", alt: "Science Laboratory", span: "md:col-span-1" },
+              { src: "/images/school-5.jpg", alt: "Library", span: "md:col-span-1" },
+              { src: "/images/school-6.jpg", alt: "Playground", span: "md:col-span-1 lg:col-span-2" },
+              { src: "/images/school-7.jpg", alt: "School Bus", span: "md:col-span-1" },
+            ].map((img, i) => (
+              <div
+                key={i}
+                className={`relative group overflow-hidden rounded-3xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 ${img.span} h-64 md:h-auto min-h-[250px]`}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110 saturate-[1.1] contrast-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-6 left-6 right-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="font-bold text-lg">{img.alt}</p>
+                    <p className="text-sm text-[#FFA500]">Starlight Model School</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
