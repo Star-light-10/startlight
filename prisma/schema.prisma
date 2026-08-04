@@ -97,39 +97,42 @@ model VerificationToken {
 }
 
 model Class {
-  id              String           @id @default(cuid())
-  tenantId        String
-  tenant          Tenant           @relation(fields: [tenantId], references: [id])
-  name            String
-  section         String?
-  capacity        Int?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  students        StudentProfile[]
+  id            String           @id @default(cuid())
+  tenantId      String
+  tenant        Tenant           @relation(fields: [tenantId], references: [id])
+  name          String
+  section       String?
+  capacity      Int?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  students      StudentProfile[]
+  feeStructures FeeStructure[]
 }
 
 model Subject {
-  id                 String              @id @default(cuid())
-  tenantId           String
-  tenant             Tenant              @relation(fields: [tenantId], references: [id])
-  name               String
-  code               String?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  enrollments        SubjectEnrollment[]
+  id          String              @id @default(cuid())
+  tenantId    String
+  tenant      Tenant              @relation(fields: [tenantId], references: [id])
+  name        String
+  code        String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  enrollments SubjectEnrollment[]
 }
 
 model AcademicTerm {
-  id                 String              @id @default(cuid())
-  tenantId           String
-  tenant             Tenant              @relation(fields: [tenantId], references: [id])
-  name               String
-  startDate          DateTime
-  endDate            DateTime
-  isActive           Boolean             @default(false)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  enrollments        SubjectEnrollment[]
+  id            String              @id @default(cuid())
+  tenantId      String
+  tenant        Tenant              @relation(fields: [tenantId], references: [id])
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean             @default(false)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  enrollments   SubjectEnrollment[]
+  feeStructures FeeStructure[]
+  invoices      Invoice[]
 }
 
 model AdmissionApplication {
@@ -171,8 +174,9 @@ model StudentProfile {
 
   enrollments SubjectEnrollment[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invoices  Invoice[]
 }
 
 model TeacherProfile {
@@ -195,4 +199,53 @@ model SubjectEnrollment {
   createdAt DateTime       @default(now())
 
   @@unique([studentId, subjectId, termId])
+}
+
+enum InvoiceStatus {
+  PENDING
+  PARTIAL
+  PAID
+}
+
+model FeeStructure {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  amount      Float
+  classId     String
+  class       Class        @relation(fields: [classId], references: [id])
+  termId      String
+  term        AcademicTerm @relation(fields: [termId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, classId, termId])
+}
+
+model Invoice {
+  id        String         @id @default(cuid())
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id])
+  termId    String
+  term      AcademicTerm   @relation(fields: [termId], references: [id])
+
+  totalAmount Float
+  amountPaid  Float         @default(0)
+  status      InvoiceStatus @default(PENDING)
+
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+  amount    Float
+  method    String
+  reference String?
+  date      DateTime @default(now())
 }

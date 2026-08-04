@@ -35,6 +35,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 Admissions
               </a>
             </li>
+            <li>
+              <a href="/dashboard/finance" className="block px-4 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                Finance
+              </a>
+            </li>
           </ul>
         </nav>
       </aside>
