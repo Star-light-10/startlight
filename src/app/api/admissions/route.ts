@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
-import { supabaseAdmin } from "@/lib/supabase-admin"
+
+const CLOUDINARY_CLOUD_NAME = "jat0mm5x"
+const CLOUDINARY_UPLOAD_PRESET = "starlight_passports"
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,14 +31,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Upload passport photo to Supabase Storage
+    // Upload passport photo to Cloudinary
     let passportPhotoUrl: string | undefined
 
     if (passportFile && passportFile.size > 0) {
-      // Validate file
-      if (passportFile.size > 2 * 1024 * 1024) {
+      if (passportFile.size > 5 * 1024 * 1024) {
         return NextResponse.json(
-          { error: "Passport photo must be less than 2MB." },
+          { error: "Passport photo must be less than 5MB." },
           { status: 400 }
         )
       }
@@ -48,32 +49,29 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      const fileExt = passportFile.name.split(".").pop() || "jpg"
-      const fileName = `${Date.now()}_${firstName}_${lastName}.${fileExt}`
+      // Build multipart form for Cloudinary
+      const cloudinaryForm = new FormData()
+      cloudinaryForm.append("file", passportFile)
+      cloudinaryForm.append("upload_preset", CLOUDINARY_UPLOAD_PRESET)
+      cloudinaryForm.append("folder", "starlight_passports")
+      cloudinaryForm.append("public_id", `${firstName}_${lastName}_${Date.now()}`)
 
-      const arrayBuffer = await passportFile.arrayBuffer()
-      const buffer = Buffer.from(arrayBuffer)
+      const cloudRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: "POST", body: cloudinaryForm }
+      )
 
-      const { error: uploadError } = await supabaseAdmin.storage
-        .from("passports")
-        .upload(fileName, buffer, {
-          contentType: passportFile.type,
-          upsert: false,
-        })
-
-      if (uploadError) {
-        console.error("Upload error:", uploadError)
+      if (!cloudRes.ok) {
+        const errData = await cloudRes.json()
+        console.error("Cloudinary upload error:", errData)
         return NextResponse.json(
           { error: "Failed to upload passport photo. Please try again." },
           { status: 500 }
         )
       }
 
-      const { data: publicUrlData } = supabaseAdmin.storage
-        .from("passports")
-        .getPublicUrl(fileName)
-
-      passportPhotoUrl = publicUrlData.publicUrl
+      const cloudData = await cloudRes.json()
+      passportPhotoUrl = cloudData.secure_url
     }
 
     // Save to database
