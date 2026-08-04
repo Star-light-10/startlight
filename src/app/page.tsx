@@ -451,8 +451,17 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-xs">© 2025 Starlight Model School. All rights reserved.</p>
-            <p className="text-gray-500 text-xs">Powered by <span className="text-[#FFA500] font-semibold">Starlight EduTech SaaS</span></p>
+            <p className="text-gray-500 text-xs">© {new Date().getFullYear()} Starlight Model School. All rights reserved.</p>
+            <p className="text-gray-500 text-xs">Powered by{" "}
+              <a
+                href="https://www.elitecomputer.com.ng"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FFA500] font-semibold hover:text-white transition-colors"
+              >
+                ELITE COMPUTER TECH LINK
+              </a>
+            </p>
           </div>
         </div>
       </footer>
