@@ -3,11 +3,11 @@ import prisma from "@/lib/db"
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { action } = await request.json()
-    const applicationId = params.id
+    const { id: applicationId } = await params
 
     const application = await prisma.admissionApplication.findUnique({
       where: { id: applicationId },
