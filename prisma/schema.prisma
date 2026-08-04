@@ -18,6 +18,13 @@ enum Role {
   PARENT
 }
 
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+}
+
 
 
 model Tenant {
@@ -34,7 +41,8 @@ model Tenant {
   users       User[]
   classes     Class[]
   subjects    Subject[]
-  terms       AcademicTerm[]
+  terms        AcademicTerm[]
+  applications AdmissionApplication[]
 }
 
 model User {
@@ -119,4 +127,33 @@ model AcademicTerm {
   isActive  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AdmissionApplication {
+  id               String            @id @default(cuid())
+  tenantId         String?
+  tenant           Tenant?           @relation(fields: [tenantId], references: [id])
+
+  // Student Info
+  firstName        String
+  middleName       String?
+  lastName         String
+  dateOfBirth      DateTime
+  gender           String
+  religion         String
+  homeAddress      String
+
+  // Application Info
+  classApplyingFor String
+  passportPhotoUrl String?
+  status           ApplicationStatus @default(PENDING)
+
+  // Parent/Guardian Info
+  parentName       String
+  parentPhone      String
+  parentEmail      String?
+  parentOccupation String?
+
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 }

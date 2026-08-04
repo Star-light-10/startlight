@@ -7,6 +7,11 @@ import { StarlightLogo } from "@/components/starlight-logo"
 
 export default function AdmissionsPage() {
   const [passportPreview, setPassportPreview] = useState<string | null>(null)
+  const [passportFile, setPassportFile] = useState<File | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [applicationId, setApplicationId] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handlePassportUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,12 +25,80 @@ export default function AdmissionsPage() {
         alert("Please upload an image file (JPG, PNG)")
         return
       }
+      setPassportFile(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setPassportPreview(reader.result as string)
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setErrorMessage("")
+    setIsSubmitting(true)
+
+    try {
+      const form = e.currentTarget
+      const formData = new FormData(form)
+
+      // Attach passport file
+      if (passportFile) {
+        formData.set("passport", passportFile)
+      }
+
+      const res = await fetch("/api/admissions", {
+        method: "POST",
+        body: formData,
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setErrorMessage(data.error || "Submission failed. Please try again.")
+        return
+      }
+
+      setApplicationId(data.applicationId)
+      setIsSuccess(true)
+    } catch {
+      setErrorMessage("Network error. Please check your connection and try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Success screen
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-10 max-w-md w-full text-center">
+          <div className="w-20 h-20 mx-auto bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+            <svg className="w-10 h-10 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-2">Application Submitted!</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+            Your admission application has been received successfully. We will review it and get back to you shortly.
+          </p>
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6">
+            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Application ID</p>
+            <p className="text-lg font-mono font-bold text-[#000080] dark:text-[#FFA500]">{applicationId}</p>
+          </div>
+          <p className="text-xs text-gray-400 mb-6">
+            Please save this ID for future reference. You can use it to track the status of your application.
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-[#000080] hover:bg-[#000066] text-white font-bold rounded-xl transition-colors shadow-lg"
+          >
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -81,7 +154,13 @@ export default function AdmissionsPage() {
             Please fill in the applicant&apos;s correct details. Fields marked * are required.
           </p>
 
-          <form className="space-y-6">
+          {errorMessage && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm font-medium">
+              ⚠ {errorMessage}
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Passport Photo Upload */}
             <div className="flex justify-center mb-8">
               <div className="relative">
@@ -124,6 +203,7 @@ export default function AdmissionsPage() {
                     type="button"
                     onClick={() => {
                       setPassportPreview(null)
+                      setPassportFile(null)
                       if (fileInputRef.current) fileInputRef.current.value = ""
                     }}
                     className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 shadow-lg transition-colors"
@@ -137,26 +217,26 @@ export default function AdmissionsPage() {
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">First Name *</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Adaeze" />
+                <input name="firstName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Adaeze" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Middle Name</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Chioma" />
+                <input name="middleName" type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Chioma" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Last Name *</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Okafor" />
+                <input name="lastName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Okafor" />
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Date of Birth *</label>
-                <input type="date" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
+                <input name="dateOfBirth" type="date" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Gender *</label>
-                <select className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
+                <select name="gender" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -167,7 +247,7 @@ export default function AdmissionsPage() {
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Class Applying For *</label>
-                <select className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
+                <select name="classApplyingFor" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
                   <option value="">Select Class</option>
                   <optgroup label="Nursery">
                     <option>Nursery 1</option>
@@ -195,7 +275,7 @@ export default function AdmissionsPage() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Religion</label>
-                <select defaultValue="Islam" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
+                <select name="religion" defaultValue="Islam" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
                   <option value="Islam">Islam</option>
                   <option value="Others">Others</option>
                 </select>
@@ -204,7 +284,7 @@ export default function AdmissionsPage() {
 
             <div>
               <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Home Address *</label>
-              <textarea rows={2} className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080] resize-none" placeholder="Full residential address" />
+              <textarea name="homeAddress" rows={2} required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080] resize-none" placeholder="Full residential address" />
             </div>
 
             <div className="border-t border-gray-100 dark:border-gray-800 pt-6">
@@ -212,19 +292,19 @@ export default function AdmissionsPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Parent/Guardian Name *</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="Full name" />
+                  <input name="parentName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="Full name" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Phone Number *</label>
-                  <input type="tel" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="08012345678" />
+                  <input name="parentPhone" type="tel" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="08012345678" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Email Address</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="parent@email.com" />
+                  <input name="parentEmail" type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="parent@email.com" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Occupation</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Civil Servant" />
+                  <input name="parentOccupation" type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Civil Servant" />
                 </div>
               </div>
             </div>
@@ -232,14 +312,25 @@ export default function AdmissionsPage() {
             <div className="flex justify-end pt-4">
               <button
                 type="submit"
-                className="px-10 py-4 bg-[#000080] hover:bg-[#000066] text-white font-bold rounded-xl transition-colors shadow-lg"
+                disabled={isSubmitting}
+                className="px-10 py-4 bg-[#000080] hover:bg-[#000066] disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors shadow-lg flex items-center gap-3"
               >
-                Save & Continue →
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application →"
+                )}
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }
