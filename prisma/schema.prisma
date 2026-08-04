@@ -105,7 +105,7 @@ model Class {
   capacity        Int?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
-  studentProfiles StudentProfile[]
+  students        StudentProfile[]
 }
 
 model Subject {
@@ -116,7 +116,7 @@ model Subject {
   code               String?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
-  subjectEnrollments SubjectEnrollment[]
+  enrollments        SubjectEnrollment[]
 }
 
 model AcademicTerm {
@@ -129,7 +129,7 @@ model AcademicTerm {
   isActive           Boolean             @default(false)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
-  subjectEnrollments SubjectEnrollment[]
+  enrollments        SubjectEnrollment[]
 }
 
 model AdmissionApplication {
