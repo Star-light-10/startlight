@@ -25,55 +25,55 @@ enum ApplicationStatus {
   REJECTED
 }
 
-
-
 model Tenant {
-  id          String   @id @default(cuid())
-  name        String
-  domain      String?  @unique
-  logoUrl     String?
-  address     String?
-  phone       String?
-  email       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  users       User[]
-  classes     Class[]
-  subjects    Subject[]
+  id        String   @id @default(cuid())
+  name      String
+  domain    String?  @unique
+  logoUrl   String?
+  address   String?
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users        User[]
+  classes      Class[]
+  subjects     Subject[]
   terms        AcademicTerm[]
   applications AdmissionApplication[]
 }
 
 model User {
-  id            String    @id @default(cuid())
-  tenantId      String?   
-  tenant        Tenant?   @relation(fields: [tenantId], references: [id])
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(STUDENT)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
+  id             String          @id @default(cuid())
+  tenantId       String?
+  tenant         Tenant?         @relation(fields: [tenantId], references: [id])
+  name           String?
+  email          String?         @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  role           Role            @default(STUDENT)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  accounts       Account[]
+  sessions       Session[]
+  studentProfile StudentProfile?
+  teacherProfile TeacherProfile?
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -97,51 +97,54 @@ model VerificationToken {
 }
 
 model Class {
-  id        String   @id @default(cuid())
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  name      String   
-  section   String?  
-  capacity  Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String           @id @default(cuid())
+  tenantId        String
+  tenant          Tenant           @relation(fields: [tenantId], references: [id])
+  name            String
+  section         String?
+  capacity        Int?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  studentProfiles StudentProfile[]
 }
 
 model Subject {
-  id        String   @id @default(cuid())
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  name      String
-  code      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String              @id @default(cuid())
+  tenantId           String
+  tenant             Tenant              @relation(fields: [tenantId], references: [id])
+  name               String
+  code               String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  subjectEnrollments SubjectEnrollment[]
 }
 
 model AcademicTerm {
-  id        String   @id @default(cuid())
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  name      String   
-  startDate DateTime
-  endDate   DateTime
-  isActive  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String              @id @default(cuid())
+  tenantId           String
+  tenant             Tenant              @relation(fields: [tenantId], references: [id])
+  name               String
+  startDate          DateTime
+  endDate            DateTime
+  isActive           Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  subjectEnrollments SubjectEnrollment[]
 }
 
 model AdmissionApplication {
-  id               String            @id @default(cuid())
-  tenantId         String?
-  tenant           Tenant?           @relation(fields: [tenantId], references: [id])
+  id       String  @id @default(cuid())
+  tenantId String?
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
 
   // Student Info
-  firstName        String
-  middleName       String?
-  lastName         String
-  dateOfBirth      DateTime
-  gender           String
-  religion         String
-  homeAddress      String
+  firstName   String
+  middleName  String?
+  lastName    String
+  dateOfBirth DateTime
+  gender      String
+  religion    String
+  homeAddress String
 
   // Application Info
   classApplyingFor String
@@ -154,6 +157,42 @@ model AdmissionApplication {
   parentEmail      String?
   parentOccupation String?
 
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentProfile {
+  id              String @id @default(cuid())
+  userId          String @unique
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admissionNumber String @unique
+  classId         String
+  class           Class  @relation(fields: [classId], references: [id])
+
+  enrollments SubjectEnrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeacherProfile {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeId String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SubjectEnrollment {
+  id        String         @id @default(cuid())
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  termId    String
+  term      AcademicTerm   @relation(fields: [termId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([studentId, subjectId, termId])
 }
