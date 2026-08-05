@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { StarlightLogo } from "@/components/starlight-logo";
+import ContactForm from "@/components/contact-form";
 
 export const metadata: Metadata = {
   title: "Starlight Model School | Oke-Medina, Boroboro, Oyo State",
@@ -401,17 +402,7 @@ export default function HomePage() {
             </div>
             <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8">
               <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-6">Send a Message</h3>
-              <form className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
-                  <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
-                </div>
-                <input type="email" placeholder="Email Address" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
-                <textarea rows={4} placeholder="Your Message" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080] resize-none" />
-                <button type="submit" className="w-full py-3 bg-[#000080] hover:bg-[#000066] text-white font-bold rounded-xl transition-colors">
-                  Send Message
-                </button>
-              </form>
+              <ContactForm />
             </div>
           </div>
         </div>

@@ -1,9 +1,11 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { StarlightLogo } from "@/components/starlight-logo"
+
+const STORAGE_KEY = "starlight_admission_form"
 
 export default function AdmissionsPage() {
   const [passportPreview, setPassportPreview] = useState<string | null>(null)
@@ -13,6 +15,45 @@ export default function AdmissionsPage() {
   const [applicationId, setApplicationId] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  // Restore saved form data on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved && formRef.current) {
+        const data = JSON.parse(saved)
+        const form = formRef.current
+        Object.entries(data).forEach(([key, value]) => {
+          const el = form.elements.namedItem(key) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null
+          if (el && typeof value === "string") {
+            el.value = value
+          }
+        })
+        // Restore passport preview if saved
+        if (data._passportPreview) {
+          setPassportPreview(data._passportPreview)
+        }
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, [])
+
+  // Save form data on every change
+  const saveProgress = useCallback(() => {
+    if (!formRef.current) return
+    const form = formRef.current
+    const formData = new FormData(form)
+    const data: Record<string, string> = {}
+    formData.forEach((val, key) => {
+      if (typeof val === "string") data[key] = val
+    })
+    // Also save passport preview
+    if (passportPreview) data._passportPreview = passportPreview
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  }, [passportPreview])
+
 
   const handlePassportUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -85,6 +126,7 @@ export default function AdmissionsPage() {
       }
 
       setApplicationId(data.applicationId)
+      localStorage.removeItem(STORAGE_KEY)
       setIsSuccess(true)
     } catch {
       setErrorMessage("Network error. Please check your connection and try again.")
@@ -184,7 +226,7 @@ export default function AdmissionsPage() {
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form ref={formRef} className="space-y-6" onSubmit={handleSubmit} onChange={saveProgress}>
             {/* Passport Photo Upload */}
             <div className="flex justify-center mb-8">
               <div className="relative">
