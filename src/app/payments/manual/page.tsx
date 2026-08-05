@@ -3,9 +3,9 @@
 import { useState } from "react"
 
 const BANK_DETAILS = {
-  bankName: "BANK NAME TO BE PROVIDED",
-  accountName: "STARLIGHT MODEL SCHOOL",
-  accountNumber: "XXXX-XXXX-XXXX",
+  bankName: "First Bank of Nigeria",
+  accountName: "YAKUB KHADIJAT TITILOPE",
+  accountNumber: "3056744562",
 }
 
 const SCHOOL_WHATSAPP = "2348000000000" // Replace with school WhatsApp number
