@@ -191,7 +191,7 @@ export default function ManualPaymentPage() {
 
             <div style={{ display: "grid", gap: "1rem" }}>
               {[
-                { id: "studentName", label: "Full Name *", type: "text", placeholder: "e.g. Lawal Akinlabi Mohammed" },
+                { id: "studentName", label: "Full Name *", type: "text", placeholder: "e.g. Aisha Abdullahi Abolore" },
                 { id: "matricNumber", label: "Matric / Admission Number *", type: "text", placeholder: "e.g. SML/2026/001" },
                 { id: "studentId", label: "Student ID (from profile)", type: "text", placeholder: "Your internal student ID" },
                 { id: "amountPaid", label: "Amount Paid (₦) *", type: "number", placeholder: "e.g. 50000" },
