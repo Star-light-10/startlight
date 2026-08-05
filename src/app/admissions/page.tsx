@@ -40,12 +40,36 @@ export default function AdmissionsPage() {
     setIsSubmitting(true)
 
     try {
+      let passportPhotoUrl = ""
+
+      // Upload passport to Cloudinary directly from browser
+      if (passportFile) {
+        const cloudForm = new FormData()
+        cloudForm.append("file", passportFile)
+        cloudForm.append("upload_preset", "starlight_passports")
+        cloudForm.append("folder", "starlight_passports")
+
+        const cloudRes = await fetch(
+          "https://api.cloudinary.com/v1_1/jat0mm5x/image/upload",
+          { method: "POST", body: cloudForm }
+        )
+
+        if (!cloudRes.ok) {
+          setErrorMessage("Failed to upload passport photo. Please try again.")
+          return
+        }
+
+        const cloudData = await cloudRes.json()
+        passportPhotoUrl = cloudData.secure_url
+      }
+
       const form = e.currentTarget
       const formData = new FormData(form)
 
-      // Attach passport file
-      if (passportFile) {
-        formData.set("passport", passportFile)
+      // Remove the raw file, send the Cloudinary URL instead
+      formData.delete("passport")
+      if (passportPhotoUrl) {
+        formData.set("passportPhotoUrl", passportPhotoUrl)
       }
 
       const res = await fetch("/api/admissions", {

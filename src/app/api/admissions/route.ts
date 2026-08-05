@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     const parentEmail = (formData.get("parentEmail") as string) || undefined
     const parentOccupation = (formData.get("parentOccupation") as string) || undefined
     const passportFile = formData.get("passport") as File | null
+    const passportPhotoUrl = (formData.get("passportPhotoUrl") as string) || undefined
 
     // Validate required fields
     if (!firstName || !lastName || !dateOfBirth || !gender || !homeAddress || !classApplyingFor || !parentName || !parentPhone) {
@@ -31,10 +32,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Upload passport photo to Cloudinary
-    let passportPhotoUrl: string | undefined
+    // Use the Cloudinary URL sent from client-side upload
+    // Fallback: if a file was sent directly, upload it server-side
+    let finalPhotoUrl = passportPhotoUrl
 
-    if (passportFile && passportFile.size > 0) {
+    if (!finalPhotoUrl && passportFile && passportFile.size > 0) {
       if (passportFile.size > 5 * 1024 * 1024) {
         return NextResponse.json(
           { error: "Passport photo must be less than 5MB." },
@@ -42,36 +44,20 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      if (!passportFile.type.startsWith("image/")) {
-        return NextResponse.json(
-          { error: "Passport photo must be an image file." },
-          { status: 400 }
-        )
-      }
-
-      // Build multipart form for Cloudinary
       const cloudinaryForm = new FormData()
       cloudinaryForm.append("file", passportFile)
       cloudinaryForm.append("upload_preset", CLOUDINARY_UPLOAD_PRESET)
       cloudinaryForm.append("folder", "starlight_passports")
-      cloudinaryForm.append("public_id", `${firstName}_${lastName}_${Date.now()}`)
 
       const cloudRes = await fetch(
         `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
         { method: "POST", body: cloudinaryForm }
       )
 
-      if (!cloudRes.ok) {
-        const errData = await cloudRes.json()
-        console.error("Cloudinary upload error:", errData)
-        return NextResponse.json(
-          { error: "Failed to upload passport photo. Please try again." },
-          { status: 500 }
-        )
+      if (cloudRes.ok) {
+        const cloudData = await cloudRes.json()
+        finalPhotoUrl = cloudData.secure_url
       }
-
-      const cloudData = await cloudRes.json()
-      passportPhotoUrl = cloudData.secure_url
     }
 
     // Save to database
@@ -85,7 +71,7 @@ export async function POST(request: NextRequest) {
         religion: religion || "Islam",
         homeAddress,
         classApplyingFor,
-        passportPhotoUrl,
+        passportPhotoUrl: finalPhotoUrl,
         parentName,
         parentPhone,
         parentEmail,
