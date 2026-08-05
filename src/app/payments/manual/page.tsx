@@ -8,7 +8,7 @@ const BANK_DETAILS = {
   accountNumber: "3056744562",
 }
 
-const SCHOOL_WHATSAPP = "2348000000000" // Replace with school WhatsApp number
+const SCHOOL_WHATSAPP = "2348056809200"
 
 const PURPOSE_OPTIONS = [
   { value: "school_fees", label: "School Fees" },
