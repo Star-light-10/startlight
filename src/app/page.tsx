@@ -435,8 +435,15 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-sm mb-4 text-[#FFA500]">Portals</h4>
               <ul className="space-y-2">
-                {["Admin Login", "Teacher Login", "Student Login", "Parent Login", "CBT Portal", "Library"].map((l) => (
-                  <li key={l}><a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">{l}</a></li>
+                {[
+                  { name: "Admin Login", path: "/login" },
+                  { name: "Teacher Login", path: "/login" },
+                  { name: "Student Login", path: "/login" },
+                  { name: "Parent Login", path: "/login" },
+                  { name: "CBT Portal", path: "/login" },
+                  { name: "Library", path: "/login" }
+                ].map((l) => (
+                  <li key={l.name}><a href={l.path} className="text-gray-400 hover:text-white text-sm transition-colors">{l.name}</a></li>
                 ))}
               </ul>
             </div>
