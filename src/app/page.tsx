@@ -119,9 +119,9 @@ export default function HomePage() {
           {/* ── PORTAL LOGIN CARDS ── */}
           <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {[
-              { title: "Admin",   desc: "Management &amp; records",        icon: "🏫", href: "/dashboard", bg: "from-[#000080] to-[#1e3a8a]" },
-              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨\u200d🏫", href: "/login",     bg: "from-[#b45309] to-[#d97706]" },
-              { title: "Student", desc: "Results &amp; timetable",          icon: "👨\u200d🎓", href: "/login",     bg: "from-[#065f46] to-[#047857]" },
+              { title: "Admin",   desc: "Management &amp; records",        icon: "🏫", href: "/login", bg: "from-[#000080] to-[#1e3a8a]" },
+              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨\u200d🏫", href: "/login", bg: "from-[#b45309] to-[#d97706]" },
+              { title: "Student", desc: "Results &amp; timetable",          icon: "👨\u200d🎓", href: "/login", bg: "from-[#065f46] to-[#047857]" },
               { title: "Parent",  desc: "Track child&apos;s progress",    icon: "👨\u200d👩\u200d👧", href: "/login", bg: "from-[#581c87] to-[#7e22ce]" },
             ].map((portal) => (
               <Link
@@ -227,12 +227,12 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { src: "/images/grad.png", alt: "Graduation Ceremony", span: "md:col-span-2 lg:col-span-2 lg:row-span-2 border-4 border-[#FFA500]/50 hover:border-[#FFA500]", isSpecial: true },
-              { src: "/images/students.png", alt: "Our Bright Students", span: "md:col-span-1 border-4 border-[#000080]/50 hover:border-[#000080]", isSpecial: true },
-              { src: "/images/school-4.jpg", alt: "Science Laboratory", span: "md:col-span-1 border border-gray-200/50" },
-              { src: "/images/school-5.jpg", alt: "Library", span: "md:col-span-1 border border-gray-200/50" },
-              { src: "/images/school-6.jpg", alt: "Playground", span: "md:col-span-1 lg:col-span-2 border border-gray-200/50" },
-              { src: "/images/school-7.jpg", alt: "School Bus", span: "md:col-span-1 border border-gray-200/50" },
+              { src: "/images/grad.png",      alt: "Graduation Ceremony",  span: "md:col-span-2 lg:col-span-2 lg:row-span-2 border-4 border-[#FFA500]/50 hover:border-[#FFA500]", isSpecial: true },
+              { src: "/images/students.png",  alt: "Our Bright Students",  span: "md:col-span-1 border-4 border-[#000080]/50 hover:border-[#000080]", isSpecial: true },
+              { src: "/images/school-3.png",  alt: "School Activities",    span: "md:col-span-1 border border-gray-200/50" },
+              { src: "/images/school-4.png",  alt: "School Community",     span: "md:col-span-1 border border-gray-200/50" },
+              { src: "/images/school-5.png",  alt: "Student Life",         span: "md:col-span-1 lg:col-span-2 border border-gray-200/50" },
+              { src: "/images/school-6.png",  alt: "Campus",               span: "md:col-span-1 border border-gray-200/50" },
             ].map((img, i) => (
               <div
                 key={i}
