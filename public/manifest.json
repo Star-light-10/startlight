@@ -1,0 +1,41 @@
+{
+  "name": "Starlight Model School",
+  "short_name": "Starlight SMS",
+  "description": "School Management System for Starlight Model School",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000080",
+  "theme_color": "#000080",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Apply for Admission",
+      "short_name": "Admissions",
+      "description": "Submit an admission application",
+      "url": "/admissions",
+      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open the admin management panel",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+    }
+  ]
+}

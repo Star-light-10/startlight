@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -14,13 +14,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#000080",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Starlight Model School - Management System",
-  description: "A digital ecosystem for education",
+  title: "Starlight Model School",
+  description: "School Management System — Admissions, Students, Finance & More",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Starlight SMS",
+  },
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    apple: "/icon-192.jpg",
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 
