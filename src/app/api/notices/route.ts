@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/db"
+import { auth } from "@/auth"
 
 export async function GET() {
   try {
@@ -14,6 +15,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const session = await auth()
     const body = await req.json()
     const { title, content, audience } = body
 
@@ -21,11 +23,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    // Get or create a system user ID for the announcement author
+    let authorId = session?.user?.id
+    if (!authorId) {
+      // Fallback: find any admin user to use as author
+      const adminUser = await prisma.user.findFirst({
+        where: { role: { in: ["SUPER_ADMIN", "SCHOOL_OWNER", "PRINCIPAL"] } }
+      })
+      authorId = adminUser?.id
+    }
+
+    if (!authorId) {
+      return NextResponse.json({ error: "Could not determine author. Please log in." }, { status: 401 })
+    }
+
     const notice = await prisma.announcement.create({
       data: {
         title,
         content,
         audience,
+        authorId,
       },
     })
     
