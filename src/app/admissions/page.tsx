@@ -7,6 +7,26 @@ import { StarlightLogo } from "@/components/starlight-logo"
 
 const STORAGE_KEY = "starlight_admission_form"
 
+const inputClass =
+  "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080] transition"
+
+const labelClass =
+  "block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5"
+
+function SectionHeader({ number, title, subtitle }: { number: number; title: string; subtitle?: string }) {
+  return (
+    <div className="flex items-start gap-4 mb-6">
+      <div className="w-8 h-8 rounded-full bg-[#000080] text-white flex items-center justify-center text-sm font-black flex-shrink-0 mt-0.5">
+        {number}
+      </div>
+      <div>
+        <h2 className="text-lg font-black text-gray-900 dark:text-white">{title}</h2>
+        {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{subtitle}</p>}
+      </div>
+    </div>
+  )
+}
+
 export default function AdmissionsPage() {
   const [passportPreview, setPassportPreview] = useState<string | null>(null)
   const [passportFile, setPassportFile] = useState<File | null>(null)
@@ -26,21 +46,15 @@ export default function AdmissionsPage() {
         const form = formRef.current
         Object.entries(data).forEach(([key, value]) => {
           const el = form.elements.namedItem(key) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null
-          if (el && typeof value === "string") {
-            el.value = value
-          }
+          if (el && typeof value === "string") el.value = value
         })
-        // Restore passport preview if saved
-        if (data._passportPreview) {
-          setPassportPreview(data._passportPreview)
-        }
+        if (data._passportPreview) setPassportPreview(data._passportPreview)
       }
     } catch {
       // ignore parse errors
     }
   }, [])
 
-  // Save form data on every change
   const saveProgress = useCallback(() => {
     if (!formRef.current) return
     const form = formRef.current
@@ -49,11 +63,9 @@ export default function AdmissionsPage() {
     formData.forEach((val, key) => {
       if (typeof val === "string") data[key] = val
     })
-    // Also save passport preview
     if (passportPreview) data._passportPreview = passportPreview
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
   }, [passportPreview])
-
 
   const handlePassportUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -68,9 +80,7 @@ export default function AdmissionsPage() {
       }
       setPassportFile(file)
       const reader = new FileReader()
-      reader.onloadend = () => {
-        setPassportPreview(reader.result as string)
-      }
+      reader.onloadend = () => setPassportPreview(reader.result as string)
       reader.readAsDataURL(file)
     }
   }
@@ -110,7 +120,7 @@ export default function AdmissionsPage() {
     }
   }
 
-  // Success screen
+  // ── Success Screen ──────────────────────────────────────────────────────────
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
@@ -142,11 +152,12 @@ export default function AdmissionsPage() {
     )
   }
 
+  // ── Main Form ───────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <StarlightLogo className="w-9 h-9" />
@@ -163,48 +174,35 @@ export default function AdmissionsPage() {
       </header>
 
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-[#000080] to-[#4169E1] py-16 text-center text-white">
-        <h1 className="text-4xl font-black mb-3">Admission Application</h1>
-        <p className="text-blue-200 max-w-xl mx-auto">
-          2026/2027 Academic Session • Nursery, Primary, JSS &amp; SSS
-        </p>
+      <div className="bg-gradient-to-r from-[#000080] to-[#4169E1] py-12 text-center text-white">
+        <h1 className="text-3xl font-black mb-2">Admission Application</h1>
+        <p className="text-blue-200 text-sm">2026/2027 Academic Session • Nursery, Primary, JSS &amp; SSS</p>
       </div>
 
-      {/* Progress Steps */}
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-center gap-0 mb-12">
-          {["Personal Info", "Academic History", "Documents", "Payment", "Submit"].map((step, i, arr) => (
-            <div key={step} className="flex items-center">
-              <div className="flex flex-col items-center">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${i === 0 ? "bg-[#000080] text-white" : "bg-gray-200 dark:bg-gray-700 text-gray-500"}`}>
-                  {i + 1}
-                </div>
-                <span className="text-xs mt-1 text-gray-500 dark:text-gray-400 hidden sm:block">{step}</span>
-              </div>
-              {i < arr.length - 1 && (
-                <div className={`h-px w-12 sm:w-16 mx-1 ${i === 0 ? "bg-[#000080]" : "bg-gray-200 dark:bg-gray-700"}`} />
-              )}
-            </div>
-          ))}
-        </div>
+      {/* Form Card */}
+      <div className="max-w-3xl mx-auto px-4 py-10">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden">
 
-        {/* Step 1: Application Form */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8">
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Personal Information</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-            Please fill in the applicant&apos;s correct details. Fields marked * are required.
-          </p>
+          {/* Form intro */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-100 dark:border-blue-800 px-8 py-4">
+            <p className="text-sm text-blue-800 dark:text-blue-300">
+              Please fill in all required fields marked with <span className="font-bold">*</span>. Your progress is saved automatically.
+            </p>
+          </div>
 
+          {/* Error Message */}
           {errorMessage && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm font-medium">
+            <div className="mx-8 mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm font-medium">
               ⚠ {errorMessage}
             </div>
           )}
 
-          <form ref={formRef} className="space-y-6" onSubmit={handleSubmit} onChange={saveProgress}>
-            {/* Passport Photo Upload */}
-            <div className="flex justify-center mb-8">
-              <div className="relative">
+          <form ref={formRef} onSubmit={handleSubmit} onChange={saveProgress} className="px-8 py-8 space-y-10">
+
+            {/* ── Section 1: Passport Photo ── */}
+            <div>
+              <SectionHeader number={1} title="Passport Photograph" subtitle="Upload a clear, recent passport-sized photo of the applicant." />
+              <div className="flex flex-col items-center gap-3">
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -213,29 +211,21 @@ export default function AdmissionsPage() {
                   id="passport-upload"
                   onChange={handlePassportUpload}
                 />
-                <label
-                  htmlFor="passport-upload"
-                  className="block cursor-pointer"
-                >
+                <label htmlFor="passport-upload" className="block cursor-pointer">
                   {passportPreview ? (
-                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-[#000080] shadow-lg group">
-                      <Image
-                        src={passportPreview}
-                        alt="Passport preview"
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[#000080] shadow-lg group">
+                      <Image src={passportPreview} alt="Passport preview" fill className="object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">Change Photo</span>
+                        <span className="text-white text-xs font-bold">Change</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="w-28 h-28 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center hover:border-[#000080] hover:bg-blue-50 dark:hover:bg-gray-700 transition-all">
+                    <div className="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-800 border-4 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center hover:border-[#000080] hover:bg-blue-50 dark:hover:bg-gray-700 transition-all">
                       <svg className="w-8 h-8 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      <span className="text-[10px] text-gray-400 text-center px-2 font-medium">Upload Passport</span>
+                      <span className="text-[10px] text-gray-400 text-center px-2 font-medium">Upload Photo</span>
                     </div>
                   )}
                 </label>
@@ -247,128 +237,198 @@ export default function AdmissionsPage() {
                       setPassportFile(null)
                       if (fileInputRef.current) fileInputRef.current.value = ""
                     }}
-                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 shadow-lg transition-colors"
+                    className="text-xs text-red-500 hover:text-red-700 font-semibold transition-colors"
                   >
-                    ✕
+                    Remove photo
                   </button>
                 )}
+                <p className="text-xs text-gray-400">JPG, PNG or WEBP • Max 2MB</p>
               </div>
             </div>
 
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">First Name *</label>
-                <input name="firstName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Aisha" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Middle Name</label>
-                <input name="middleName" type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Nafisat" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Last Name *</label>
-                <input name="lastName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Abdullahi" />
-              </div>
-            </div>
+            <hr className="border-gray-100 dark:border-gray-800" />
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Date of Birth *</label>
-                <input name="dateOfBirth" type="date" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Gender *</label>
-                <select name="gender" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Class Applying For *</label>
-                <select name="classApplyingFor" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
-                  <option value="">Select Class</option>
-                  <optgroup label="Nursery">
-                    <option>Nursery 1</option>
-                    <option>Nursery 2</option>
-                  </optgroup>
-                  <optgroup label="Primary">
-                    <option>Primary 1</option>
-                    <option>Primary 2</option>
-                    <option>Primary 3</option>
-                    <option>Primary 4</option>
-                    <option>Primary 5</option>
-                    <option>Primary 6</option>
-                  </optgroup>
-                  <optgroup label="Junior Secondary">
-                    <option>JSS 1</option>
-                    <option>JSS 2</option>
-                    <option>JSS 3</option>
-                  </optgroup>
-                  <optgroup label="Senior Secondary">
-                    <option>SSS 1</option>
-                    <option>SSS 2</option>
-                    <option>SSS 3</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Religion</label>
-                <select name="religion" defaultValue="Islam" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
-                  <option value="Islam">Islam</option>
-                  <option value="Others">Others</option>
-                </select>
-              </div>
-            </div>
-
+            {/* ── Section 2: Personal Information ── */}
             <div>
-              <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Home Address *</label>
-              <textarea name="homeAddress" rows={2} required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080] resize-none" placeholder="Full residential address" />
+              <SectionHeader number={2} title="Personal Information" subtitle="Enter the applicant's biodata exactly as it appears on official documents." />
+              <div className="space-y-4">
+                <div className="grid sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className={labelClass}>First Name *</label>
+                    <input name="firstName" type="text" required className={inputClass} placeholder="e.g. Aisha" />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Middle Name</label>
+                    <input name="middleName" type="text" className={inputClass} placeholder="e.g. Nafisat" />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Last Name *</label>
+                    <input name="lastName" type="text" required className={inputClass} placeholder="e.g. Abdullahi" />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className={labelClass}>Date of Birth *</label>
+                    <input name="dateOfBirth" type="date" required className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Gender *</label>
+                    <select name="gender" required className={inputClass}>
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Religion</label>
+                    <select name="religion" defaultValue="Islam" className={inputClass}>
+                      <option value="Islam">Islam</option>
+                      <option value="Christianity">Christianity</option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Home Address *</label>
+                  <textarea name="homeAddress" rows={2} required className={`${inputClass} resize-none`} placeholder="Full residential address" />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelClass}>Class Applying For *</label>
+                    <select name="classApplyingFor" required className={inputClass}>
+                      <option value="">Select Class</option>
+                      <optgroup label="Nursery">
+                        <option>Nursery 1</option>
+                        <option>Nursery 2</option>
+                      </optgroup>
+                      <optgroup label="Primary">
+                        <option>Primary 1</option>
+                        <option>Primary 2</option>
+                        <option>Primary 3</option>
+                        <option>Primary 4</option>
+                        <option>Primary 5</option>
+                        <option>Primary 6</option>
+                      </optgroup>
+                      <optgroup label="Junior Secondary">
+                        <option>JSS 1</option>
+                        <option>JSS 2</option>
+                        <option>JSS 3</option>
+                      </optgroup>
+                      <optgroup label="Senior Secondary">
+                        <option>SSS 1</option>
+                        <option>SSS 2</option>
+                        <option>SSS 3</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelClass}>State of Origin</label>
+                    <input name="stateOfOrigin" type="text" className={inputClass} placeholder="e.g. Oyo State" />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="border-t border-gray-100 dark:border-gray-800 pt-6">
-              <h3 className="font-black text-gray-900 dark:text-white mb-4">Parent / Guardian Information</h3>
+            <hr className="border-gray-100 dark:border-gray-800" />
+
+            {/* ── Section 3: Parent / Guardian ── */}
+            <div>
+              <SectionHeader number={3} title="Parent / Guardian Information" subtitle="Provide the contact details of the applicant's parent or guardian." />
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Parent/Guardian Name *</label>
-                  <input name="parentName" type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="Full name" />
+                  <label className={labelClass}>Full Name *</label>
+                  <input name="parentName" type="text" required className={inputClass} placeholder="Parent or guardian full name" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Phone Number *</label>
-                  <input name="parentPhone" type="tel" required className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="08012345678" />
+                  <label className={labelClass}>Phone Number *</label>
+                  <input name="parentPhone" type="tel" required className={inputClass} placeholder="08012345678" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Email Address</label>
-                  <input name="parentEmail" type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="parent@email.com" />
+                  <label className={labelClass}>Email Address</label>
+                  <input name="parentEmail" type="email" className={inputClass} placeholder="parent@email.com" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">Occupation</label>
-                  <input name="parentOccupation" type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" placeholder="e.g. Civil Servant" />
+                  <label className={labelClass}>Occupation</label>
+                  <input name="parentOccupation" type="text" className={inputClass} placeholder="e.g. Civil Servant" />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={labelClass}>Relationship to Applicant</label>
+                  <select name="parentRelationship" className={inputClass}>
+                    <option value="">Select relationship</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Guardian">Guardian</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-10 py-4 bg-[#000080] hover:bg-[#000066] disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors shadow-lg flex items-center gap-3"
-              >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Application →"
-                )}
-              </button>
+            <hr className="border-gray-100 dark:border-gray-800" />
+
+            {/* ── Section 4: Academic History ── */}
+            <div>
+              <SectionHeader number={4} title="Academic History" subtitle="Details about the applicant's previous school (if applicable)." />
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className={labelClass}>Previous School Name</label>
+                  <input name="previousSchool" type="text" className={inputClass} placeholder="Name of last school attended" />
+                </div>
+                <div>
+                  <label className={labelClass}>Last Class Attended</label>
+                  <input name="lastClassAttended" type="text" className={inputClass} placeholder="e.g. Primary 4" />
+                </div>
+                <div>
+                  <label className={labelClass}>Year Left</label>
+                  <input name="yearLeft" type="text" className={inputClass} placeholder="e.g. 2025" />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={labelClass}>Reason for Leaving</label>
+                  <textarea name="reasonForLeaving" rows={2} className={`${inputClass} resize-none`} placeholder="Optional" />
+                </div>
+              </div>
             </div>
+
+            <hr className="border-gray-100 dark:border-gray-800" />
+
+            {/* ── Section 5: Additional Notes ── */}
+            <div>
+              <SectionHeader number={5} title="Additional Information" subtitle="Any special needs, medical conditions, or other notes we should know about." />
+              <textarea name="additionalNotes" rows={3} className={`${inputClass} resize-none`} placeholder="e.g. dietary restrictions, health conditions, special learning needs..." />
+            </div>
+
+            {/* ── Declaration & Submit ── */}
+            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-100 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+                By submitting this form, I confirm that all information provided is accurate and true to the best of my knowledge. I understand that providing false information may result in the rejection of this application.
+              </p>
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+                  ← Cancel
+                </Link>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-10 py-4 bg-[#000080] hover:bg-[#000066] disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors shadow-lg flex items-center gap-3"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Application →"
+                  )}
+                </button>
+              </div>
+            </div>
+
           </form>
         </div>
       </div>
