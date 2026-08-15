@@ -1,9 +1,30 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
 
+import { getServerSession } from "next-auth"
+import authConfig from "@/auth.config"
+
 export async function GET(request: NextRequest) {
   try {
+    const session = await getServerSession(authConfig)
+    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
+    let whereClause = {}
+    
+    // If student, filter by their profile
+    if ((session.user as any).role === "STUDENT") {
+      const profile = await prisma.studentProfile.findUnique({
+        where: { userId: session.user.id }
+      })
+      if (profile) {
+        whereClause = { studentId: profile.id }
+      } else {
+        return NextResponse.json([]) // No profile yet
+      }
+    }
+
     const invoices = await prisma.invoice.findMany({
+      where: whereClause,
       include: {
         student: {
           include: { user: true, class: true }

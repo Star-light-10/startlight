@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 
 export default function FinanceDashboard() {
-  const [activeTab, setActiveTab] = useState<"FEES" | "INVOICES">("FEES")
+  const [activeTab, setActiveTab] = useState<"FEES" | "INVOICES" | "MANUAL_PAYMENTS">("FEES")
   const [classes, setClasses] = useState<any[]>([])
   const [terms, setTerms] = useState<any[]>([])
   const [fees, setFees] = useState<any[]>([])
   const [invoices, setInvoices] = useState<any[]>([])
+  const [manualPayments, setManualPayments] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   // Fee Form State
@@ -22,16 +23,18 @@ export default function FinanceDashboard() {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      const [clsRes, termRes, feeRes, invRes] = await Promise.all([
+      const [clsRes, termRes, feeRes, invRes, mpRes] = await Promise.all([
         fetch("/api/academics/classes"),
         fetch("/api/academics/terms"),
         fetch("/api/finance/fees"),
-        fetch("/api/finance/invoices")
+        fetch("/api/finance/invoices"),
+        fetch("/api/finance/manual")
       ])
       if (clsRes.ok) setClasses(await clsRes.json())
       if (termRes.ok) setTerms(await termRes.json())
       if (feeRes.ok) setFees(await feeRes.json())
       if (invRes.ok) setInvoices(await invRes.json())
+      if (mpRes.ok) setManualPayments(await mpRes.json())
     } catch (e) {
       console.error(e)
     } finally {
@@ -49,18 +52,36 @@ export default function FinanceDashboard() {
       const res = await fetch("/api/finance/fees", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(feeForm),
+        body: JSON.stringify({ ...feeForm, amount: parseFloat(feeForm.amount) })
       })
       if (res.ok) {
         setFeeForm({ name: "", amount: "", classId: "", termId: "" })
         fetchData()
         alert("Fee structure created!")
       } else {
-        const err = await res.json()
-        alert(err.error)
+        alert("Error creating fee structure.")
       }
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleVerifyManualPayment = async (id: string, action: "VERIFY" | "REJECT") => {
+    if (!confirm(`Are you sure you want to ${action.toLowerCase()} this payment?`)) return;
+    try {
+      const res = await fetch(`/api/finance/manual/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action })
+      })
+      if (res.ok) {
+        alert(`Payment ${action.toLowerCase()}ed successfully!`)
+        fetchData()
+      } else {
+        alert("Failed to process payment.")
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -113,8 +134,8 @@ export default function FinanceDashboard() {
       </div>
 
       <div className="border-b border-gray-200 dark:border-gray-700">
-        <nav className="-mb-px flex space-x-8">
-          {["FEES", "INVOICES"].map((tab) => (
+        <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          {["FEES", "INVOICES", "MANUAL_PAYMENTS"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -124,7 +145,7 @@ export default function FinanceDashboard() {
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
               }`}
             >
-              {tab === "FEES" ? "Fee Structures" : "Invoices & Payments"}
+              {tab === "FEES" ? "Fee Structures" : tab === "INVOICES" ? "Invoices" : "Manual Payments"}
             </button>
           ))}
         </nav>
@@ -187,7 +208,7 @@ export default function FinanceDashboard() {
             </table>
           </div>
         </div>
-      ) : (
+      ) : activeTab === "INVOICES" ? (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
@@ -262,6 +283,62 @@ export default function FinanceDashboard() {
                   </tr>
                 ))}
                 {invoices.length === 0 && <tr><td colSpan={6} className="py-4 text-center text-gray-500">No invoices generated yet.</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold">Manual Payments Verification</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-gray-700/50">
+                <tr>
+                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3 px-4">Student</th>
+                  <th className="py-3 px-4">Class</th>
+                  <th className="py-3 px-4">Amount</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {manualPayments.map(p => (
+                  <tr key={p.id}>
+                    <td className="py-3 px-4">{new Date(p.submittedAt).toLocaleDateString()}</td>
+                    <td className="py-3 px-4 font-medium">{p.studentName}</td>
+                    <td className="py-3 px-4">{p.student?.class?.name}</td>
+                    <td className="py-3 px-4 font-bold text-green-600">₦{Number(p.amountPaid).toLocaleString()}</td>
+                    <td className="py-3 px-4">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase ${
+                        p.status === 'verified' ? 'bg-green-100 text-green-800' :
+                        p.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>{p.status.replace("_", " ")}</span>
+                    </td>
+                    <td className="py-3 px-4 text-right space-x-2">
+                      {p.status === 'pending_verification' && (
+                        <>
+                          <button
+                            onClick={() => handleVerifyManualPayment(p.id, "VERIFY")}
+                            className="text-white bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-xs font-bold"
+                          >
+                            Verify
+                          </button>
+                          <button
+                            onClick={() => handleVerifyManualPayment(p.id, "REJECT")}
+                            className="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-xs font-bold"
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+                {manualPayments.length === 0 && <tr><td colSpan={6} className="py-8 text-center text-gray-500">No manual payments to verify.</td></tr>}
               </tbody>
             </table>
           </div>
