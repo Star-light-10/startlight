@@ -416,7 +416,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="text-[#FFA500] font-semibold hover:text-white transition-colors"
               >
-                ELITE COMPUTER TECH LINK
+                ELITE COMPUTER TECHNOLOGICAL AND CONSULTATION LIMITED OYO
               </a>
             </p>
           </div>
