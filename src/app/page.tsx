@@ -14,8 +14,24 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 font-sans">
+      {/* ===== MARQUEE ANNOUNCEMENT ===== */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-10 bg-[#000080] overflow-hidden flex items-center border-b border-[#FFA500]/30 shadow-md">
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-white font-bold tracking-wide">
+          <span className="text-[#FFA500]">★</span>
+          ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION
+          <span className="text-[#FFA500]">★</span>
+          NURSERY, PRIMARY, JUNIOR & SENIOR SECONDARY
+          <span className="text-[#FFA500]">★</span>
+          APPLY ONLINE TODAY OR VISIT OUR CAMPUS
+          <span className="text-[#FFA500]">★</span>
+          EXCELLENCE IN EDUCATION
+          <span className="text-[#FFA500]">★</span>
+          ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION
+        </div>
+      </div>
+
       {/* ===== NAVBAR ===== */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+      <header className="fixed top-10 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -55,7 +71,7 @@ export default function HomePage() {
 
       {/* ===== HERO SECTION ===== */}
       <section
-        className="relative min-h-screen flex items-center pt-16 overflow-hidden"
+        className="relative min-h-screen flex items-center pt-26 overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #000080 0%, #1a1a6e 30%, #0a0a50 60%, #000033 100%)",
         }}
@@ -211,27 +227,29 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { src: "/images/school-2.jpg", alt: "Students in class", span: "md:col-span-2 lg:col-span-2 lg:row-span-2" },
-              { src: "/images/school-3.jpg", alt: "School building", span: "md:col-span-1" },
-              { src: "/images/school-4.jpg", alt: "Science Laboratory", span: "md:col-span-1" },
-              { src: "/images/school-5.jpg", alt: "Library", span: "md:col-span-1" },
-              { src: "/images/school-6.jpg", alt: "Playground", span: "md:col-span-1 lg:col-span-2" },
-              { src: "/images/school-7.jpg", alt: "School Bus", span: "md:col-span-1" },
+              { src: "/images/grad.png", alt: "Graduation Ceremony", span: "md:col-span-2 lg:col-span-2 lg:row-span-2 border-4 border-[#FFA500]/50 hover:border-[#FFA500]", isSpecial: true },
+              { src: "/images/students.png", alt: "Our Bright Students", span: "md:col-span-1 border-4 border-[#000080]/50 hover:border-[#000080]", isSpecial: true },
+              { src: "/images/school-4.jpg", alt: "Science Laboratory", span: "md:col-span-1 border border-gray-200/50" },
+              { src: "/images/school-5.jpg", alt: "Library", span: "md:col-span-1 border border-gray-200/50" },
+              { src: "/images/school-6.jpg", alt: "Playground", span: "md:col-span-1 lg:col-span-2 border border-gray-200/50" },
+              { src: "/images/school-7.jpg", alt: "School Bus", span: "md:col-span-1 border border-gray-200/50" },
             ].map((img, i) => (
               <div
                 key={i}
-                className={`relative group overflow-hidden rounded-3xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 ${img.span} h-64 md:h-auto min-h-[250px]`}
+                className={`relative group overflow-hidden rounded-3xl shadow-xl dark:border-gray-700/50 ${img.span} h-64 md:h-auto min-h-[250px] ${img.isSpecial ? "bg-gradient-to-br from-[#000080]/10 to-[#FFA500]/10 p-2" : ""}`}
               >
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110 saturate-[1.1] contrast-[1.05]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-6 left-6 right-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <p className="font-bold text-lg">{img.alt}</p>
-                    <p className="text-sm text-[#FFA500]">Starlight Model School</p>
+                <div className={`relative w-full h-full rounded-2xl overflow-hidden shadow-inner ${img.isSpecial ? "ring-2 ring-white/50" : ""}`}>
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110 saturate-[1.1] contrast-[1.05]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-6 left-6 right-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <p className="font-bold text-lg">{img.alt}</p>
+                      <p className="text-sm text-[#FFA500]">Starlight Model School</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -250,13 +268,13 @@ export default function HomePage() {
           <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Admissions</span>
           <h2 className="mt-2 text-4xl font-black text-white mb-4">Now Enrolling for 2026/2027</h2>
           <p className="text-blue-200 mb-12 max-w-xl mx-auto">
-            Secure your child's place in one of Oyo State's finest schools. Apply online in minutes — no paper forms needed.
+            Secure your child's place in one of Oyo State's finest schools. The process is completely online and highly simplified.
           </p>
           <div className="grid sm:grid-cols-3 gap-6 mb-12">
             {[
-              { step: "01", title: "Fill Application", desc: "Complete our simple online form with your child's details." },
-              { step: "02", title: "Upload Documents", desc: "Upload birth certificate, passport photo and academic records." },
-              { step: "03", title: "Pay & Confirm", desc: "Pay the application fee online and receive your admission letter." },
+              { step: "01", title: "Fill The Online Form", desc: "Click the 'Apply' button below and quickly enter the child's details." },
+              { step: "02", title: "Upload A Photo", desc: "Upload the child's passport photograph directly from your phone." },
+              { step: "03", title: "Submit Application", desc: "Click submit. Once approved by the school, you will receive login details!" },
             ].map((step) => (
               <div key={step.step} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-left">
                 <span className="text-[#FFA500] font-black text-3xl">{step.step}</span>
