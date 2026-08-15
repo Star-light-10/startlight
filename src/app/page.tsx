@@ -158,10 +158,9 @@ export default function HomePage() {
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8 mt-12 pt-10 border-t border-white/10">
             {[
-              { value: "2,000+", label: "Students" },
+              { value: "500+", label: "Students" },
               { value: "98%",   label: "Pass Rate" },
-              { value: "20+",   label: "Years" },
-              { value: "150+", label: "Teachers" },
+              { value: "10+",   label: "Years" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-2xl font-black text-[#FFA500]">{stat.value}</p>

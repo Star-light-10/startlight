@@ -36,7 +36,14 @@ export default function AdmissionsDashboard() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("ALL")
+  
+  // Modals state
   const [selected, setSelected] = useState<Application | null>(null)
+  const [isManualEntryOpen, setIsManualEntryOpen] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  // Form State
+  const [formData, setFormData] = useState<Partial<Application>>({})
 
   const fetchApplications = async () => {
     setIsLoading(true)
@@ -74,6 +81,82 @@ export default function AdmissionsDashboard() {
     }
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to completely delete this application? This cannot be undone.")) return;
+    
+    setProcessingId(id)
+    setErrorMsg(null)
+    try {
+      const res = await fetch(`/api/admissions/${id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to delete application")
+      }
+      setSelected(null)
+      await fetchApplications()
+    } catch (e: any) {
+      setErrorMsg(e.message)
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
+  const handleSaveForm = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setProcessingId("form-submit")
+    setErrorMsg(null)
+
+    const isEditing = isEditMode && selected?.id;
+    const url = isEditing 
+      ? `/api/admissions/${selected.id}` 
+      : "/api/admissions/manual";
+    const method = isEditing ? "PUT" : "POST";
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to save application")
+      }
+      
+      setIsManualEntryOpen(false)
+      setIsEditMode(false)
+      setSelected(null)
+      setFormData({})
+      await fetchApplications()
+    } catch (e: any) {
+      setErrorMsg(e.message)
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
+  const openManualEntry = () => {
+    setFormData({
+      status: "PENDING",
+      dateOfBirth: "2015-01-01",
+      gender: "Male",
+      religion: "Islam"
+    })
+    setErrorMsg(null)
+    setIsEditMode(false)
+    setIsManualEntryOpen(true)
+  }
+
+  const openEdit = (app: Application) => {
+    setFormData({
+      ...app,
+      dateOfBirth: new Date(app.dateOfBirth).toISOString().split('T')[0]
+    })
+    setErrorMsg(null)
+    setIsEditMode(true)
+    setIsManualEntryOpen(true)
+  }
+
   const filtered = applications.filter((app) => {
     const matchesSearch =
       `${app.firstName} ${app.lastName} ${app.parentPhone} ${app.classApplyingFor}`
@@ -101,19 +184,24 @@ export default function AdmissionsDashboard() {
             {applications.length} total application{applications.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <a
-          href="/admissions"
-          target="_blank"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#000080] hover:bg-[#000066] text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-          Open Admissions Form
-        </a>
+        <div className="flex gap-2">
+          <button
+            onClick={openManualEntry}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
+          >
+            + Manual Entry
+          </button>
+          <a
+            href="/admissions"
+            target="_blank"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#000080] hover:bg-[#000066] text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
+          >
+            Open Form
+          </a>
+        </div>
       </div>
 
-      {errorMsg && (
+      {errorMsg && !selected && !isManualEntryOpen && (
         <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl border border-red-100 dark:border-red-800 text-sm font-medium">
           ⚠ {errorMsg}
         </div>
@@ -219,17 +307,29 @@ export default function AdmissionsDashboard() {
       </div>
 
       {/* Detail Modal */}
-      {selected && (
+      {selected && !isManualEntryOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white dark:bg-gray-900 w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-10">
               <h2 className="font-black text-gray-900 dark:text-white">Application Details</h2>
-              <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-4">
+                {selected.status !== "ACCEPTED" && (
+                  <>
+                    <button onClick={() => openEdit(selected)} className="text-sm font-bold text-blue-600 hover:text-blue-800">
+                      Edit
+                    </button>
+                    <button onClick={() => handleDelete(selected.id)} disabled={!!processingId} className="text-sm font-bold text-red-600 hover:text-red-800">
+                      Delete
+                    </button>
+                  </>
+                )}
+                <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className="p-6 space-y-6">
@@ -324,6 +424,102 @@ export default function AdmissionsDashboard() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Entry & Edit Modal */}
+      {isManualEntryOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
+              <h2 className="font-black text-gray-900 dark:text-white">
+                {isEditMode ? "Edit Application" : "Manual Applicant Entry"}
+              </h2>
+              <button 
+                onClick={() => {
+                  setIsManualEntryOpen(false)
+                  if (!isEditMode) setFormData({})
+                }} 
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-white"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            
+            <form onSubmit={handleSaveForm} className="overflow-y-auto p-6 space-y-6 flex-1">
+              {errorMsg && (
+                <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium border border-red-100">
+                  ⚠ {errorMsg}
+                </div>
+              )}
+              
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Applicant Info</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input required placeholder="First Name" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.firstName || ""} onChange={e => setFormData({...formData, firstName: e.target.value})} />
+                  <input placeholder="Middle Name" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.middleName || ""} onChange={e => setFormData({...formData, middleName: e.target.value})} />
+                  <input required placeholder="Last Name" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.lastName || ""} onChange={e => setFormData({...formData, lastName: e.target.value})} />
+                  <input required type="date" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.dateOfBirth || ""} onChange={e => setFormData({...formData, dateOfBirth: e.target.value})} />
+                  <select required className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.gender || ""} onChange={e => setFormData({...formData, gender: e.target.value})}>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <select required className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.religion || ""} onChange={e => setFormData({...formData, religion: e.target.value})}>
+                    <option value="Islam">Islam</option>
+                    <option value="Christianity">Christianity</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Admission Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <select required className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.classApplyingFor || ""} onChange={e => setFormData({...formData, classApplyingFor: e.target.value})}>
+                    <option value="" disabled>Select Class</option>
+                    <option value="Creche">Creche</option>
+                    <option value="Pre-Nursery">Pre-Nursery</option>
+                    <option value="Nursery 1">Nursery 1</option>
+                    <option value="Nursery 2">Nursery 2</option>
+                    <option value="Primary 1">Primary 1</option>
+                    <option value="Primary 2">Primary 2</option>
+                    <option value="Primary 3">Primary 3</option>
+                    <option value="Primary 4">Primary 4</option>
+                    <option value="Primary 5">Primary 5</option>
+                    <option value="Primary 6">Primary 6</option>
+                    <option value="JSS 1">JSS 1</option>
+                    <option value="JSS 2">JSS 2</option>
+                    <option value="JSS 3">JSS 3</option>
+                    <option value="SSS 1">SSS 1</option>
+                    <option value="SSS 2">SSS 2</option>
+                    <option value="SSS 3">SSS 3</option>
+                  </select>
+                  <select className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.status || "PENDING"} onChange={e => setFormData({...formData, status: e.target.value as any})}>
+                    <option value="PENDING">Pending</option>
+                    <option value="REVIEWING">Reviewing</option>
+                  </select>
+                  <input required placeholder="Home Address" className="sm:col-span-2 w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.homeAddress || ""} onChange={e => setFormData({...formData, homeAddress: e.target.value})} />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Parent Info</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input required placeholder="Parent Name" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.parentName || ""} onChange={e => setFormData({...formData, parentName: e.target.value})} />
+                  <input required placeholder="Phone Number" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.parentPhone || ""} onChange={e => setFormData({...formData, parentPhone: e.target.value})} />
+                  <input type="email" placeholder="Email Address (Optional)" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.parentEmail || ""} onChange={e => setFormData({...formData, parentEmail: e.target.value})} />
+                  <input placeholder="Occupation" className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" value={formData.parentOccupation || ""} onChange={e => setFormData({...formData, parentOccupation: e.target.value})} />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsManualEntryOpen(false)} className="px-5 py-2.5 text-gray-600 font-bold hover:bg-gray-100 rounded-xl">Cancel</button>
+                <button type="submit" disabled={!!processingId} className="px-6 py-2.5 bg-[#000080] hover:bg-[#000066] text-white font-bold rounded-xl disabled:bg-gray-400">
+                  {processingId === "form-submit" ? "Saving..." : "Save Application"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

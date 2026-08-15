@@ -86,3 +86,83 @@ export async function PATCH(
     return NextResponse.json({ error: error.message || "Failed to process application" }, { status: 500 })
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    
+    // Check if the application exists and is not accepted
+    const application = await prisma.admissionApplication.findUnique({
+      where: { id }
+    });
+
+    if (!application) {
+      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+    }
+
+    if (application.status === "ACCEPTED") {
+      return NextResponse.json({ error: "Cannot delete an application that has already been accepted and enrolled." }, { status: 400 });
+    }
+
+    await prisma.admissionApplication.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error(error);
+    return NextResponse.json({ error: "Failed to delete application" }, { status: 500 });
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const data = await request.json();
+    
+    // Check if the application exists
+    const application = await prisma.admissionApplication.findUnique({
+      where: { id }
+    });
+
+    if (!application) {
+      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+    }
+
+    if (application.status === "ACCEPTED") {
+      return NextResponse.json({ error: "Cannot edit an application that has already been accepted and enrolled." }, { status: 400 });
+    }
+
+    // Update the application
+    const updated = await prisma.admissionApplication.update({
+      where: { id },
+      data: {
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        dateOfBirth: new Date(data.dateOfBirth),
+        gender: data.gender,
+        religion: data.religion,
+        homeAddress: data.homeAddress,
+        classApplyingFor: data.classApplyingFor,
+        parentName: data.parentName,
+        parentPhone: data.parentPhone,
+        parentEmail: data.parentEmail,
+        parentOccupation: data.parentOccupation,
+        ...(data.status && { status: data.status })
+      }
+    });
+
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    console.error(error);
+    return NextResponse.json({ error: "Failed to update application" }, { status: 500 });
+  }
+}
+
