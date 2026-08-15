@@ -40,13 +40,7 @@ export default function HomePage() {
             </nav>
 
             {/* CTA Buttons */}
-            <div className="flex items-center gap-3">
-              <Link
-                href="/login"
-                className="hidden sm:inline-flex items-center px-4 py-2 text-sm font-medium text-[#000080] dark:text-[#FFA500] border border-[#000080] dark:border-[#FFA500] rounded-full hover:bg-[#000080] hover:text-white dark:hover:bg-[#FFA500] dark:hover:text-black transition-all"
-              >
-                Login
-              </Link>
+            <div className="flex items-center gap-2">
               <Link
                 href="/admissions"
                 className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-[#FFA500] hover:bg-[#e69400] rounded-full shadow-md hover:shadow-lg transition-all"
@@ -91,121 +85,77 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6">
-                <span>★</span>
-                <span>EXCELLENCE IN EDUCATION SINCE 2005</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
-                Where Stars
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#FFA500] to-[#FFD700]">
-                  Are Born
-                </span>
-              </h1>
-
-              <p className="text-lg text-blue-100 leading-relaxed mb-8 max-w-xl">
-                Starlight Model School, Oke-Medina, Boroboro, Oyo State — providing world-class education
-                that nurtures excellence, character, and leadership in every child.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/admissions"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-bold rounded-full shadow-xl hover:shadow-[#FFA500]/30 hover:shadow-2xl transition-all transform hover:-translate-y-1"
-                >
-                  Start Admission
-                  <span>→</span>
-                </Link>
-                <Link
-                  href="#about"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full border border-white/30 backdrop-blur-sm transition-all"
-                >
-                  Learn More
-                </Link>
-              </div>
-
-              {/* Stats */}
-              <div className="flex gap-8 mt-12 pt-12 border-t border-white/10">
-                {[
-                  { value: "2,000+", label: "Students" },
-                  { value: "98%", label: "Pass Rate" },
-                  { value: "20+", label: "Years" },
-                  { value: "150+", label: "Teachers" },
-                ].map((stat) => (
-                  <div key={stat.label}>
-                    <p className="text-2xl font-black text-[#FFA500]">{stat.value}</p>
-                    <p className="text-xs text-blue-200 uppercase tracking-wider">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Hero Visual */}
-            <div className="hidden lg:flex justify-center">
-              <div className="relative">
-                <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-[#FFA500]/20 to-[#000080]/50 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col items-center justify-center gap-4 p-8">
-                  <StarlightLogo className="w-20 h-20 drop-shadow-2xl" />
-                  <p className="text-white font-black text-xl text-center">STARLIGHT MODEL SCHOOL</p>
-                  <p className="text-blue-200 text-sm text-center">Oke-Medina, Boroboro Area, Oyo State, Nigeria</p>
-                  <div className="w-full h-px bg-white/20 my-2" />
-                  <div className="grid grid-cols-2 gap-3 w-full">
-                    {["Portal Login", "Pay Fees", "Check Result", "Apply Now"].map((item) => (
-                      <div
-                        key={item}
-                        className="bg-white/10 rounded-xl p-3 text-center text-white text-xs font-semibold hover:bg-white/20 cursor-pointer transition-all"
-                      >
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Floating cards */}
-                <div className="absolute -top-4 -right-4 bg-[#FFA500] text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg">
-                  🏆 Best School 2024
-                </div>
-                <div className="absolute -bottom-4 -left-4 bg-white text-[#000080] text-xs font-bold px-3 py-2 rounded-xl shadow-lg">
-                  📱 Digital First
-                </div>
-              </div>
-            </div>
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6">
+            <span>★</span>
+            <span>EXCELLENCE IN EDUCATION SINCE 2005</span>
           </div>
-        </div>
-      </section>
 
-      {/* ===== PORTAL LOGIN SECTION ===== */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900" id="portals">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2">Access Your Portal</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-12">Login to manage your school experience digitally</p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4 text-white">
+            Starlight Model School
+          </h1>
+          <p className="text-blue-200 text-base sm:text-lg mb-4 max-w-xl mx-auto">
+            Oke-Medina, Boroboro, Oyo State
+          </p>
+
+          {/* ── PORTAL LOGIN CARDS ── */}
+          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {[
-              { title: "Admin Portal", desc: "School management & records", icon: "🏫", href: "/dashboard", color: "from-[#000080] to-[#4169E1]" },
-              { title: "Teacher Portal", desc: "Classes, results & attendance", icon: "👨‍🏫", href: "/teacher", color: "from-[#FFA500] to-[#FFD700]" },
-              { title: "Student Portal", desc: "Results, timetable & fees", icon: "👨‍🎓", href: "/student", color: "from-emerald-500 to-teal-500" },
-              { title: "Parent Portal", desc: "Track your child's progress", icon: "👨‍👩‍👧", href: "/parent", color: "from-purple-500 to-pink-500" },
+              { title: "Admin",   desc: "Management &amp; records",        icon: "🏫", href: "/dashboard", bg: "from-[#000080] to-[#1e3a8a]" },
+              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨\u200d🏫", href: "/login",     bg: "from-[#b45309] to-[#d97706]" },
+              { title: "Student", desc: "Results &amp; timetable",          icon: "👨\u200d🎓", href: "/login",     bg: "from-[#065f46] to-[#047857]" },
+              { title: "Parent",  desc: "Track child&apos;s progress",    icon: "👨\u200d👩\u200d👧", href: "/login", bg: "from-[#581c87] to-[#7e22ce]" },
             ].map((portal) => (
               <Link
                 key={portal.title}
                 href={portal.href}
-                className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all hover:-translate-y-1"
+                className={`group bg-gradient-to-br ${portal.bg} rounded-2xl p-5 sm:p-6 text-white text-center shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 border border-white/10`}
               >
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${portal.color} flex items-center justify-center text-2xl mx-auto mb-4 shadow-md group-hover:scale-110 transition-transform`}>
-                  {portal.icon}
-                </div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-1">{portal.title}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{portal.desc}</p>
-                <div className="mt-4 text-[#000080] dark:text-[#FFA500] text-sm font-semibold group-hover:translate-x-1 transition-transform inline-block">
+                <div className="text-3xl sm:text-4xl mb-3">{portal.icon}</div>
+                <h2 className="text-base sm:text-lg font-black mb-1">{portal.title} Login</h2>
+                <p className="text-xs text-white/70" dangerouslySetInnerHTML={{ __html: portal.desc }} />
+                <div className="mt-4 inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
                   Login →
                 </div>
               </Link>
             ))}
           </div>
+
+          {/* Apply CTA */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/admissions"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-black rounded-full shadow-xl hover:shadow-[#FFA500]/30 hover:shadow-2xl transition-all transform hover:-translate-y-1"
+            >
+              Apply for Admission 2026/2027 →
+            </Link>
+            <Link
+              href="#about"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full border border-white/30 transition-all"
+            >
+              Learn More
+            </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="flex flex-wrap justify-center gap-8 mt-12 pt-10 border-t border-white/10">
+            {[
+              { value: "2,000+", label: "Students" },
+              { value: "98%",   label: "Pass Rate" },
+              { value: "20+",   label: "Years" },
+              { value: "150+", label: "Teachers" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="text-2xl font-black text-[#FFA500]">{stat.value}</p>
+                <p className="text-xs text-blue-200 uppercase tracking-wider">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+
+
 
       {/* ===== ABOUT SECTION ===== */}
       <section className="py-24 bg-white dark:bg-gray-950" id="about">
