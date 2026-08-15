@@ -393,6 +393,31 @@ export default function AdmissionsDashboard() {
                 </div>
               </div>
 
+              {/* Fee Verification */}
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-900 flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Application Fee Status</p>
+                  {selected.hasPaidFee ? (
+                    <span className="inline-flex px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
+                      ✓ Verified Paid
+                    </span>
+                  ) : (
+                    <span className="inline-flex px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                      Pending Verification
+                    </span>
+                  )}
+                </div>
+                {!selected.hasPaidFee && (
+                  <button
+                    onClick={() => handleAction(selected.id, "VERIFY_FEE")}
+                    disabled={!!processingId}
+                    className="px-4 py-2 bg-[#000080] hover:bg-[#000066] text-white text-xs font-bold rounded-xl transition-colors disabled:bg-gray-400"
+                  >
+                    Verify Payment
+                  </button>
+                )}
+              </div>
+
               {/* Error in modal */}
               {errorMsg && (
                 <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-xl text-sm border border-red-100 dark:border-red-800">
@@ -405,15 +430,16 @@ export default function AdmissionsDashboard() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => handleAction(selected.id, "ACCEPT")}
-                    disabled={!!processingId}
-                    className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-bold rounded-xl transition-colors text-sm"
+                    disabled={!!processingId || !selected.hasPaidFee}
+                    title={!selected.hasPaidFee ? "Verify fee payment before accepting" : ""}
+                    className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors text-sm"
                   >
                     {processingId === selected.id ? "Processing…" : "✓ Accept & Enroll"}
                   </button>
                   <button
                     onClick={() => handleAction(selected.id, "REJECT")}
                     disabled={!!processingId}
-                    className="flex-1 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white font-bold rounded-xl transition-colors text-sm"
+                    className="flex-1 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors text-sm"
                   >
                     {processingId === selected.id ? "…" : "✗ Reject"}
                   </button>

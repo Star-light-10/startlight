@@ -25,6 +25,14 @@ export async function PATCH(
       return NextResponse.json(updated)
     }
 
+    if (action === "VERIFY_FEE") {
+      const updated = await prisma.admissionApplication.update({
+        where: { id: applicationId },
+        data: { hasPaidFee: true },
+      })
+      return NextResponse.json(updated)
+    }
+
     if (action === "ACCEPT") {
       // Begin transaction to accept and enroll
       const result = await prisma.$transaction(async (tx) => {

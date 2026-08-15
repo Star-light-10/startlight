@@ -175,6 +175,7 @@ model AdmissionApplication {
   classApplyingFor String
   passportPhotoUrl String?
   status           ApplicationStatus @default(PENDING)
+  hasPaidFee       Boolean           @default(false)
 
   // Parent/Guardian Info
   parentName       String
