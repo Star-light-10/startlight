@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { StarlightLogo } from "@/components/starlight-logo";
 import ContactForm from "@/components/contact-form";
+import { SchoolSections } from "@/components/school-sections";
 
 export const metadata: Metadata = {
   title: "Starlight Model School | Oke-Medina, Boroboro, Oyo State",
@@ -188,18 +189,8 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: "Nursery School", color: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800" },
-                { label: "Primary School", color: "bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800" },
-                { label: "Junior Secondary", color: "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800" },
-                { label: "Senior Secondary", color: "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800" },
-              ].map((level) => (
-                <div key={level.label} className={`rounded-2xl border-2 p-6 text-center ${level.color}`}>
-                  <div className="text-4xl mb-3">🎓</div>
-                  <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">{level.label}</p>
-                </div>
-              ))}
+            <div className="flex w-full">
+              <SchoolSections />
             </div>
           </div>
         </div>

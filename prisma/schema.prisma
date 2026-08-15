@@ -25,6 +25,19 @@ enum ApplicationStatus {
   REJECTED
 }
 
+enum Audience {
+  ALL
+  STAFF
+  STUDENTS
+  PARENTS
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
 model Tenant {
   id        String   @id @default(cuid())
   name      String
@@ -41,6 +54,7 @@ model Tenant {
   subjects     Subject[]
   terms        AcademicTerm[]
   applications AdmissionApplication[]
+  announcements Announcement[]
 }
 
 model User {
@@ -59,6 +73,8 @@ model User {
   sessions       Session[]
   studentProfile StudentProfile?
   teacherProfile TeacherProfile?
+  announcements  Announcement[]
+  attendanceMarked Attendance[]
 }
 
 model Account {
@@ -107,6 +123,7 @@ model Class {
   updatedAt     DateTime         @updatedAt
   students      StudentProfile[]
   feeStructures FeeStructure[]
+  attendances   Attendance[]
 }
 
 model Subject {
@@ -175,6 +192,7 @@ model StudentProfile {
   enrollments    SubjectEnrollment[]
   invoices       Invoice[]
   manualPayments ManualPayment[]
+  attendances    Attendance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -268,4 +286,34 @@ model ManualPayment {
   rejectionReason String?
 
   @@map("manual_payments")
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  tenantId  String?
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+  title     String
+  content   String
+  audience  Audience @default(ALL)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attendance {
+  id        String           @id @default(cuid())
+  date      DateTime
+  studentId String
+  student   StudentProfile   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  status    AttendanceStatus @default(PRESENT)
+  notes     String?
+  markedBy  String
+  marker    User             @relation(fields: [markedBy], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@unique([date, studentId]) // One attendance record per student per day
 }
