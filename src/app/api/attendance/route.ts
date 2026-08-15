@@ -47,9 +47,9 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { studentId, status, date } = body
+    const { studentId, status, date, classId, markedBy } = body
 
-    if (!studentId || !status || !date) {
+    if (!studentId || !status || !date || !classId || !markedBy) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
@@ -75,16 +75,16 @@ export async function POST(req: Request) {
     if (existing) {
       record = await prisma.attendance.update({
         where: { id: existing.id },
-        data: { status }
+        data: { status, markedBy }
       })
     } else {
       record = await prisma.attendance.create({
         data: {
           studentId,
+          classId,
           status,
+          markedBy,
           date: new Date(date),
-          term: "FIRST_TERM", // Hardcoded for MVP, should be dynamic
-          session: "2026/2027" // Hardcoded for MVP
         }
       })
     }
