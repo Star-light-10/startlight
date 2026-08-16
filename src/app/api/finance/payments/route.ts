@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
 
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const invoiceId = searchParams.get("invoiceId")
+
+    if (!invoiceId) {
+      return NextResponse.json({ error: "invoiceId query param is required" }, { status: 400 })
+    }
+
+    const payments = await prisma.payment.findMany({
+      where: { invoiceId },
+      orderBy: { date: "desc" }
+    })
+
+    return NextResponse.json(payments)
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({ error: "Failed to fetch payments" }, { status: 500 })
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
@@ -36,9 +57,9 @@ export async function POST(request: NextRequest) {
 
       // Update the invoice status and amount paid
       const newAmountPaid = invoice.amountPaid + paymentAmount
-      const newStatus = newAmountPaid >= invoice.totalAmount ? "PAID" : "PARTIAL"
+      const newStatus = newAmountPaid >= invoice.totalAmount ? "PAID" : newAmountPaid > 0 ? "PARTIAL" : "PENDING"
 
-      await tx.invoice.update({
+      const updatedInvoice = await tx.invoice.update({
         where: { id: invoiceId },
         data: {
           amountPaid: newAmountPaid,
@@ -46,7 +67,7 @@ export async function POST(request: NextRequest) {
         }
       })
 
-      return payment
+      return { payment, invoice: updatedInvoice }
     })
 
     return NextResponse.json(result, { status: 201 })

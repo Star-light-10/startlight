@@ -4,8 +4,66 @@ import prisma from "@/lib/db"
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
-    const dateStr = searchParams.get("date")
+    const mode = searchParams.get("mode")
     const classId = searchParams.get("classId")
+
+    // ── Summary mode ──────────────────────────────────────────────────────────
+    if (mode === "summary") {
+      const startDate = searchParams.get("startDate")
+      const endDate = searchParams.get("endDate")
+
+      if (!classId || !startDate || !endDate) {
+        return NextResponse.json(
+          { error: "Missing classId, startDate, or endDate" },
+          { status: 400 }
+        )
+      }
+
+      const start = new Date(startDate)
+      start.setHours(0, 0, 0, 0)
+
+      const end = new Date(endDate)
+      end.setHours(23, 59, 59, 999)
+
+      // Fetch all students in the class
+      const students = await prisma.studentProfile.findMany({
+        where: { classId },
+        include: {
+          user: { select: { name: true } },
+          attendances: {
+            where: {
+              date: { gte: start, lte: end },
+            },
+            select: { status: true },
+          },
+        },
+        orderBy: { admissionNumber: "asc" },
+      })
+
+      const summary = students.map((s) => {
+        const present = s.attendances.filter((a) => a.status === "PRESENT").length
+        const absent = s.attendances.filter((a) => a.status === "ABSENT").length
+        const late = s.attendances.filter((a) => a.status === "LATE").length
+        const totalDays = present + absent + late
+        const percentage = totalDays === 0 ? 0 : Math.round(((present + late) / totalDays) * 100)
+
+        return {
+          studentId: s.id,
+          name: s.user.name,
+          admissionNumber: s.admissionNumber,
+          totalDays,
+          present,
+          absent,
+          late,
+          percentage,
+        }
+      })
+
+      return NextResponse.json(summary)
+    }
+
+    // ── Default mode: fetch attendance for a single date ───────────────────────
+    const dateStr = searchParams.get("date")
 
     if (!dateStr || !classId) {
       return NextResponse.json({ error: "Missing date or classId" }, { status: 400 })
