@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { getServerSession } from "next-auth";
-import authConfig from "@/auth.config";
+import { auth } from "@/auth";
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authConfig);
+    const params = await props.params;
+    const session = await auth();
     if (!session?.user || (session.user as any).role === "STUDENT") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

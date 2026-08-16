@@ -19,6 +19,7 @@ type Application = {
   parentPhone: string
   parentEmail?: string
   parentOccupation?: string
+  hasPaidFee?: boolean
   createdAt: string
 }
 
@@ -59,7 +60,7 @@ export default function AdmissionsDashboard() {
 
   useEffect(() => { fetchApplications() }, [])
 
-  const handleAction = async (id: string, action: "ACCEPT" | "REJECT") => {
+  const handleAction = async (id: string, action: "ACCEPT" | "REJECT" | "VERIFY_FEE") => {
     setProcessingId(id)
     setErrorMsg(null)
     try {

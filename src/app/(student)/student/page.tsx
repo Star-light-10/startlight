@@ -20,7 +20,7 @@ export default function StudentDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Quick Links */}
         <Link 
-          href="/dashboard/fees" 
+          href="/student/fees" 
           className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-3xl p-6 border border-blue-100 dark:border-blue-800 transition-colors group"
         >
           <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform">
@@ -31,7 +31,7 @@ export default function StudentDashboard() {
         </Link>
 
         <Link 
-          href="/dashboard/results" 
+          href="/student/results" 
           className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-3xl p-6 border border-green-100 dark:border-green-800 transition-colors group"
         >
           <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform">

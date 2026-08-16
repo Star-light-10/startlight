@@ -18,9 +18,9 @@ export default function StudentLayout({
   }
 
   const navItems = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'School Fees', href: '/dashboard/fees' },
-    { name: 'Results', href: '/dashboard/results' },
+    { name: 'Dashboard', href: '/student' },
+    { name: 'School Fees', href: '/student/fees' },
+    { name: 'Results', href: '/student/results' },
   ]
 
   return (
@@ -30,7 +30,7 @@ export default function StudentLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="flex items-center gap-3">
+              <Link href="/student" className="flex items-center gap-3">
                 <StarlightLogo className="w-8 h-8" />
                 <div>
                   <h1 className="font-black text-[#000080] dark:text-white text-sm">STARLIGHT</h1>
