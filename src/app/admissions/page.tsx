@@ -34,6 +34,12 @@ export default function AdmissionsPage() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [applicationId, setApplicationId] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
+  const [applicantDetails, setApplicantDetails] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    className: "",
+  })
   const fileInputRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -110,6 +116,19 @@ export default function AdmissionsPage() {
         return
       }
 
+      // Capture applicant details before clearing form
+      const form = e.currentTarget
+      const fd = new FormData(form)
+      const firstName = (fd.get("firstName") as string) || ""
+      const middleName = (fd.get("middleName") as string) || ""
+      const lastName = (fd.get("lastName") as string) || ""
+      setApplicantDetails({
+        name: [firstName, middleName, lastName].filter(Boolean).join(" "),
+        phone: (fd.get("parentPhone") as string) || "",
+        address: (fd.get("homeAddress") as string) || "",
+        className: (fd.get("classApplyingFor") as string) || "",
+      })
+
       setApplicationId(data.applicationId)
       localStorage.removeItem(STORAGE_KEY)
       setIsSuccess(true)
@@ -122,7 +141,16 @@ export default function AdmissionsPage() {
 
   // ── Success Screen ──────────────────────────────────────────────────────────
   if (isSuccess) {
-    const whatsappMessage = encodeURIComponent(`Hello Admin, I have just paid the ₦2,000 Admission Application Fee. My Application ID is: ${applicationId}`);
+    const whatsappMessage = encodeURIComponent(
+      `Hello Admin,\n\nI have just paid the ₦2,000 Admission Application Fee.\n\n` +
+      `*Applicant Details:*\n` +
+      `• Name: ${applicantDetails.name}\n` +
+      `• Class Applying For: ${applicantDetails.className}\n` +
+      `• Home Address: ${applicantDetails.address}\n` +
+      `• Parent/Guardian Phone: ${applicantDetails.phone}\n\n` +
+      `*Application ID:* ${applicationId}\n\n` +
+      `Please find my payment receipt attached. Kindly process my application. Thank you.`
+    );
     const whatsappUrl = `https://wa.me/2348056809200?text=${whatsappMessage}`;
 
     return (
