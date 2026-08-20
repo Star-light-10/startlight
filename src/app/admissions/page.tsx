@@ -170,9 +170,9 @@ export default function AdmissionsPage() {
 
           {/* Application ID Box */}
           <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-5 mb-6 text-center border border-gray-100 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1 font-bold">Your Application ID</p>
-            <p className="text-2xl font-mono font-black text-[#000080] dark:text-[#FFA500] tracking-wider">{applicationId}</p>
-            <p className="text-[10px] text-gray-400 mt-2">Save this ID! You will need it to check your status and download your letter.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 font-bold">Your Application ID</p>
+            <p className="text-base sm:text-lg font-mono font-black text-[#000080] dark:text-[#FFA500] break-all text-center leading-relaxed px-2">{applicationId}</p>
+            <p className="text-[10px] text-gray-400 mt-3">Save this ID! You will need it to check your status and download your letter.</p>
           </div>
 
           {/* Payment Instructions */}
