@@ -117,16 +117,14 @@ export default function AdmissionsPage() {
       }
 
       // Capture applicant details before clearing form
-      const form = e.currentTarget
-      const fd = new FormData(form)
-      const firstName = (fd.get("firstName") as string) || ""
-      const middleName = (fd.get("middleName") as string) || ""
-      const lastName = (fd.get("lastName") as string) || ""
+      const firstName = (formData.get("firstName") as string) || ""
+      const middleName = (formData.get("middleName") as string) || ""
+      const lastName = (formData.get("lastName") as string) || ""
       setApplicantDetails({
         name: [firstName, middleName, lastName].filter(Boolean).join(" "),
-        phone: (fd.get("parentPhone") as string) || "",
-        address: (fd.get("homeAddress") as string) || "",
-        className: (fd.get("classApplyingFor") as string) || "",
+        phone: (formData.get("parentPhone") as string) || "",
+        address: (formData.get("homeAddress") as string) || "",
+        className: (formData.get("classApplyingFor") as string) || "",
       })
 
       setApplicationId(data.applicationId)
