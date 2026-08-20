@@ -35,11 +35,20 @@ export default function StudentsDashboard() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [successResult, setSuccessResult] = useState<any[] | null>(null)
 
+  // Edit student state
+  const [editStudent, setEditStudent] = useState<any | null>(null)
+  const [classes, setClasses] = useState<any[]>([])
+  const [editForm, setEditForm] = useState({ name: "", admissionNumber: "", classId: "" })
+
   const fetchStudents = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("/api/students")
-      if (res.ok) setStudents(await res.json())
+      const [stuRes, clsRes] = await Promise.all([
+        fetch("/api/students"),
+        fetch("/api/academics/classes"),
+      ])
+      if (stuRes.ok) setStudents(await stuRes.json())
+      if (clsRes.ok) setClasses(await clsRes.json())
     } catch (e) {
       console.error(e)
     } finally {
@@ -48,6 +57,38 @@ export default function StudentsDashboard() {
   }
 
   useEffect(() => { fetchStudents() }, [])
+
+  const openEdit = (s: Student) => {
+    setEditStudent(s)
+    setEditForm({ name: s.name, admissionNumber: s.admissionNumber, classId: (s as any).classId || "" })
+  }
+
+  const handleEditSave = async () => {
+    if (!editStudent) return
+    setIsProcessing(true)
+    try {
+      const res = await fetch(`/api/students/${editStudent.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editForm),
+      })
+      if (res.ok) {
+        setEditStudent(null)
+        fetchStudents()
+      } else {
+        const d = await res.json()
+        alert(d.error || "Update failed")
+      }
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Delete student "${name}"? This cannot be undone.`)) return
+    await fetch(`/api/students/${id}`, { method: "DELETE" })
+    fetchStudents()
+  }
 
   const handleSingleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -197,6 +238,50 @@ export default function StudentsDashboard() {
         </div>
       )}
 
+      {/* Edit Student Modal */}
+      {editStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+              <h2 className="font-black">Edit Student</h2>
+              <button onClick={() => setEditStudent(null)} className="text-gray-400 hover:text-gray-700 dark:hover:text-white">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Full Name</label>
+                <input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Admission Number</label>
+                <input value={editForm.admissionNumber} onChange={e => setEditForm({...editForm, admissionNumber: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#000080]" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Class</label>
+                <select value={editForm.classId} onChange={e => setEditForm({...editForm, classId: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#000080]">
+                  <option value="">— No Change —</option>
+                  {classes.map(c => <option key={c.id} value={c.id}>{c.name}{c.section ? ` ${c.section}` : ""}</option>)}
+                </select>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button onClick={handleEditSave} disabled={isProcessing}
+                  className="flex-1 py-2.5 bg-[#000080] hover:bg-[#000066] text-white font-bold rounded-xl disabled:opacity-50">
+                  {isProcessing ? "Saving…" : "Save Changes"}
+                </button>
+                <button onClick={() => setEditStudent(null)}
+                  className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Toolbar */}
       <div className="relative max-w-sm">
         <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,6 +311,7 @@ export default function StudentsDashboard() {
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Student Name</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Class</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -238,6 +324,10 @@ export default function StudentsDashboard() {
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                         {s.status}
                       </span>
+                    </td>
+                    <td className="px-5 py-4 text-right space-x-2 whitespace-nowrap">
+                      <button onClick={() => openEdit(s)} className="px-3 py-1 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200">✏ Edit</button>
+                      <button onClick={() => handleDelete(s.id, s.name)} className="px-3 py-1 text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 rounded-lg border border-red-200">🗑 Delete</button>
                     </td>
                   </tr>
                 ))}
