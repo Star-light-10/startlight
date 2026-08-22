@@ -305,18 +305,18 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                name: "Mr. & Mrs. Okafor",
-                role: "Parent",
+                name: "Alhaji & Mrs. Yusuf",
+                role: "Parent — Oyo, Oyo State",
                 msg: "Starlight School transformed our son's life. The teachers are dedicated and the new digital portal makes it so easy to track his progress.",
               },
               {
-                name: "Adaeze Nwosu",
-                role: "SS3 Student",
+                name: "Aisha Abdullahi",
+                role: "SS3 Student — Oyo, Oyo State",
                 msg: "I love that I can access my timetable, check my results and submit assignments online. Starlight is truly modern and forward-thinking!",
               },
               {
-                name: "Mrs. Fatima Adeleke",
-                role: "Class Teacher",
+                name: "Mrs. Khadijat Salawu",
+                role: "Class Teacher — Oyo, Oyo State",
                 msg: "The management system has saved me hours every week. I can take attendance, upload notes and generate report cards with just a few clicks.",
               },
             ].map((t) => (
