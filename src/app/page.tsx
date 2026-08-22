@@ -4,6 +4,7 @@ import Image from "next/image";
 import { StarlightLogo } from "@/components/starlight-logo";
 import ContactForm from "@/components/contact-form";
 import { SchoolSections } from "@/components/school-sections";
+import { HeroAudio } from "@/components/hero-audio";
 
 export const metadata: Metadata = {
   title: "Starlight Model School | Oke-Medina, Boroboro, Oyo State",
@@ -16,26 +17,26 @@ export default function HomePage() {
     <div className="min-h-screen bg-white dark:bg-gray-950 font-sans">
       {/* ===== MARQUEE ANNOUNCEMENT ===== */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-10 bg-[#000080] overflow-hidden flex items-center border-b border-[#FFA500]/30 shadow-md">
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-white font-bold tracking-wide">
-          <span className="text-[#FFA500]">★</span>
-          ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION
-          <span className="text-[#FFA500]">★</span>
-          NURSERY, PRIMARY, JUNIOR & SENIOR SECONDARY
-          <span className="text-[#FFA500]">★</span>
-          APPLY ONLINE TODAY OR VISIT OUR CAMPUS
-          <span className="text-[#FFA500]">★</span>
-          EXCELLENCE IN EDUCATION
-          <span className="text-[#FFA500]">★</span>
-          ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-16 text-white font-bold tracking-[0.2em] text-sm">
+          <span className="text-[#FFA500] text-xl">★</span>
+          <span>ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION</span>
+          <span className="text-[#FFA500] text-xl">★</span>
+          <span>NURSERY, PRIMARY, JUNIOR & SENIOR SECONDARY</span>
+          <span className="text-[#FFA500] text-xl">★</span>
+          <span>APPLY ONLINE TODAY OR VISIT OUR CAMPUS</span>
+          <span className="text-[#FFA500] text-xl">★</span>
+          <span>EXCELLENCE IN EDUCATION</span>
+          <span className="text-[#FFA500] text-xl">★</span>
+          <span>ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION</span>
         </div>
       </div>
 
       {/* ===== NAVBAR ===== */}
-      <header className="fixed top-10 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+      <header className="fixed top-10 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 animate-in slide-in-from-top duration-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 hover:scale-105 transition-transform duration-300">
               <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
               <div>
                 <p className="font-black text-[#000080] dark:text-white text-sm leading-none">STARLIGHT</p>
@@ -60,7 +61,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/admissions"
-                className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-[#FFA500] hover:bg-[#e69400] rounded-full shadow-md hover:shadow-lg transition-all"
+                className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-[#FFA500] hover:bg-[#e69400] rounded-full shadow-[0_0_15px_rgba(255,165,0,0.4)] hover:shadow-[0_0_25px_rgba(255,165,0,0.6)] transition-all hover:scale-105"
               >
                 Apply Now →
               </Link>
@@ -71,7 +72,7 @@ export default function HomePage() {
 
       {/* ===== HERO SECTION ===== */}
       <section
-        className="relative min-h-screen flex items-center pt-26 overflow-hidden"
+        className="relative min-h-screen flex items-center pt-26 overflow-hidden perspective-1000"
         style={{
           background: "linear-gradient(135deg, #000080 0%, #1a1a6e 30%, #0a0a50 60%, #000033 100%)",
         }}
@@ -80,13 +81,13 @@ export default function HomePage() {
           src="/images/school-1.jpg"
           alt="School Background"
           fill
-          className="object-cover opacity-10 mix-blend-screen pointer-events-none"
+          className="object-cover opacity-10 mix-blend-screen pointer-events-none animate-in fade-in duration-[2000ms] zoom-in-110"
           priority
         />
         {/* Animated Background Circles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 right-10 w-72 h-72 bg-[#FFA500]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#000080]/20 rounded-full blur-3xl" />
           {/* Stars */}
           {[...Array(20)].map((_, i) => (
@@ -96,6 +97,7 @@ export default function HomePage() {
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
+                animation: `pulse ${2 + Math.random() * 3}s infinite`,
                 animationDelay: `${Math.random() * 3}s`,
               }}
             />
@@ -104,35 +106,37 @@ export default function HomePage() {
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6">
-            <span>★</span>
-            <span>EXCELLENCE IN EDUCATION SINCE 2005</span>
+          <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <span className="animate-spin-slow">★</span>
+            <span className="tracking-widest">EXCELLENCE IN EDUCATION SINCE 2005</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4 text-white">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black leading-tight mb-4 text-white animate-in fade-in zoom-in-95 slide-in-from-bottom-8 duration-1000 delay-100 fill-mode-both drop-shadow-2xl">
             Starlight Model School
           </h1>
-          <p className="text-blue-200 text-base sm:text-lg mb-4 max-w-xl mx-auto">
+          <p className="text-blue-200 text-base sm:text-xl font-medium mb-4 max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both tracking-wide">
             Oke-Medina, Boroboro, Oyo State
           </p>
 
           {/* ── PORTAL LOGIN CARDS ── */}
-          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 fill-mode-both">
             {[
               { title: "Admin",   desc: "Management &amp; records",        icon: "🏫", href: "/login", bg: "from-[#000080] to-[#1e3a8a]" },
-              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨\u200d🏫", href: "/login", bg: "from-[#b45309] to-[#d97706]" },
-              { title: "Student", desc: "Results &amp; timetable",          icon: "👨\u200d🎓", href: "/login", bg: "from-[#065f46] to-[#047857]" },
-              { title: "Parent",  desc: "Track child&apos;s progress",    icon: "👨\u200d👩\u200d👧", href: "/login", bg: "from-[#581c87] to-[#7e22ce]" },
-            ].map((portal) => (
+              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨‍🏫", href: "/login", bg: "from-[#b45309] to-[#d97706]" },
+              { title: "Student", desc: "Results &amp; timetable",          icon: "👨‍🎓", href: "/login", bg: "from-[#065f46] to-[#047857]" },
+              { title: "Parent",  desc: "Track child's progress",    icon: "👨‍👩‍👧", href: "/login", bg: "from-[#581c87] to-[#7e22ce]" },
+            ].map((portal, idx) => (
               <Link
                 key={portal.title}
                 href={portal.href}
-                className={`group bg-gradient-to-br ${portal.bg} rounded-2xl p-5 sm:p-6 text-white text-center shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 border border-white/10`}
+                className={`group relative bg-gradient-to-br ${portal.bg} rounded-2xl p-5 sm:p-6 text-white text-center shadow-xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2 hover:scale-105 transition-all duration-300 border border-white/10 overflow-hidden`}
+                style={{ animationDelay: `${600 + (idx * 100)}ms` }}
               >
-                <div className="text-3xl sm:text-4xl mb-3">{portal.icon}</div>
+                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="text-3xl sm:text-4xl mb-3 transform group-hover:scale-110 transition-transform duration-300">{portal.icon}</div>
                 <h2 className="text-base sm:text-lg font-black mb-1">{portal.title} Login</h2>
                 <p className="text-xs text-white/70" dangerouslySetInnerHTML={{ __html: portal.desc }} />
-                <div className="mt-4 inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+                <div className="mt-4 inline-flex items-center gap-1 bg-white/20 group-hover:bg-white text-white group-hover:text-[#000080] text-xs font-bold px-4 py-2 rounded-full transition-colors duration-300">
                   Login →
                 </div>
               </Link>
@@ -140,7 +144,8 @@ export default function HomePage() {
           </div>
 
           {/* Apply CTA */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 fill-mode-both">
+
             <Link
               href="/admissions"
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-black rounded-full shadow-xl hover:shadow-[#FFA500]/30 hover:shadow-2xl transition-all transform hover:-translate-y-1"
@@ -169,6 +174,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+        <HeroAudio />
       </section>
 
 
