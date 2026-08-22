@@ -103,37 +103,69 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
-              <span className="text-[10px] font-semibold tracking-[0.2em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair text-white leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              Where <span className="text-gold italic">Deen</span> meets <br />
-              Digital Excellence.
-            </h1>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             
-            <p className="text-lg sm:text-xl text-slate-400 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-              Nurturing the next generation with profound Islamic morals, outstanding academic rigor, and a seamlessly integrated technology platform.
-            </p>
+            {/* Left Column: Typography & CTA */}
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
+              </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-              <Link
-                href="/admissions"
-                className="px-8 py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase transition-all rounded-sm flex items-center gap-3 group"
-              >
-                Begin Enrollment
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
-              <Link
-                href="#about"
-                className="px-8 py-4 border border-white/20 hover:border-gold hover:text-gold text-white font-bold text-sm tracking-widest uppercase transition-all rounded-sm"
-              >
-                Discover Starlight
-              </Link>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair text-white leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+                Where <span className="text-gold italic">Deen</span> meets <br />
+                Digital Excellence.
+              </h1>
+              
+              <p className="text-lg sm:text-xl text-slate-400 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+                Nurturing the next generation with profound Islamic morals, outstanding academic rigor, and a seamlessly integrated technology platform.
+              </p>
+
+              <div className="mt-12 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                <Link
+                  href="/admissions"
+                  className="px-8 py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase transition-all rounded-sm flex items-center gap-3 group"
+                >
+                  Begin Enrollment
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+                <Link
+                  href="#about"
+                  className="px-8 py-4 border border-white/20 hover:border-gold hover:text-gold text-white font-bold text-sm tracking-widest uppercase transition-all rounded-sm"
+                >
+                  Discover Starlight
+                </Link>
+              </div>
             </div>
+
+            {/* Right Column: Hero Image */}
+            <div className="hidden lg:block relative h-[550px] w-full animate-in fade-in slide-in-from-right-8 duration-1000 delay-500">
+              <div className="absolute inset-0 rounded-2xl overflow-hidden glass-panel p-2 transform rotate-2 hover:rotate-0 transition-transform duration-700 shadow-2xl">
+                <div className="relative w-full h-full rounded-xl overflow-hidden">
+                  <Image
+                    src="/images/school-2.jpg" 
+                    alt="Starlight School Children"
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-1000"
+                    priority
+                  />
+                  {/* Subtle dark gradient overlay to blend with background */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-l from-[#020617]/50 via-transparent to-transparent opacity-50" />
+                </div>
+              </div>
+              
+              {/* Floating Badge overlay */}
+              <div className="absolute -bottom-6 -left-10 glass-panel px-6 py-4 rounded-2xl shadow-xl animate-bounce-slow border-l-4 border-l-gold">
+                <p className="text-3xl font-playfair text-white mb-1">100%</p>
+                <p className="text-[10px] text-gold uppercase tracking-widest font-bold">Digital Integration</p>
+              </div>
+              <div className="absolute top-10 -right-6 glass-panel px-5 py-3 rounded-2xl shadow-xl animate-pulse">
+                <p className="text-lg text-white mb-1">🏆</p>
+                <p className="text-[9px] text-slate-300 uppercase tracking-widest font-bold">Oyo's Finest</p>
+              </div>
+            </div>
+
           </div>
 
           {/* ── SLEEK PORTAL CARDS ── */}
