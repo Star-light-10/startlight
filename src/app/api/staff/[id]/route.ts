@@ -24,6 +24,35 @@ export async function PATCH(
         where: { id },
         data: { password: hashedPassword },
       })
+
+      // Send email
+      if (process.env.RESEND_API_KEY) {
+        try {
+          const { Resend } = require("resend");
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          await resend.emails.send({
+            from: "Starlight Admin <admin@starlight.edu.ng>",
+            to: user.email!,
+            subject: "Password Reset - Starlight Model School",
+            html: `
+              <h2>Password Reset</h2>
+              <p>Dear ${user.name},</p>
+              <p>Your teacher portal password has been reset by an administrator.</p>
+              <p>Here are your new login credentials:</p>
+              <ul>
+                <li><strong>Email:</strong> ${user.email}</li>
+                <li><strong>Temporary Password:</strong> ${newPassword}</li>
+              </ul>
+              <p>Please log in and change your password immediately.</p>
+              <br>
+              <p>Best regards,<br>School Management</p>
+            `,
+          });
+        } catch (err) {
+          console.error("Failed to send reset email:", err);
+        }
+      }
+
       return NextResponse.json({ success: true, email: user.email, tempPassword: newPassword })
     }
 

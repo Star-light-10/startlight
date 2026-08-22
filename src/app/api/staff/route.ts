@@ -75,6 +75,34 @@ export async function POST(request: NextRequest) {
       return newUser
     })
 
+    // Send email to teacher
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const { Resend } = require("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: "Starlight Admin <admin@starlight.edu.ng>",
+          to: email.trim().toLowerCase(),
+          subject: "Your Teacher Login Credentials - Starlight Model School",
+          html: `
+            <h2>Welcome to Starlight Model School!</h2>
+            <p>Dear ${name.trim()},</p>
+            <p>Your teacher portal account has been created successfully.</p>
+            <p>Here are your login credentials:</p>
+            <ul>
+              <li><strong>Email:</strong> ${email.trim().toLowerCase()}</li>
+              <li><strong>Temporary Password:</strong> ${password}</li>
+            </ul>
+            <p>Please log in and change your password as soon as possible.</p>
+            <br>
+            <p>Best regards,<br>School Management</p>
+          `,
+        });
+      } catch (err) {
+        console.error("Failed to send teacher creation email:", err);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       user,

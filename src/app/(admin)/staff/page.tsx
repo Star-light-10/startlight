@@ -164,6 +164,27 @@ export default function StaffPage() {
                         >
                           Delete
                         </button>
+                        <span className="text-gray-300">|</span>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to reset the password for ${teacher.name}? A new password will be generated and emailed to them.`)) return;
+                            try {
+                              const res = await fetch(`/api/staff/${teacher.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'reset_password' })
+                              });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setNewCredentials({ email: data.email, tempPass: data.tempPassword });
+                                setIsModalOpen(true);
+                              }
+                            } catch (e) {}
+                          }}
+                          className="font-semibold text-blue-600 hover:underline"
+                        >
+                          Reset Pass
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -179,7 +200,9 @@ export default function StaffPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
-              <h2 className="font-black text-gray-900 dark:text-white">Add New Teacher</h2>
+              <h2 className="font-black text-gray-900 dark:text-white">
+                {newCredentials ? "Credentials Generated" : "Add New Teacher"}
+              </h2>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -191,8 +214,8 @@ export default function StaffPage() {
                   <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Teacher Added!</h3>
-                  <p className="text-sm text-gray-500">Please copy these credentials and send them to the teacher securely.</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Credentials Generated!</h3>
+                  <p className="text-sm text-gray-500">Please copy these credentials and send them to the teacher securely. An email has also been sent to them.</p>
                   
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 text-left border border-gray-200 dark:border-gray-700">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email (Login ID)</p>
