@@ -69,6 +69,7 @@ export default function StudentsPage() {
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Class</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -84,9 +85,46 @@ export default function StudentsPage() {
                       {student.class}
                     </td>
                     <td className="px-5 py-4">
-                      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${student.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
                         {student.status}
                       </span>
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <div className="flex justify-end gap-2 text-sm">
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to mark ${student.name} as ${student.status === 'Active' ? 'Inactive' : 'Active'}?`)) return;
+                            try {
+                              const res = await fetch(`/api/students/${student.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'toggle_status' })
+                              });
+                              if (res.ok) {
+                                setStudents(students.map(s => s.id === student.id ? { ...s, status: student.status === 'Active' ? 'Inactive' : 'Active' } : s));
+                              }
+                            } catch (e) {}
+                          }}
+                          className={`font-semibold hover:underline ${student.status === 'Active' ? 'text-amber-600' : 'text-green-600'}`}
+                        >
+                          Mark {student.status === 'Active' ? 'Inactive' : 'Active'}
+                        </button>
+                        <span className="text-gray-300">|</span>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`WARNING: Deleting ${student.name} removes all their history. Are you sure?`)) return;
+                            try {
+                              const res = await fetch(`/api/students/${student.id}`, { method: 'DELETE' });
+                              if (res.ok) {
+                                setStudents(students.filter(s => s.id !== student.id));
+                              }
+                            } catch (e) {}
+                          }}
+                          className="font-semibold text-red-600 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

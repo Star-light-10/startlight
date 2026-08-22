@@ -107,6 +107,7 @@ export default function StaffPage() {
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Email</th>
                   <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -122,9 +123,48 @@ export default function StaffPage() {
                       {teacher.email}
                     </td>
                     <td className="px-5 py-4">
-                      <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                        Active
-                      </span>
+                      {(() => {
+                        const isActive = (teacher.teacherProfile as any)?.isActive !== false;
+                        return (
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+                            {isActive ? 'Active' : 'Inactive'}
+                          </span>
+                        );
+                      })()}
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <div className="flex justify-end gap-2 text-sm">
+                        <button
+                          onClick={async () => {
+                            const isActive = (teacher.teacherProfile as any)?.isActive !== false;
+                            if (!confirm(`Are you sure you want to mark ${teacher.name} as ${isActive ? 'Inactive' : 'Active'}?`)) return;
+                            try {
+                              const res = await fetch(`/api/staff/${teacher.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'toggle_status' })
+                              });
+                              if (res.ok) fetchTeachers();
+                            } catch (e) {}
+                          }}
+                          className={`font-semibold hover:underline ${(teacher.teacherProfile as any)?.isActive !== false ? 'text-amber-600' : 'text-green-600'}`}
+                        >
+                          Mark {(teacher.teacherProfile as any)?.isActive !== false ? 'Inactive' : 'Active'}
+                        </button>
+                        <span className="text-gray-300">|</span>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`WARNING: Deleting ${teacher.name} removes their record permanently. Are you sure?`)) return;
+                            try {
+                              const res = await fetch(`/api/staff/${teacher.id}`, { method: 'DELETE' });
+                              if (res.ok) fetchTeachers();
+                            } catch (e) {}
+                          }}
+                          className="font-semibold text-red-600 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

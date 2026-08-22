@@ -26,7 +26,24 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const { name, email, admissionNumber, classId } = await request.json()
+    const body = await request.json()
+
+    if (body.action === 'toggle_status') {
+      const student = await prisma.studentProfile.findUnique({ where: { id } })
+      if (!student) return NextResponse.json({ error: "Student not found" }, { status: 404 })
+      
+      const newStatus = !student.isActive
+      const updated = await prisma.studentProfile.update({
+        where: { id },
+        data: { 
+          isActive: newStatus,
+          leftAt: newStatus ? null : new Date() 
+        }
+      })
+      return NextResponse.json({ success: true, isActive: newStatus })
+    }
+
+    const { name, email, admissionNumber, classId } = body
 
     const student = await prisma.studentProfile.findUnique({
       where: { id },

@@ -33,10 +33,10 @@ export async function GET(req: Request) {
       const formattedStudents = students.map((s) => ({
         id: s.id,
         admissionNumber: s.admissionNumber,
-        name: s.user.name,
+        name: s.user?.name || "Unknown",
         class: s.class?.name || "Unassigned",
-        status: "Active",
-        user: { name: s.user.name }
+        status: (s as any).isActive === false ? "Inactive" : "Active",
+        user: { name: s.user?.name }
       }))
       return NextResponse.json(formattedStudents)
     }
@@ -55,10 +55,10 @@ export async function GET(req: Request) {
     const formattedStudents = students.map((s) => ({
       id: s.id,
       admissionNumber: s.admissionNumber,
-      name: s.user.name,
+      name: s.user?.name || "Unknown",
       class: s.class?.name || "Unassigned",
-      status: "Active",
-      user: { name: s.user.name }
+      status: (s as any).isActive === false ? "Inactive" : "Active",
+      user: { name: s.user?.name }
     }))
 
     return NextResponse.json({
