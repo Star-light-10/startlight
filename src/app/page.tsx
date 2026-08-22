@@ -392,10 +392,18 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-slate-600 text-[10px] uppercase tracking-widest">© {new Date().getFullYear()} Starlight Model School. Exclusive Rights Reserved.</p>
-            <p className="text-slate-600 text-[10px] uppercase tracking-widest">
-              Engineered by <span className="text-slate-400">Elite Computer Technological & Consultation Ltd</span>
+          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-slate-600 text-xs tracking-widest">© {new Date().getFullYear()} Starlight Model School. Exclusive Rights Reserved.</p>
+            <p className="text-slate-500 text-xs tracking-widest flex items-center gap-2">
+              Engineered by 
+              <a 
+                href="https://www.elitecomputer.com.ng" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gold hover:text-white transition-colors font-bold border-b border-gold/30 pb-0.5"
+              >
+                Elite Computer Technological & Consultation Ltd.
+              </a>
             </p>
           </div>
         </div>
