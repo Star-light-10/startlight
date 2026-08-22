@@ -264,7 +264,6 @@ export default function AdmissionsDashboard() {
               }`}
             >
               {s === "ALL" ? "All" : s.charAt(0) + s.slice(1).toLowerCase()}
-              <span className="ml-1.5 opacity-70">({counts[s]})</span>
             </button>
           ))}
         </div>
@@ -274,7 +273,7 @@ export default function AdmissionsDashboard() {
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm">
         {isLoading ? (
           <div className="py-20 text-center text-gray-400 text-sm">Loading applications…</div>
-        ) : filtered.length === 0 ? (
+        ) : applications.length === 0 ? (
           <div className="py-20 text-center text-gray-400 text-sm">
             {search || statusFilter !== "ALL" ? "No applications match your filters." : "No applications yet."}
           </div>
@@ -535,7 +534,7 @@ export default function AdmissionsDashboard() {
               </button>
             </div>
             
-            <form onSubmit={handleSaveForm} className="overflow-y-auto p-6 space-y-6 flex-1">
+            <form onSubmit={handleManualSubmit} className="overflow-y-auto p-6 space-y-6 flex-1">
               {errorMsg && (
                 <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium border border-red-100">
                   ⚠ {errorMsg}

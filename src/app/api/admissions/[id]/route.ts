@@ -50,12 +50,19 @@ export async function PATCH(
           data: { status: "ACCEPTED" },
         })
 
+        let effectiveTenantId = updatedApp.tenantId
+        if (!effectiveTenantId) {
+          const fallback = await tx.tenant.findFirst()
+          if (!fallback) throw new Error("System not initialized. No tenant found.")
+          effectiveTenantId = fallback.id
+        }
+
         // 2. Find or create target class
         // The application classApplyingFor contains the class name, e.g. "JSS 1"
         let targetClass = await tx.class.findFirst({
           where: { 
             name: updatedApp.classApplyingFor,
-            tenantId: updatedApp.tenantId || undefined
+            tenantId: effectiveTenantId
           },
         })
 
@@ -64,7 +71,7 @@ export async function PATCH(
           targetClass = await tx.class.create({
             data: {
               name: updatedApp.classApplyingFor,
-              tenantId: updatedApp.tenantId || undefined
+              tenantId: effectiveTenantId
             }
           })
         }
