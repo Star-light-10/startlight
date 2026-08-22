@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { StarlightLogo } from "@/components/starlight-logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,14 +30,6 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-
-      // Instead of hardcoding logic, let's redirect based on session role.
-      // A quick hack is fetching session here, or redirecting to a router page
-      // For now, let's redirect to a global router page or handle the routing here
-      // But let's just use the email string logic like before to route them correctly
-      // since that's what the prompt wanted, but a better way is a /api/auth/session check.
-      // To keep it simple, we will redirect to /dashboard and let middleware or the page handle it.
-      // But let's just keep the naive routing for now.
       
       const emailLower = email.toLowerCase();
       if (emailLower.includes("admin")) {
@@ -46,7 +39,6 @@ export default function LoginPage() {
       } else if (emailLower.includes("parent")) {
         router.push("/parent");
       } else {
-        // Teacher is the default case for most school staff
         router.push("/teacher");
       }
       
@@ -59,28 +51,26 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #000080 0%, #0a0a50 100%)" }}
+      style={{ background: "linear-gradient(135deg, #020617 0%, #000080 100%)" }}
     >
       {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-64 h-64 bg-[#FFA500]/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 right-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 left-10 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#FFA500] to-[#FFD700] flex items-center justify-center shadow-2xl shadow-[#FFA500]/40 mx-auto mb-4">
-            <span className="text-white font-black text-3xl">★</span>
-          </div>
-          <h1 className="text-white font-black text-2xl">STARLIGHT MODEL SCHOOL</h1>
-          <p className="text-blue-200 text-sm mt-1">Management System</p>
+        <div className="text-center mb-8 flex flex-col items-center">
+          <StarlightLogo className="w-16 h-16 mb-4 drop-shadow-2xl" />
+          <h1 className="text-white font-playfair font-black text-3xl tracking-wide">STARLIGHT</h1>
+          <p className="text-gold text-[10px] tracking-[0.3em] uppercase mt-1">Model School</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-          <h2 className="text-white font-black text-xl mb-2">Welcome Back</h2>
-          <p className="text-blue-200 text-sm mb-6">Enter your credentials to access your portal</p>
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <h2 className="text-white font-playfair font-black text-2xl mb-2">Welcome Back</h2>
+          <p className="text-slate-400 text-sm mb-8 font-light">Enter your credentials to access your portal.</p>
 
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-200 text-sm text-center">
@@ -88,9 +78,9 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form className="space-y-4" onSubmit={handleLogin}>
+          <form className="space-y-5" onSubmit={handleLogin}>
             <div>
-              <label className="block text-xs font-bold text-blue-200 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-widest mb-2">
                 Email Address
               </label>
               <input
@@ -98,23 +88,23 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFA500] focus:border-transparent"
+                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold text-blue-200 uppercase tracking-wider">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-widest">
                   Password
                 </label>
-                <a href="#" className="text-xs text-[#FFA500] hover:text-[#FFD700]">Forgot password?</a>
+                <a href="#" className="text-xs text-gold hover:text-[#FFD700] hover:underline transition-all">Forgot password?</a>
               </div>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFA500] focus:border-transparent"
+                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -122,14 +112,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-[#FFA500] hover:bg-[#e69400] text-white font-black rounded-xl transition-colors shadow-lg shadow-[#FFA500]/30 mt-2 disabled:opacity-50"
+              className="w-full py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg mt-4 disabled:opacity-50"
             >
               {loading ? "Verifying..." : "Login to Portal"}
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <p className="text-blue-200 text-xs text-center mb-4">Or select your portal</p>
+          <div className="mt-8 pt-8 border-t border-white/10">
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest text-center mb-5">Quick Access</p>
             <div className="grid grid-cols-2 gap-3">
               {[
                 { label: "Admin", href: "/dashboard" },
@@ -140,18 +130,18 @@ export default function LoginPage() {
                 <Link
                   key={p.label}
                   href={p.href}
-                  className="py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-semibold text-center transition-colors"
+                  className="py-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 text-slate-300 hover:text-gold text-xs font-bold tracking-wider uppercase text-center transition-all"
                 >
-                  {p.label} Portal
+                  {p.label}
                 </Link>
               ))}
             </div>
           </div>
         </div>
 
-        <p className="text-center text-blue-300 text-xs mt-6">
+        <p className="text-center text-slate-400 text-xs mt-8 tracking-widest">
           © 2026 Starlight Model School •{" "}
-          <Link href="/" className="text-[#FFA500] hover:underline">
+          <Link href="/" className="text-gold hover:text-white hover:underline transition-colors font-bold">
             Back to Website
           </Link>
         </p>
