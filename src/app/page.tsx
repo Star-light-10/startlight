@@ -63,12 +63,12 @@ export default function HomePage() {
             </div>
 
             {/* Nav Links */}
-            <nav className="hidden lg:flex items-center gap-10">
-              {["About", "Academics", "Admissions", "Campus", "Contact"].map((item) => (
-                <Link
-                  key={item}
+            <nav className="hidden md:flex items-center gap-8">
+              {['About', 'Academics', 'Admissions', 'Campus', 'Contact'].map((item) => (
+                <Link 
+                  key={item} 
                   href={`#${item.toLowerCase()}`}
-                  className="text-xs font-semibold text-slate-400 hover:text-white uppercase tracking-[0.15em] transition-colors"
+                  className="text-sm font-bold text-slate-300 hover:text-white uppercase tracking-wider transition-colors"
                 >
                   {item}
                 </Link>
@@ -76,16 +76,16 @@ export default function HomePage() {
             </nav>
 
             {/* CTA */}
-            <div className="hidden sm:flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-6">
               <Link
                 href="/login"
-                className="text-xs font-semibold text-slate-300 hover:text-white uppercase tracking-widest transition-colors"
+                className="text-sm font-bold text-slate-200 hover:text-white uppercase tracking-widest transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 href="/admissions"
-                className="inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-[#020617] bg-gold hover:bg-[#b5952f] transition-all rounded-sm uppercase tracking-widest"
+                className="inline-flex items-center justify-center px-8 py-3 text-sm font-extrabold text-[#020617] bg-gold hover:bg-[#b5952f] transition-all rounded-md uppercase tracking-wider shadow-lg"
               >
                 Apply Now
               </Link>
@@ -107,31 +107,31 @@ export default function HomePage() {
             
             {/* Left Column: Typography & CTA */}
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
+              <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse"></span>
+                <span className="text-sm font-semibold tracking-[0.15em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
               </div>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair text-white leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-playfair text-white leading-[1.1] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                 Where <span className="text-gold italic">Deen</span> meets <br />
                 Digital Excellence.
               </h1>
               
-              <p className="text-lg sm:text-xl text-slate-400 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+              <p className="text-xl sm:text-2xl text-slate-300 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
                 Nurturing the next generation with profound Islamic morals, outstanding academic rigor, and a seamlessly integrated technology platform.
               </p>
 
-              <div className="mt-12 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+              <div className="mt-14 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                 <Link
                   href="/admissions"
-                  className="px-8 py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase transition-all rounded-sm flex items-center gap-3 group"
+                  className="px-10 py-5 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-base md:text-lg tracking-wider uppercase transition-all rounded-md flex items-center gap-3 group shadow-xl"
                 >
                   Begin Enrollment
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
                 <Link
                   href="#about"
-                  className="px-8 py-4 border border-white/20 hover:border-gold hover:text-gold text-white font-bold text-sm tracking-widest uppercase transition-all rounded-sm"
+                  className="px-10 py-5 border-2 border-white/20 hover:border-gold hover:text-gold text-white font-bold text-base md:text-lg tracking-wider uppercase transition-all rounded-md"
                 >
                   Discover Starlight
                 </Link>

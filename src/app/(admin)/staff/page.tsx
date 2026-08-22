@@ -103,30 +103,30 @@ export default function StaffPage() {
             <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-800">
               <thead>
                 <tr className="bg-gray-50 dark:bg-gray-800/50">
-                  <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Employee ID</th>
-                  <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-5 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-5 py-4 text-left text-sm font-bold text-gray-500 uppercase tracking-wider">Employee ID</th>
+                  <th className="px-5 py-4 text-left text-sm font-bold text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-5 py-4 text-left text-sm font-bold text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-5 py-4 text-left text-sm font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-4 text-right text-sm font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {teachers.map((teacher) => (
                   <tr key={teacher.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
-                    <td className="px-5 py-4 text-sm font-semibold text-[#000080] dark:text-blue-400">
+                    <td className="px-5 py-5 text-base font-semibold text-[#000080] dark:text-blue-400">
                       {teacher.teacherProfile?.employeeId || "—"}
                     </td>
-                    <td className="px-5 py-4 font-bold text-gray-900 dark:text-white">
+                    <td className="px-5 py-5 text-base font-bold text-gray-900 dark:text-white">
                       {teacher.name}
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">
+                    <td className="px-5 py-5 text-base text-gray-600 dark:text-gray-300">
                       {teacher.email}
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-5">
                       {(() => {
                         const isActive = (teacher.teacherProfile as any)?.isActive !== false;
                         return (
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+                          <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
                             {isActive ? 'Active' : 'Inactive'}
                           </span>
                         );
