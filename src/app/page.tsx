@@ -4,66 +4,90 @@ import Image from "next/image";
 import { StarlightLogo } from "@/components/starlight-logo";
 import ContactForm from "@/components/contact-form";
 import { SchoolSections } from "@/components/school-sections";
-import { HeroAudio } from "@/components/hero-audio";
 
 export const metadata: Metadata = {
-  title: "Starlight Model School | Oyo, Oyo State",
+  title: "Starlight Model School | Exclusive Islamic Education in Oyo",
   description:
-    "Starlight Model School — A trusted community school serving Yoruba families in Oyo, Oyo State, Nigeria. Nursery, Primary, Junior & Senior Secondary education with a digital management system.",
+    "Starlight Model School — Oyo State's premier Islamic Model School, combining deep-rooted Qur'anic values with cutting-edge technology and academic excellence.",
 };
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 font-sans">
+    <div className="min-h-screen bg-[#020617] text-slate-300 font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden">
+      
+      {/* ===== GLOBAL STYLES FOR SERIF / PREMIUM FEEL ===== */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .font-playfair { font-family: 'Playfair Display', Georgia, serif; }
+        .text-gold { color: #D4AF37; }
+        .bg-gold { background-color: #D4AF37; }
+        .border-gold { border-color: #D4AF37; }
+        .glass-panel {
+          background: rgba(15, 23, 42, 0.4);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-panel:hover {
+          border: 1px solid rgba(212, 175, 55, 0.3);
+          background: rgba(15, 23, 42, 0.6);
+        }
+      `}} />
+
       {/* ===== MARQUEE ANNOUNCEMENT ===== */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-10 bg-[#000080] overflow-hidden flex items-center border-b border-[#FFA500]/30 shadow-md">
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-16 text-white font-bold tracking-[0.2em] text-sm">
-          <span className="text-[#FFA500] text-xl">☪️</span>
-          <span>ADMISSIONS NOW OPEN — Starlight Model School — OYO, OYO STATE</span>
-          <span className="text-[#FFA500] text-xl">★</span>
-          <span>NURSERY, PRIMARY, JUNIOR & SENIOR SECONDARY</span>
-          <span className="text-[#FFA500] text-xl">☪️</span>
-          <span>ISLAMIC VALUES · KNOWLEDGE · TECHNOLOGY · EXCELLENCE</span>
-          <span className="text-[#FFA500] text-xl">★</span>
-          <span>2026/2027 ACADEMIC SESSION — APPLY ONLINE TODAY</span>
-          <span className="text-[#FFA500] text-xl">☪️</span>
-          <span>ADMISSIONS NOW OPEN — Starlight Model School — OYO, OYO STATE</span>
+      <div className="fixed top-0 left-0 right-0 z-[60] h-9 bg-slate-950/80 backdrop-blur-md flex items-center border-b border-white/5">
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-16 text-slate-300 font-medium tracking-[0.2em] text-[10px] uppercase">
+          <span className="text-gold">☪</span>
+          <span>Admissions Now Open — 2026/2027 Session</span>
+          <span className="text-gold">✦</span>
+          <span>Islamic Values · Knowledge · Technology · Excellence</span>
+          <span className="text-gold">☪</span>
+          <span>Starlight Model School — Oyo, Oyo State</span>
+          <span className="text-gold">✦</span>
+          <span>Nursery, Primary, Junior & Senior Secondary</span>
+          <span className="text-gold">☪</span>
+          <span>Admissions Now Open — 2026/2027 Session</span>
         </div>
       </div>
 
       {/* ===== NAVBAR ===== */}
-      <header className="fixed top-10 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 animate-in slide-in-from-top duration-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="fixed top-9 left-0 right-0 z-50 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 animate-in slide-in-from-top duration-700">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <div className="flex items-center gap-3 hover:scale-105 transition-transform duration-300">
-              <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
+            <div className="flex items-center gap-4 hover:opacity-80 transition-opacity">
+              <StarlightLogo className="w-10 h-10 drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]" />
               <div>
-                <p className="font-black text-[#000080] dark:text-white text-sm leading-none">STARLIGHT</p>
-                <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest uppercase">Model School</p>
+                <p className="font-playfair font-bold text-white text-lg leading-none tracking-wide">STARLIGHT</p>
+                <p className="text-[9px] text-gold font-medium tracking-[0.3em] uppercase mt-1">Model School</p>
               </div>
             </div>
 
             {/* Nav Links */}
-            <nav className="hidden lg:flex items-center gap-8">
-              {["About", "Academics", "Admissions", "Facilities", "News", "Contact"].map((item) => (
+            <nav className="hidden lg:flex items-center gap-10">
+              {["About", "Academics", "Admissions", "Campus", "Contact"].map((item) => (
                 <Link
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-[#000080] dark:hover:text-[#FFA500] transition-colors"
+                  className="text-xs font-semibold text-slate-400 hover:text-white uppercase tracking-[0.15em] transition-colors"
                 >
                   {item}
                 </Link>
               ))}
             </nav>
 
-            {/* CTA Buttons */}
-            <div className="flex items-center gap-2">
+            {/* CTA */}
+            <div className="hidden sm:flex items-center gap-4">
+              <Link
+                href="/login"
+                className="text-xs font-semibold text-slate-300 hover:text-white uppercase tracking-widest transition-colors"
+              >
+                Sign In
+              </Link>
               <Link
                 href="/admissions"
-                className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-[#FFA500] hover:bg-[#e69400] rounded-full shadow-[0_0_15px_rgba(255,165,0,0.4)] hover:shadow-[0_0_25px_rgba(255,165,0,0.6)] transition-all hover:scale-105"
+                className="inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-[#020617] bg-gold hover:bg-[#b5952f] transition-all rounded-sm uppercase tracking-widest"
               >
-                Apply Now →
+                Apply Now
               </Link>
             </div>
           </div>
@@ -71,314 +95,212 @@ export default function HomePage() {
       </header>
 
       {/* ===== HERO SECTION ===== */}
-      <section
-        className="relative min-h-screen flex items-center pt-26 overflow-hidden perspective-1000"
-        style={{
-          background: "linear-gradient(135deg, #000080 0%, #1a1a6e 30%, #0a0a50 60%, #000033 100%)",
-        }}
-      >
-        <Image
-          src="/images/school-1.jpg"
-          alt="School Background"
-          fill
-          className="object-cover opacity-10 mix-blend-screen pointer-events-none animate-in fade-in duration-[2000ms] zoom-in-110"
-          priority
-        />
-        {/* Animated Background Circles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 right-10 w-72 h-72 bg-[#FFA500]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#000080]/20 rounded-full blur-3xl" />
-          {/* Stars */}
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full opacity-50"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animation: `pulse ${2 + Math.random() * 3}s infinite`,
-                animationDelay: `${Math.random() * 3}s`,
-              }}
-            />
-          ))}
+      <section className="relative min-h-screen flex flex-col justify-center pt-32 pb-20 overflow-hidden">
+        {/* Abstract dark gradients */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-[#0f172a]/80 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[rgba(212,175,55,0.03)] rounded-full blur-[100px]" />
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <span className="animate-spin-slow">☪️</span>
-            <span className="tracking-widest">STARLIGHT MODEL SCHOOL — OYO, OYO STATE</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+          
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair text-white leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+              Where <span className="text-gold italic">Deen</span> meets <br />
+              Digital Excellence.
+            </h1>
+            
+            <p className="text-lg sm:text-xl text-slate-400 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+              Nurturing the next generation with profound Islamic morals, outstanding academic rigor, and a seamlessly integrated technology platform.
+            </p>
+
+            <div className="mt-12 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+              <Link
+                href="/admissions"
+                className="px-8 py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase transition-all rounded-sm flex items-center gap-3 group"
+              >
+                Begin Enrollment
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
+              <Link
+                href="#about"
+                className="px-8 py-4 border border-white/20 hover:border-gold hover:text-gold text-white font-bold text-sm tracking-widest uppercase transition-all rounded-sm"
+              >
+                Discover Starlight
+              </Link>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black leading-tight mb-4 text-white animate-in fade-in zoom-in-95 slide-in-from-bottom-8 duration-1000 delay-100 fill-mode-both drop-shadow-2xl">
-            Starlight Model School
-          </h1>
-          <p className="text-blue-200 text-base sm:text-xl font-medium mb-4 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both tracking-wide">
-            Islamic Values · Knowledge · Technology · Excellence
-          </p>
-
-          {/* ── PORTAL LOGIN CARDS ── */}
-          <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 fill-mode-both">
+          {/* ── SLEEK PORTAL CARDS ── */}
+          <div className="mt-32 grid grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
             {[
-              { title: "Admin",   desc: "Management &amp; records",        icon: "🏫", href: "/login", bg: "from-[#000080] to-[#1e3a8a]" },
-              { title: "Teacher", desc: "Classes &amp; attendance",         icon: "👨‍🏫", href: "/login", bg: "from-[#b45309] to-[#d97706]" },
-              { title: "Student", desc: "Results &amp; timetable",          icon: "👨‍🎓", href: "/login", bg: "from-[#065f46] to-[#047857]" },
-              { title: "Parent",  desc: "Track child's progress",    icon: "👨‍👩‍👧", href: "/login", bg: "from-[#581c87] to-[#7e22ce]" },
+              { title: "Administrator",   desc: "Command Center",   icon: "🏛", href: "/login" },
+              { title: "Educator",        desc: "Classroom Hub",    icon: "🖋", href: "/login" },
+              { title: "Student",         desc: "Learning Portal",  icon: "📚", href: "/login" },
+              { title: "Parent",          desc: "Progress Tracker", icon: "🤝", href: "/login" },
             ].map((portal, idx) => (
               <Link
                 key={portal.title}
                 href={portal.href}
-                className={`group relative bg-gradient-to-br ${portal.bg} rounded-2xl p-5 sm:p-6 text-white text-center shadow-xl hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2 hover:scale-105 transition-all duration-300 border border-white/10 overflow-hidden`}
-                style={{ animationDelay: `${600 + (idx * 100)}ms` }}
+                className="glass-panel group relative p-6 text-left transition-all duration-500 flex flex-col justify-between min-h-[140px] rounded-lg"
               >
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="text-3xl sm:text-4xl mb-3 transform group-hover:scale-110 transition-transform duration-300">{portal.icon}</div>
-                <h2 className="text-base sm:text-lg font-black mb-1">{portal.title} Login</h2>
-                <p className="text-xs text-white/70" dangerouslySetInnerHTML={{ __html: portal.desc }} />
-                <div className="mt-4 inline-flex items-center gap-1 bg-white/20 group-hover:bg-white text-white group-hover:text-[#000080] text-xs font-bold px-4 py-2 rounded-full transition-colors duration-300">
-                  Login →
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-gold text-2xl opacity-80 group-hover:opacity-100 transition-opacity">{portal.icon}</span>
+                  <span className="text-slate-600 group-hover:text-gold transition-colors">↗</span>
+                </div>
+                <div>
+                  <h2 className="text-sm font-bold text-white uppercase tracking-widest mb-1">{portal.title}</h2>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-widest">{portal.desc}</p>
                 </div>
               </Link>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Apply CTA */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 fill-mode-both">
-
-            <Link
-              href="/admissions"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-black rounded-full shadow-xl hover:shadow-[#FFA500]/30 hover:shadow-2xl transition-all transform hover:-translate-y-1"
-            >
-              Apply for Admission 2026/2027 →
-            </Link>
-            <Link
-              href="#about"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full border border-white/30 transition-all"
-            >
-              Learn More
-            </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-10 mt-12 pt-10 border-t border-white/10">
+      {/* ===== PRESTIGE STATS ===== */}
+      <section className="border-y border-white/5 bg-[#020617]/50 backdrop-blur-xl py-12 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
             {[
-              { value: "500+", label: "Students Enrolled", icon: "🎓" },
-              { value: "98%",  label: "Exam Pass Rate",    icon: "🏆" },
-              { value: "100%", label: "Digital Records",   icon: "💻" },
-              { value: "24/7", label: "Portal Access",     icon: "📱" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="text-lg mb-1">{stat.icon}</p>
-                <p className="text-2xl font-black text-[#FFA500]">{stat.value}</p>
-                <p className="text-xs text-blue-200 uppercase tracking-wider">{stat.label}</p>
+              { value: "500+", label: "Elite Scholars" },
+              { value: "98%",  label: "Board Pass Rate" },
+              { value: "100%", label: "Digital Integration" },
+              { value: "24/7", label: "Global Access" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center px-4">
+                <p className="text-3xl md:text-4xl font-playfair text-white mb-2">{stat.value}</p>
+                <p className="text-[9px] text-gold uppercase tracking-[0.2em] font-semibold">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
-        <HeroAudio />
       </section>
 
-
-
-      {/* ===== ABOUT SECTION ===== */}
-      <section className="py-24 bg-white dark:bg-gray-950" id="about">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">About Us</span>
-              <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                Islamic Values. <br />
-                <span className="text-[#000080] dark:text-blue-400">Knowledge & Technology.</span>
+      {/* ===== PHILOSOPHY / ABOUT ===== */}
+      <section className="py-32 relative" id="about">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="order-2 lg:order-1 relative h-[500px] w-full rounded-lg overflow-hidden glass-panel p-2">
+              <div className="relative w-full h-full rounded-md overflow-hidden">
+                <Image
+                  src="/images/school-1.jpg"
+                  alt="Starlight Architecture"
+                  fill
+                  className="object-cover opacity-60 mix-blend-luminosity hover:mix-blend-normal hover:opacity-100 transition-all duration-1000"
+                />
+              </div>
+            </div>
+            
+            <div className="order-1 lg:order-2">
+              <h4 className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-4">
+                <span className="w-8 h-[1px] bg-gold"></span>
+                Our Philosophy
+              </h4>
+              <h2 className="text-4xl lg:text-5xl font-playfair text-white leading-tight mb-8">
+                A legacy of intellect, <br />
+                <span className="text-slate-400 italic">grounded in faith.</span>
               </h2>
-              <p className="mt-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                Starlight Model School is an <strong>Starlight Model School</strong> in Oyo, Oyo State, built on the
-                foundation of <em>Deen</em>, discipline, and academic excellence. We nurture children with strong
-                Islamic morals, Qur'anic values, and a modern technology-powered education — preparing them to be
-                righteous, intelligent, and successful in this world and the next.
-                <span className="block mt-3 italic text-sm text-gray-500 dark:text-gray-500">
-                  "Seek knowledge from the cradle to the grave." — Prophet Muhammad ﷺ
-                </span>
+              <p className="text-slate-400 leading-relaxed font-light mb-6 text-lg">
+                Located in the heart of Oyo State, Starlight Model School redefines modern education for the Muslim child. We fuse strict adherence to Islamic morals with a world-class, technology-driven curriculum.
               </p>
-              <div className="mt-8 grid grid-cols-2 gap-5">
+              <blockquote className="border-l-2 border-gold pl-6 py-2 my-10">
+                <p className="text-white font-playfair text-xl italic mb-2">
+                  "Seek knowledge from the cradle to the grave."
+                </p>
+                <footer className="text-xs text-gold tracking-widest uppercase">— Prophet Muhammad ﷺ</footer>
+              </blockquote>
+              
+              <div className="grid sm:grid-cols-2 gap-6 mt-12">
                 {[
-                  { icon: "☪️",  title: "Islamic Values",   desc: "Rooted in Qur'anic morals, honesty, discipline and respect for knowledge." },
-                  { icon: "📚", title: "Academic Excellence", desc: "WAEC, NECO & BECE preparation with Oyo State-approved curriculum." },
-                  { icon: "💻", title: "Digital Platform",  desc: "Results, attendance & fees managed online — accessible from any phone." },
-                  { icon: "🎓", title: "Online Admissions", desc: "Parents apply for admission 100% online from home — fast and simple." },
-                ].map((item) => (
-                  <div key={item.title} className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-[#FFA500] transition-colors">
-                    <span className="text-2xl flex-shrink-0">{item.icon}</span>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-white text-sm">{item.title}</h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{item.desc}</p>
-                    </div>
+                  { title: "Moral Fortitude", desc: "Uncompromising discipline and Qur'anic values." },
+                  { title: "Academic Rigor", desc: "Excellence in WAEC, NECO & BECE standards." },
+                  { title: "Digital Mastery", desc: "Fully automated, cloud-based infrastructure." },
+                  { title: "Global Vision", desc: "Preparing leaders for tomorrow's challenges." }
+                ].map(item => (
+                  <div key={item.title}>
+                    <h5 className="text-white font-bold text-sm tracking-wide mb-2">{item.title}</h5>
+                    <p className="text-slate-500 text-xs leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="flex w-full">
-              <SchoolSections />
-            </div>
           </div>
         </div>
       </section>
 
-      {/* ===== CAMPUS LIFE GALLERY ===== */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-900" id="gallery">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Campus Life</span>
-            <h2 className="mt-2 text-3xl md:text-4xl font-black text-gray-900 dark:text-white">
-              Experience Starlight
-            </h2>
-            <p className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-              A glimpse into our vibrant school environment, state-of-the-art facilities, and the daily lives of our brilliant students.
+      {/* ===== THE DIGITAL EXPERIENCE ===== */}
+      <section className="py-32 bg-[#050A15] relative border-y border-white/5" id="campus">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h4 className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4">The Digital Edge</h4>
+            <h2 className="text-4xl md:text-5xl font-playfair text-white mb-6">Unrivaled Platform Architecture</h2>
+            <p className="text-slate-400 font-light text-lg">
+              Experience a sophisticated ecosystem where every operational detail is precisely engineered for seamless school management.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { src: "/images/grad-1.jpg",    alt: "Graduation Ceremony",  span: "md:col-span-2 lg:col-span-2 lg:row-span-2 border-4 border-[#FFA500]/50 hover:border-[#FFA500]", isSpecial: true },
-              { src: "/images/school-2.jpg",  alt: "Our Bright Students",  span: "md:col-span-1 border-4 border-[#000080]/50 hover:border-[#000080]", isSpecial: true },
-              { src: "/images/school-3.jpg",  alt: "School Activities",    span: "md:col-span-1 border border-gray-200/50" },
-              { src: "/images/school-4.jpg",  alt: "School Community",     span: "md:col-span-1 border border-gray-200/50" },
-              { src: "/images/school-5.jpg",  alt: "Student Life",         span: "md:col-span-1 lg:col-span-2 border border-gray-200/50" },
-              { src: "/images/school-6.jpg",  alt: "Campus",               span: "md:col-span-1 border border-gray-200/50" },
-            ].map((img, i) => (
-              <div
-                key={i}
-                className={`relative group overflow-hidden rounded-3xl shadow-xl dark:border-gray-700/50 ${img.span} h-64 md:h-auto min-h-[250px] ${img.isSpecial ? "bg-gradient-to-br from-[#000080]/10 to-[#FFA500]/10 p-2" : ""}`}
-              >
-                <div className={`relative w-full h-full rounded-2xl overflow-hidden shadow-inner ${img.isSpecial ? "ring-2 ring-white/50" : ""}`}>
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110 saturate-[1.1] contrast-[1.05]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute bottom-6 left-6 right-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <p className="font-bold text-lg">{img.alt}</p>
-                      <p className="text-sm text-[#FFA500]">Starlight Model School</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TECH FEATURES STRIP ===== */}
-      <section className="py-16 bg-gray-950 dark:bg-black" id="features">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">🚀 Powered by Technology</span>
-            <h2 className="mt-2 text-3xl md:text-4xl font-black text-white">
-              Complete School Management — <span className="text-[#FFA500]">Digital & Seamless</span>
-            </h2>
-            <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-sm">
-              Starlight combines Islamic moral upbringing with a fully digital school system — from admissions to graduation, every step is online.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { icon: "🏫", label: "Online Admissions",   desc: "Apply from home" },
-              { icon: "📊", label: "Live Attendance",      desc: "Daily digital register" },
-              { icon: "📝", label: "Result Entry",         desc: "Auto-grade calculation" },
-              { icon: "🧾", label: "Fee Invoices",         desc: "Track & pay online" },
-              { icon: "📋", label: "Report Cards",         desc: "PDF auto-generated" },
-              { icon: "📱", label: "Parent Alerts",        desc: "WhatsApp notifications" },
+              { icon: "🏛", label: "Paperless Admissions", desc: "A streamlined, zero-friction digital enrollment process." },
+              { icon: "📉", label: "Analytics Dashboard", desc: "Real-time metrics on attendance, fees, and academics." },
+              { icon: "📑", label: "Automated Grading", desc: "Algorithmic computation of continuous assessments & exams." },
+              { icon: "💳", label: "Financial Ledger", desc: "Transparent, secure invoicing and digital payment tracking." },
+              { icon: "📜", label: "Smart Archives", desc: "Immutable cloud storage for student dossiers & report cards." },
+              { icon: "📡", label: "Instant Comms", desc: "Direct-to-parent alerts via WhatsApp and email integrations." },
             ].map((f) => (
-              <div key={f.label} className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FFA500]/50 rounded-2xl p-5 text-center transition-all duration-300 group cursor-default">
-                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">{f.icon}</div>
-                <p className="text-white font-bold text-xs mb-1">{f.label}</p>
-                <p className="text-gray-500 text-[10px]">{f.desc}</p>
+              <div key={f.label} className="glass-panel p-8 rounded-lg group">
+                <div className="text-3xl mb-6 text-gold opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300">{f.icon}</div>
+                <h3 className="text-white font-bold text-sm tracking-wide uppercase mb-3">{f.label}</h3>
+                <p className="text-slate-500 text-xs leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ===== ADMISSIONS SECTION ===== */}
-      <section
-        className="py-24"
-        id="admissions"
-        style={{ background: "linear-gradient(135deg, #000080 0%, #0a0a50 100%)" }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Admissions</span>
-          <h2 className="mt-2 text-4xl font-black text-white mb-4">Now Enrolling for 2026/2027</h2>
-          <p className="text-blue-200 mb-12 max-w-xl mx-auto">
-            Secure your child's place in one of Oyo State's finest schools. The process is completely online and highly simplified.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-6 mb-12">
-            {[
-              { step: "01", title: "Fill The Online Form", desc: "Click the 'Apply' button below and quickly enter the child's details." },
-              { step: "02", title: "Upload A Photo", desc: "Upload the child's passport photograph directly from your phone." },
-              { step: "03", title: "Submit Application", desc: "Click submit. Once approved by the school, you will receive login details!" },
-            ].map((step) => (
-              <div key={step.step} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-left">
-                <span className="text-[#FFA500] font-black text-3xl">{step.step}</span>
-                <h3 className="text-white font-bold mt-2 mb-1">{step.title}</h3>
-                <p className="text-blue-200 text-sm">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-          <Link
-            href="/admissions"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-black text-lg rounded-full shadow-2xl hover:shadow-[#FFA500]/40 transition-all transform hover:-translate-y-1"
-          >
-            Start Your Application →
-          </Link>
         </div>
       </section>
 
       {/* ===== TESTIMONIALS ===== */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Testimonials</span>
-          <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white mb-12">What Our Oyo Community Says</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+      <section className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <h4 className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4">Endorsements</h4>
+          <h2 className="text-4xl md:text-5xl font-playfair text-white mb-16">Voices of Prestige</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 text-left">
             {[
               {
-                name: "Alhaji & Alhaja Yusuf Adegoke",
-                role: "Parent — Oyo Town",
-                tag: "📱 WhatsApp Alerts",
-                msg: "Mo n gba WhatsApp message lẹsẹkẹsẹ nigba ti ọmọ mi ba fi orúkọ sí ibi idarí. Mo tun ri ìpèsè owo ati àbájáde rẹ lori foonu mi. Eyi ni imọ-ẹrọ gidi! (I get WhatsApp alerts instantly. This is real technology!)",
+                name: "Alh. Yusuf Adegoke",
+                role: "Parent",
+                tag: "Real-Time Tracking",
+                msg: "The level of transparency is unprecedented. Receiving live updates on my phone ensures I am always connected to my child's academic journey.",
               },
               {
-                name: "Aisha Abdullahi Lawal",
-                role: "SS3 Student — Oyo, Oyo State",
-                tag: "💻 Online Results",
-                msg: "I check my results, timetable and download my report card PDF directly from my phone. Even in Oyo, we now have the same tech as schools in Lagos. Starlight is ahead of everyone!",
+                name: "Aisha A. Lawal",
+                role: "Senior Prefect",
+                tag: "Digital Empowerment",
+                msg: "Having our results, schedules, and resources available 24/7 on a secure portal places us on par with the most elite institutions globally.",
               },
               {
-                name: "Mrs. Khadijat Salawu",
-                role: "Class Teacher — Oyo, Oyo State",
-                tag: "📊 Digital Attendance",
-                msg: "I mark attendance on the dashboard, enter exam scores and the system automatically calculates grades and positions. The PDF report cards print perfectly. Ẹ o péré — this is the future!",
+                name: "Mrs. K. Salawu",
+                role: "Educator",
+                tag: "Operational Efficiency",
+                msg: "The automation of grading and attendance allows us to focus entirely on what matters most: delivering high-quality, impactful teaching.",
               },
             ].map((t) => (
-              <div key={t.name} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 text-left hover:border-[#000080] dark:hover:border-blue-500 hover:shadow-xl transition-all duration-300 group">
-                {/* Tech tag badge */}
-                <div className="inline-flex items-center gap-1.5 bg-[#000080]/10 dark:bg-blue-900/30 text-[#000080] dark:text-blue-300 text-[10px] font-black px-3 py-1 rounded-full mb-3 tracking-wide">
-                  {t.tag}
-                </div>
-                {/* Stars */}
-                <div className="flex gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => <span key={i} className="text-[#FFA500]">★</span>)}
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6">"{t.msg}"</p>
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                    {t.name.charAt(0)}
+              <div key={t.name} className="glass-panel p-8 rounded-lg flex flex-col justify-between min-h-[300px]">
+                <div>
+                  <div className="inline-flex text-[9px] text-gold uppercase tracking-widest border border-gold/30 px-3 py-1 rounded-sm mb-6">
+                    {t.tag}
                   </div>
-                  <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.role}</p>
-                  </div>
+                  <p className="text-slate-300 text-sm leading-loose font-light mb-8 font-serif italic">"{t.msg}"</p>
+                </div>
+                <div className="border-t border-white/10 pt-6">
+                  <p className="font-bold text-white text-xs uppercase tracking-widest">{t.name}</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{t.role}</p>
                 </div>
               </div>
             ))}
@@ -386,89 +308,62 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== CONTACT SECTION ===== */}
-      <section className="py-24 bg-white dark:bg-gray-950" id="contact">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Contact Us</span>
-              <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white mb-6">Get in Touch</h2>
-              <div className="space-y-4">
-                {[
-                  { icon: "📍", label: "Address", value: "Oyo, Oyo State, Nigeria" },
-                  { icon: "📞", label: "Phone", value: "08138967797, 08056809200" },
-                  { icon: "📧", label: "Email", value: "starlightmodelschool10@gmail.com" },
-                  { icon: "🕐", label: "Office Hours", value: "Monday – Friday: 8:00 AM – 4:00 PM" },
-                ].map((c) => (
-                  <div key={c.label} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                    <span className="text-2xl flex-shrink-0">{c.icon}</span>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{c.label}</p>
-                      <p className="text-gray-800 dark:text-gray-200 font-medium">{c.value}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8">
-              <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-6">Send a Message</h3>
-              <ContactForm />
-            </div>
-          </div>
+      {/* ===== ADMISSIONS CTA ===== */}
+      <section className="py-32 bg-gold relative overflow-hidden" id="admissions">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+          <h2 className="text-4xl md:text-6xl font-playfair text-[#020617] font-black mb-8 leading-tight">
+            Secure their future.<br /> Apply for 2026.
+          </h2>
+          <p className="text-[#020617]/80 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto">
+            Join Oyo State's most prestigious Islamic educational institution. The admissions process is entirely digital and strictly merit-based.
+          </p>
+          <Link
+            href="/admissions"
+            className="inline-flex items-center justify-center px-10 py-5 bg-[#020617] text-white hover:bg-slate-800 font-bold text-sm tracking-widest uppercase transition-all rounded-sm shadow-2xl"
+          >
+            Commence Application
+          </Link>
         </div>
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-gray-950 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-[#020617] pt-24 pb-12 border-t border-white/10" id="contact">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2">
-              <div className="flex items-center gap-3 mb-4">
-                <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
+              <div className="flex items-center gap-4 mb-6">
+                <StarlightLogo className="w-8 h-8 opacity-80" />
                 <div>
-                  <p className="font-black text-white text-sm">STARLIGHT MODEL SCHOOL</p>
-                  <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest">Oyo, Oyo State</p>
+                  <p className="font-playfair font-bold text-white tracking-wide">STARLIGHT</p>
+                  <p className="text-[8px] text-gold tracking-[0.3em] uppercase">Model School</p>
                 </div>
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-                Serving Yoruba families in Oyo town with quality education rooted in excellence, discipline, and strong moral values since 2005.
+              <p className="text-slate-400 text-xs leading-loose max-w-md">
+                An institution of uncompromising standards. Delivering premium Islamic education and technological excellence to the elite families of Oyo town.
               </p>
             </div>
             <div>
-              <h4 className="font-bold text-sm mb-4 text-[#FFA500]">Quick Links</h4>
-              <ul className="space-y-2">
-                {["About Us", "Admissions", "Academics", "Facilities", "News", "Contact"].map((l) => (
-                  <li key={l}><a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">{l}</a></li>
-                ))}
+              <h4 className="font-bold text-xs text-white uppercase tracking-[0.2em] mb-6">Headquarters</h4>
+              <ul className="space-y-4 text-slate-400 text-xs">
+                <li>Oyo, Oyo State, Nigeria</li>
+                <li>0813 896 7797</li>
+                <li>0805 680 9200</li>
+                <li>starlightmodelschool10@gmail.com</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-sm mb-4 text-[#FFA500]">Portals</h4>
-              <ul className="space-y-2">
-                {[
-                  { name: "Admin Login", path: "/login" },
-                  { name: "Teacher Login", path: "/login" },
-                  { name: "Student Login", path: "/login" },
-                  { name: "Parent Login", path: "/login" },
-                  { name: "CBT Portal", path: "/login" },
-                  { name: "Library", path: "/login" }
-                ].map((l) => (
-                  <li key={l.name}><a href={l.path} className="text-gray-400 hover:text-white text-sm transition-colors">{l.name}</a></li>
+              <h4 className="font-bold text-xs text-white uppercase tracking-[0.2em] mb-6">Systems</h4>
+              <ul className="space-y-4 text-slate-400 text-xs">
+                {["Admin Portal", "Educator Access", "Student Hub", "Parent Dashboard"].map(l => (
+                  <li key={l}><Link href="/login" className="hover:text-gold transition-colors">{l}</Link></li>
                 ))}
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-xs">© {new Date().getFullYear()} Starlight Model School. All rights reserved.</p>
-            <p className="text-gray-500 text-xs">Powered by{" "}
-              <a
-                href="https://www.elitecomputer.com.ng"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#FFA500] font-semibold hover:text-white transition-colors"
-              >
-                ELITE COMPUTER TECHNOLOGICAL AND CONSULTATION LIMITED OYO
-              </a>
+          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-slate-600 text-[10px] uppercase tracking-widest">© {new Date().getFullYear()} Starlight Model School. Exclusive Rights Reserved.</p>
+            <p className="text-slate-600 text-[10px] uppercase tracking-widest">
+              Engineered by <span className="text-slate-400">Elite Computer Technological & Consultation Ltd</span>
             </p>
           </div>
         </div>
