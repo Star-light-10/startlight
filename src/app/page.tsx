@@ -18,16 +18,16 @@ export default function HomePage() {
       {/* ===== MARQUEE ANNOUNCEMENT ===== */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-10 bg-[#000080] overflow-hidden flex items-center border-b border-[#FFA500]/30 shadow-md">
         <div className="animate-marquee whitespace-nowrap flex items-center gap-16 text-white font-bold tracking-[0.2em] text-sm">
-          <span className="text-[#FFA500] text-xl">★</span>
-          <span>ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION</span>
+          <span className="text-[#FFA500] text-xl">☪️</span>
+          <span>ADMISSIONS NOW OPEN — ISLAMIC MODEL SCHOOL — OYO, OYO STATE</span>
           <span className="text-[#FFA500] text-xl">★</span>
           <span>NURSERY, PRIMARY, JUNIOR & SENIOR SECONDARY</span>
+          <span className="text-[#FFA500] text-xl">☪️</span>
+          <span>ISLAMIC VALUES · KNOWLEDGE · TECHNOLOGY · EXCELLENCE</span>
           <span className="text-[#FFA500] text-xl">★</span>
-          <span>APPLY ONLINE TODAY OR VISIT OUR CAMPUS</span>
-          <span className="text-[#FFA500] text-xl">★</span>
-          <span>EXCELLENCE IN EDUCATION</span>
-          <span className="text-[#FFA500] text-xl">★</span>
-          <span>ADMISSIONS NOW OPEN FOR 2026/2027 ACADEMIC SESSION</span>
+          <span>2026/2027 ACADEMIC SESSION — APPLY ONLINE TODAY</span>
+          <span className="text-[#FFA500] text-xl">☪️</span>
+          <span>ADMISSIONS NOW OPEN — ISLAMIC MODEL SCHOOL — OYO, OYO STATE</span>
         </div>
       </div>
 
@@ -107,15 +107,15 @@ export default function HomePage() {
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-[#FFA500]/20 border border-[#FFA500]/40 text-[#FFA500] text-xs font-bold px-4 py-2 rounded-full mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <span className="animate-spin-slow">★</span>
-            <span className="tracking-widest">EXCELLENCE IN EDUCATION SINCE 2005</span>
+            <span className="animate-spin-slow">☪️</span>
+            <span className="tracking-widest">ISLAMIC MODEL SCHOOL — OYO, OYO STATE</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black leading-tight mb-4 text-white animate-in fade-in zoom-in-95 slide-in-from-bottom-8 duration-1000 delay-100 fill-mode-both drop-shadow-2xl">
             Starlight Model School
           </h1>
-          <p className="text-blue-200 text-base sm:text-xl font-medium mb-4 max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both tracking-wide">
-            Oyo, Oyo State — Yoruba Community School
+          <p className="text-blue-200 text-base sm:text-xl font-medium mb-4 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both tracking-wide">
+            Islamic Values · Knowledge · Technology · Excellence
           </p>
 
           {/* ── PORTAL LOGIN CARDS ── */}
@@ -188,21 +188,26 @@ export default function HomePage() {
             <div>
               <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">About Us</span>
               <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                Oyo's First <br /> <span className="text-[#000080] dark:text-blue-400">Tech-Powered</span> School
+                Islamic Values. <br />
+                <span className="text-[#000080] dark:text-blue-400">Knowledge & Technology.</span>
               </h2>
               <p className="mt-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                Starlight Model School is Oyo town's leading community school — where <strong>Yoruba values meet cutting-edge technology</strong>.
-                Parents track results on their phones via WhatsApp. Teachers mark attendance digitally. Students access their timetables and results 24/7 online.
-                All from right here in Oyo, Oyo State.
+                Starlight Model School is an <strong>Islamic Model School</strong> in Oyo, Oyo State, built on the
+                foundation of <em>Deen</em>, discipline, and academic excellence. We nurture children with strong
+                Islamic morals, Qur'anic values, and a modern technology-powered education — preparing them to be
+                righteous, intelligent, and successful in this world and the next.
+                <span className="block mt-3 italic text-sm text-gray-500 dark:text-gray-500">
+                  "Seek knowledge from the cradle to the grave." — Prophet Muhammad ﷺ
+                </span>
               </p>
               <div className="mt-8 grid grid-cols-2 gap-5">
                 {[
-                  { icon: "📱", title: "Mobile Portal",     desc: "Parents check results, fees & attendance from any phone — no data plan needed via WhatsApp." },
-                  { icon: "🖥️", title: "Digital Records",  desc: "All student records, report cards & invoices stored securely in the cloud." },
-                  { icon: "📊", title: "Live Dashboards",  desc: "Admin sees real-time stats — enrolment, fees collected, attendance rate." },
-                  { icon: "🎓", title: "Online Admission", desc: "Parents apply for admission 100% online — no need to visit campus first." },
+                  { icon: "☪️",  title: "Islamic Values",   desc: "Rooted in Qur'anic morals, honesty, discipline and respect for knowledge." },
+                  { icon: "📚", title: "Academic Excellence", desc: "WAEC, NECO & BECE preparation with Oyo State-approved curriculum." },
+                  { icon: "💻", title: "Digital Platform",  desc: "Results, attendance & fees managed online — accessible from any phone." },
+                  { icon: "🎓", title: "Online Admissions", desc: "Parents apply for admission 100% online from home — fast and simple." },
                 ].map((item) => (
-                  <div key={item.title} className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-[#000080] dark:hover:border-blue-500 transition-colors">
+                  <div key={item.title} className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-[#FFA500] transition-colors">
                     <span className="text-2xl flex-shrink-0">{item.icon}</span>
                     <div>
                       <h4 className="font-bold text-gray-900 dark:text-white text-sm">{item.title}</h4>
@@ -271,10 +276,10 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">🚀 Powered by Technology</span>
             <h2 className="mt-2 text-3xl md:text-4xl font-black text-white">
-              A Full School Management Platform — <span className="text-[#FFA500]">Right in Oyo</span>
+              Complete School Management — <span className="text-[#FFA500]">Digital & Seamless</span>
             </h2>
             <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-sm">
-              From admissions to graduation — every process is digital, automated, and accessible from any phone.
+              Starlight combines Islamic moral upbringing with a fully digital school system — from admissions to graduation, every step is online.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
