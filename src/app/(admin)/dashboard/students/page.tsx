@@ -40,14 +40,28 @@ export default function StudentsDashboard() {
   const [classes, setClasses] = useState<any[]>([])
   const [editForm, setEditForm] = useState({ name: "", admissionNumber: "", classId: "" })
 
+  // Pagination & Search
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalItems, setTotalItems] = useState(0)
+
   const fetchStudents = async () => {
     setIsLoading(true)
     try {
       const [stuRes, clsRes] = await Promise.all([
-        fetch("/api/students"),
+        fetch(`/api/students?page=${page}&limit=50&search=${encodeURIComponent(search)}`),
         fetch("/api/academics/classes"),
       ])
-      if (stuRes.ok) setStudents(await stuRes.json())
+      if (stuRes.ok) {
+        const json = await stuRes.json()
+        if (json.data) {
+          setStudents(json.data)
+          setTotalPages(json.meta.totalPages)
+          setTotalItems(json.meta.total)
+        } else {
+          setStudents(json)
+        }
+      }
       if (clsRes.ok) setClasses(await clsRes.json())
     } catch (e) {
       console.error(e)
@@ -56,7 +70,13 @@ export default function StudentsDashboard() {
     }
   }
 
-  useEffect(() => { fetchStudents() }, [])
+  // Trigger fetch when page or search changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchStudents()
+    }, 300) // debounce search
+    return () => clearTimeout(timer)
+  }, [page, search])
 
   const openEdit = (s: Student) => {
     setEditStudent(s)
@@ -168,11 +188,27 @@ export default function StudentsDashboard() {
     })
   }
 
-  const filtered = students.filter(s => 
-    s.name.toLowerCase().includes(search.toLowerCase()) || 
-    s.admissionNumber.toLowerCase().includes(search.toLowerCase()) ||
-    s.class.toLowerCase().includes(search.toLowerCase())
-  )
+  const handleExportCSV = async () => {
+    // Fetch all students without pagination for the export
+    const res = await fetch(`/api/students?paginate=false&search=${encodeURIComponent(search)}`)
+    const allStudents = await res.json()
+    
+    const dataToExport = allStudents.map((s: any) => ({
+      "Admission No": s.admissionNumber,
+      Name: s.name,
+      Class: s.class,
+      Status: s.status,
+    }))
+    const csv = Papa.unparse(dataToExport)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `students_export_${new Date().toISOString().slice(0, 10)}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   return (
     <div className="space-y-6">
@@ -181,10 +217,17 @@ export default function StudentsDashboard() {
         <div>
           <h1 className="text-2xl font-black text-gray-900 dark:text-white">Students Management</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-            {students.length} total student{students.length !== 1 ? "s" : ""}
+            {totalItems} total student{totalItems !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex gap-2">
+          <button
+            onClick={handleExportCSV}
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors shadow-sm flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Export CSV
+          </button>
           <button
             onClick={() => { setIsAddOpen(true); setErrorMsg(null) }}
             className="px-4 py-2 bg-[#000080] hover:bg-[#000066] text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
@@ -300,7 +343,7 @@ export default function StudentsDashboard() {
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm">
         {isLoading ? (
           <div className="py-20 text-center text-gray-400 text-sm">Loading students...</div>
-        ) : filtered.length === 0 ? (
+        ) : students.length === 0 ? (
           <div className="py-20 text-center text-gray-400 text-sm">No students found.</div>
         ) : (
           <div className="overflow-x-auto">
@@ -315,7 +358,7 @@ export default function StudentsDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {filtered.map((s) => (
+                {students.map((s) => (
                   <tr key={s.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <td className="px-5 py-4 font-mono text-sm text-[#000080] dark:text-blue-400 font-bold">{s.admissionNumber}</td>
                     <td className="px-5 py-4 text-sm font-semibold text-gray-900 dark:text-white">{s.name}</td>
@@ -333,6 +376,27 @@ export default function StudentsDashboard() {
                 ))}
               </tbody>
             </table>
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-5 py-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                <button 
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-3 py-1 text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span className="text-sm text-gray-500">Page {page} of {totalPages}</span>
+                <button 
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="px-3 py-1 text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -132,7 +132,7 @@ export default function ApplicationStatusPage() {
                 {statusData.hasPaidFee && statusData.status === "ACCEPTED" && (
                   <div className="pt-4">
                     <a
-                      href={`/api/admissions/letter?id=${statusData.id}`}
+                      href={`/admissions/letter/${statusData.id}`}
                       target="_blank"
                       className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#FFA500] hover:bg-[#E69500] text-[#000080] font-black rounded-xl transition-colors shadow-lg"
                     >

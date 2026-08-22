@@ -37,6 +37,10 @@ export default function AdmissionsDashboard() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("ALL")
+  // Pagination state
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalItems, setTotalItems] = useState(0)
   
   // Modals state
   const [selected, setSelected] = useState<Application | null>(null)
@@ -49,8 +53,17 @@ export default function AdmissionsDashboard() {
   const fetchApplications = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("/api/admissions/list")
-      if (res.ok) setApplications(await res.json())
+      const res = await fetch(`/api/admissions/list?page=${page}&limit=50&search=${encodeURIComponent(search)}&status=${statusFilter}`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.data) {
+          setApplications(json.data)
+          setTotalPages(json.meta.totalPages)
+          setTotalItems(json.meta.total)
+        } else {
+          setApplications(json) // legacy support
+        }
+      }
     } catch (e) {
       console.error(e)
     } finally {
@@ -58,24 +71,35 @@ export default function AdmissionsDashboard() {
     }
   }
 
-  useEffect(() => { fetchApplications() }, [])
+  // Refetch when page, search, or status changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchApplications()
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [page, search, statusFilter])
 
-  const handleAction = async (id: string, action: "ACCEPT" | "REJECT" | "VERIFY_FEE") => {
+  const handleAction = async (id: string, action: string) => {
     setProcessingId(id)
     setErrorMsg(null)
     try {
       const res = await fetch(`/api/admissions/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ action })
       })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Failed to process application")
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Action failed")
+      
+      // Update local state instead of full refetch to preserve scroll
+      setApplications(apps => apps.map(app => 
+        app.id === id ? { ...app, ...data } : app
+      ))
+      if (selected?.id === id) {
+        setSelected({ ...selected, ...data })
       }
-      setSelected(null)
-      await fetchApplications()
     } catch (e: any) {
+      alert(e.message)
       setErrorMsg(e.message)
     } finally {
       setProcessingId(null)
@@ -83,96 +107,95 @@ export default function AdmissionsDashboard() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to completely delete this application? This cannot be undone.")) return;
-    
-    setProcessingId(id)
-    setErrorMsg(null)
+    if (!confirm("Are you sure you want to delete this application?")) return;
+    setProcessingId(id);
     try {
-      const res = await fetch(`/api/admissions/${id}`, { method: "DELETE" })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Failed to delete application")
-      }
-      setSelected(null)
-      await fetchApplications()
+      const res = await fetch(`/api/admissions/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete");
+      setApplications(apps => apps.filter(a => a.id !== id));
+      if (selected?.id === id) setSelected(null);
     } catch (e: any) {
-      setErrorMsg(e.message)
+      alert(e.message);
     } finally {
-      setProcessingId(null)
+      setProcessingId(null);
     }
   }
 
-  const handleSaveForm = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setProcessingId("form-submit")
-    setErrorMsg(null)
-
-    const isEditing = isEditMode && selected?.id;
-    const url = isEditing 
-      ? `/api/admissions/${selected.id}` 
-      : "/api/admissions/manual";
-    const method = isEditing ? "PUT" : "POST";
-
+  const handleManualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg(null);
     try {
+      const method = isEditMode ? "PUT" : "POST";
+      const url = isEditMode ? `/api/admissions/${formData.id}` : "/api/admissions";
+      
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Failed to save application")
-      }
-      
-      setIsManualEntryOpen(false)
-      setIsEditMode(false)
-      setSelected(null)
-      setFormData({})
-      await fetchApplications()
-    } catch (e: any) {
-      setErrorMsg(e.message)
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save");
+
+      setIsManualEntryOpen(false);
+      setFormData({});
+      setIsEditMode(false);
+      fetchApplications();
+    } catch (error: any) {
+      setErrorMsg(error.message);
     } finally {
-      setProcessingId(null)
+      setIsLoading(false);
     }
   }
 
   const openManualEntry = () => {
     setFormData({
-      status: "PENDING",
-      dateOfBirth: "2015-01-01",
+      dateOfBirth: new Date().toISOString().split('T')[0],
       gender: "Male",
-      religion: "Islam"
-    })
-    setErrorMsg(null)
-    setIsEditMode(false)
-    setIsManualEntryOpen(true)
+      religion: "Islam",
+      status: "PENDING",
+      hasPaidFee: false
+    });
+    setIsEditMode(false);
+    setIsManualEntryOpen(true);
   }
 
   const openEdit = (app: Application) => {
-    setFormData({
-      ...app,
-      dateOfBirth: new Date(app.dateOfBirth).toISOString().split('T')[0]
-    })
-    setErrorMsg(null)
-    setIsEditMode(true)
-    setIsManualEntryOpen(true)
+    setFormData(app);
+    setIsEditMode(true);
+    setIsManualEntryOpen(true);
   }
 
-  const filtered = applications.filter((app) => {
-    const matchesSearch =
-      `${app.firstName} ${app.lastName} ${app.parentPhone} ${app.classApplyingFor}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    const matchesStatus = statusFilter === "ALL" || app.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+  const handleExportCSV = async () => {
+    const res = await fetch(`/api/admissions/list?paginate=false&search=${encodeURIComponent(search)}&status=${statusFilter}`)
+    const allApps = await res.json()
+    
+    const dataToExport = allApps.map((app: any) => ({
+      ID: app.id,
+      "First Name": app.firstName,
+      "Last Name": app.lastName,
+      "Date of Birth": new Date(app.dateOfBirth).toLocaleDateString(),
+      Gender: app.gender,
+      "Class Applying For": app.classApplyingFor,
+      Status: app.status,
+      "Fee Paid": app.hasPaidFee ? "Yes" : "No",
+      "Parent Name": app.parentName,
+      "Parent Phone": app.parentPhone,
+      "Applied On": new Date(app.createdAt).toLocaleDateString()
+    }))
 
-  const counts = {
-    ALL: applications.length,
-    PENDING: applications.filter((a) => a.status === "PENDING").length,
-    REVIEWING: applications.filter((a) => a.status === "REVIEWING").length,
-    ACCEPTED: applications.filter((a) => a.status === "ACCEPTED").length,
-    REJECTED: applications.filter((a) => a.status === "REJECTED").length,
+    import("papaparse").then(Papa => {
+      const csv = Papa.default.unparse(dataToExport)
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `admissions_export_${new Date().toISOString().slice(0, 10)}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    })
   }
 
   return (
@@ -186,6 +209,13 @@ export default function AdmissionsDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors shadow-sm"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Export CSV
+          </button>
           <button
             onClick={openManualEntry}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-xl transition-colors shadow-sm"
@@ -261,35 +291,45 @@ export default function AdmissionsDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {filtered.map((app) => (
-                  <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
-                    <td className="px-5 py-4">
+                {applications.map((app) => (
+                  <tr
+                    key={app.id}
+                    onClick={() => setSelected(app)}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors"
+                  >
+                    <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0 relative">
-                          {app.passportPhotoUrl ? (
-                            <Image src={app.passportPhotoUrl} alt="Photo" fill className="object-cover" />
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-gray-400 text-sm">
-                              {app.firstName[0]}
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {app.firstName} {app.lastName}
+                        {app.passportPhotoUrl ? (
+                          <Image src={app.passportPhotoUrl} alt="Passport" width={32} height={32} className="rounded-full object-cover border border-gray-200 dark:border-gray-700" />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
+                            {app.firstName[0]}
                           </div>
-                          <div className="text-xs text-gray-400">{app.parentPhone}</div>
+                        )}
+                        <div>
+                          <p className="font-bold text-gray-900 dark:text-white text-sm">{`${app.firstName} ${app.lastName}`}</p>
+                          <p className="text-xs text-gray-500">{app.classApplyingFor}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600 dark:text-gray-300">{app.classApplyingFor}</td>
-                    <td className="px-5 py-4 text-sm text-gray-500 hidden sm:table-cell">
-                      {new Date(app.createdAt).toLocaleDateString("en-GB")}
+                    <td className="px-6 py-4">
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-300">{app.parentName}</p>
+                      <p className="text-xs text-gray-500">{app.parentPhone}</p>
                     </td>
-                    <td className="px-5 py-4">
-                      <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusConfig[app.status]?.classes}`}>
-                        {statusConfig[app.status]?.label ?? app.status}
-                      </span>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2.5 py-1 text-[10px] uppercase tracking-wider font-black rounded-full ${statusConfig[app.status]?.classes || "bg-gray-100 text-gray-800"}`}>
+                          {statusConfig[app.status]?.label || app.status}
+                        </span>
+                        {app.hasPaidFee && (
+                          <span className="px-2 py-0.5 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 text-[10px] font-bold rounded border border-green-200 dark:border-green-800/30" title="Application Fee Paid">
+                            💰 Paid
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-xs text-gray-500 whitespace-nowrap">
+                      {new Date(app.createdAt).toLocaleDateString("en-GB")}
                     </td>
                     <td className="px-5 py-4 text-right">
                       <button
@@ -303,6 +343,27 @@ export default function AdmissionsDashboard() {
                 ))}
               </tbody>
             </table>
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-6 py-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                <button 
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="px-3 py-1 text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span className="text-sm text-gray-500">Page {page} of {totalPages}</span>
+                <button 
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="px-3 py-1 text-sm font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -6,26 +6,70 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
     const classId = searchParams.get("classId")
+    const search = searchParams.get("search") || ""
+    const paginate = searchParams.get("paginate") !== "false"
+    const page = parseInt(searchParams.get("page") || "1", 10)
+    const limit = parseInt(searchParams.get("limit") || "50", 10)
     
-    const students = await prisma.studentProfile.findMany({
-      where: classId ? { classId } : undefined,
-      include: {
-        user: true,
-        class: true,
-      },
-      orderBy: { admissionNumber: "desc" },
-    })
+    const skip = (page - 1) * limit
+
+    const where: any = {}
+    if (classId) where.classId = classId
+    if (search) {
+      where.OR = [
+        { admissionNumber: { contains: search, mode: "insensitive" } },
+        { user: { name: { contains: search, mode: "insensitive" } } },
+        { class: { name: { contains: search, mode: "insensitive" } } }
+      ]
+    }
+    
+    if (!paginate) {
+      // Return flat array for legacy components
+      const students = await prisma.studentProfile.findMany({
+        where,
+        include: { user: true, class: true },
+        orderBy: { admissionNumber: "desc" },
+      })
+      const formattedStudents = students.map((s) => ({
+        id: s.id,
+        admissionNumber: s.admissionNumber,
+        name: s.user.name,
+        class: s.class?.name || "Unassigned",
+        status: "Active",
+        user: { name: s.user.name }
+      }))
+      return NextResponse.json(formattedStudents)
+    }
+
+    const [students, total] = await Promise.all([
+      prisma.studentProfile.findMany({
+        where,
+        include: { user: true, class: true },
+        orderBy: { admissionNumber: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.studentProfile.count({ where })
+    ])
 
     const formattedStudents = students.map((s) => ({
       id: s.id,
       admissionNumber: s.admissionNumber,
       name: s.user.name,
       class: s.class?.name || "Unassigned",
-      status: "Active", // For now
-      user: { name: s.user.name } // Include user object directly for Attendance Manager component
+      status: "Active",
+      user: { name: s.user.name }
     }))
 
-    return NextResponse.json(formattedStudents)
+    return NextResponse.json({
+      data: formattedStudents,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
