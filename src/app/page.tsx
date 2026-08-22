@@ -7,9 +7,9 @@ import { SchoolSections } from "@/components/school-sections";
 import { HeroAudio } from "@/components/hero-audio";
 
 export const metadata: Metadata = {
-  title: "Starlight Model School | Oke-Medina, Boroboro, Oyo State",
+  title: "Starlight Model School | Oyo, Oyo State",
   description:
-    "Starlight Model School — A world-class educational institution in Oke-Medina, Boroboro Area, Oyo State, Nigeria. Admissions, academics, and digital learning at its finest.",
+    "Starlight Model School — A trusted community school serving Yoruba families in Oyo, Oyo State, Nigeria. Nursery, Primary, Junior & Senior Secondary education with a digital management system.",
 };
 
 export default function HomePage() {
@@ -115,7 +115,7 @@ export default function HomePage() {
             Starlight Model School
           </h1>
           <p className="text-blue-200 text-base sm:text-xl font-medium mb-4 max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both tracking-wide">
-            Oke-Medina, Boroboro, Oyo State
+            Oyo, Oyo State — Yoruba Community School
           </p>
 
           {/* ── PORTAL LOGIN CARDS ── */}
@@ -186,19 +186,20 @@ export default function HomePage() {
             <div>
               <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">About Us</span>
               <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                Shaping the Leaders <br /> of Tomorrow
+                Shaping the Leaders <br /> of Oyo Tomorrow
               </h2>
               <p className="mt-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                Starlight Model School was founded with a singular vision: to provide every child with the tools,
-                knowledge, and character to excel in a rapidly changing world. Located in Oke-Medina, Boroboro Area,
-                Oyo State, we have been the gold standard for education in our community for over two decades.
+                Starlight Model School was founded with a singular vision: to provide every child in Oyo town and its
+                surrounding communities with the tools, knowledge, and moral character to excel. Located in the heart
+                of Oyo, Oyo State, we serve Yoruba families who believe in the power of quality education blended with
+                strong Islamic and cultural values.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-6">
                 {[
-                  { icon: "🎯", title: "Our Mission", desc: "To inspire excellence through quality education, discipline, and innovation." },
-                  { icon: "🌟", title: "Our Vision", desc: "To be Africa's most student-centric and technology-driven model school." },
-                  { icon: "📚", title: "Curriculum", desc: "Lagos State curriculum with WAEC, NECO, and JUPEB preparation." },
-                  { icon: "🏆", title: "Excellence", desc: "Consistent top performances in State & National examinations." },
+                  { icon: "🎯", title: "Our Mission", desc: "To inspire excellence through quality education, discipline, and Yoruba cultural pride." },
+                  { icon: "🌟", title: "Our Vision", desc: "To be Oyo State's most trusted and technology-driven community school." },
+                  { icon: "📚", title: "Curriculum", desc: "Oyo State curriculum with WAEC, NECO and BECE preparation." },
+                  { icon: "🏆", title: "Excellence", desc: "Consistent top performances in Local, State & National examinations." },
                 ].map((item) => (
                   <div key={item.title} className="flex gap-3">
                     <span className="text-2xl flex-shrink-0">{item.icon}</span>
@@ -305,19 +306,19 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                name: "Alhaji & Mrs. Yusuf",
-                role: "Parent — Oyo, Oyo State",
-                msg: "Starlight School transformed our son's life. The teachers are dedicated and the new digital portal makes it so easy to track his progress.",
+                name: "Alhaji & Alhaja Yusuf Adegoke",
+                role: "Parent — Oyo Town",
+                msg: "Ẹ jẹ ki omo wa kọ! Starlight School ti yi igbesi aye ọmọ wa pada. Awọn olukọ wa ni igbẹkẹle ati ẹbun, ati pẹlu portal oni-nọmba titun, o rọrun pupọ lati tọpa ilọsiwaju rẹ lati ile.",
               },
               {
-                name: "Aisha Abdullahi",
+                name: "Aisha Abdullahi Lawal",
                 role: "SS3 Student — Oyo, Oyo State",
-                msg: "I love that I can access my timetable, check my results and submit assignments online. Starlight is truly modern and forward-thinking!",
+                msg: "I love that I can check my results, see my timetable and track my fees right from my phone. As a student from Oyo, I am proud that our school is this modern!",
               },
               {
                 name: "Mrs. Khadijat Salawu",
                 role: "Class Teacher — Oyo, Oyo State",
-                msg: "The management system has saved me hours every week. I can take attendance, upload notes and generate report cards with just a few clicks.",
+                msg: "This system has saved me so much time. Taking attendance, uploading results and generating report cards for our Oyo children is now just a few clicks. Ẹ o péré!",
               },
             ].map((t) => (
               <div key={t.name} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 text-left">
@@ -349,7 +350,7 @@ export default function HomePage() {
               <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white mb-6">Get in Touch</h2>
               <div className="space-y-4">
                 {[
-                  { icon: "📍", label: "Address", value: "Oke-Medina, Boroboro Area, Oyo State, Nigeria" },
+                  { icon: "📍", label: "Address", value: "Oyo, Oyo State, Nigeria" },
                   { icon: "📞", label: "Phone", value: "08138967797, 08056809200" },
                   { icon: "📧", label: "Email", value: "starlightmodelschool10@gmail.com" },
                   { icon: "🕐", label: "Office Hours", value: "Monday – Friday: 8:00 AM – 4:00 PM" },
@@ -381,11 +382,11 @@ export default function HomePage() {
                 <StarlightLogo className="w-10 h-10 drop-shadow-lg" />
                 <div>
                   <p className="font-black text-white text-sm">STARLIGHT MODEL SCHOOL</p>
-                  <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest">Oke-Medina, Boroboro, Oyo State</p>
+                  <p className="text-[10px] text-[#FFA500] font-semibold tracking-widest">Oyo, Oyo State</p>
                 </div>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-                Providing world-class education and nurturing excellence, character, and leadership in every child since 2005.
+                Serving Yoruba families in Oyo town with quality education rooted in excellence, discipline, and strong moral values since 2005.
               </p>
             </div>
             <div>
