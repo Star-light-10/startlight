@@ -29,10 +29,10 @@ export default function AttendanceManager({ classes, userId }: { classes: Class[
     const fetchStudents = async () => {
       setIsLoading(true)
       try {
-        const res = await fetch(`/api/students?classId=${selectedClass}`)
+        const res = await fetch(`/api/students?classId=${selectedClass}&paginate=false`)
         if (res.ok) {
           const data = await res.json()
-          setStudents(data)
+          setStudents(Array.isArray(data) ? data : (data.data || []))
         }
       } catch (e) {
         console.error(e)

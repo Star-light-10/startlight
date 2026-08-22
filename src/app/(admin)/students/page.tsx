@@ -17,9 +17,9 @@ export default function StudentsPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch("/api/students")
+    fetch("/api/students?paginate=false")
       .then(res => res.json())
-      .then(data => setStudents(data))
+      .then(data => setStudents(Array.isArray(data) ? data : (data.data || [])))
       .catch(console.error)
       .finally(() => setIsLoading(false))
   }, [])

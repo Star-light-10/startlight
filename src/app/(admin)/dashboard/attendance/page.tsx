@@ -46,10 +46,12 @@ export default function AttendanceDashboard() {
   const fetchMarkData = async () => {
     setIsLoading(true)
     try {
-      // 1. Fetch all students in class
-      const stRes = await fetch(`/api/students?classId=${selectedClass}`)
+      // 1. Fetch all students in class (bypass pagination to get array)
+      const stRes = await fetch(`/api/students?classId=${selectedClass}&paginate=false`)
       const stData = await stRes.json()
-      setStudents(stData)
+      // ensure stData is an array
+      const studentsArray = Array.isArray(stData) ? stData : (stData.data || [])
+      setStudents(studentsArray)
 
       // 2. Fetch existing attendance for this date
       const attRes = await fetch(`/api/attendance?classId=${selectedClass}&date=${date}`)
@@ -58,7 +60,7 @@ export default function AttendanceDashboard() {
       const newAtt: Record<string, string> = {}
       
       // Default everyone to PRESENT if no record exists
-      stData.forEach((s: any) => {
+      studentsArray.forEach((s: any) => {
         newAtt[s.id] = "PRESENT"
       })
       

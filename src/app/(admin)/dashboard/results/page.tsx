@@ -243,17 +243,21 @@ export default function ResultsPage() {
       .catch(() => {})
   }, [])
 
-  // ── Load students when class changes ──
+  // Fetch students when a class is selected
   useEffect(() => {
     if (!selectedClassId) {
       setStudents([])
-      setSelectedStudentId("")
       return
     }
-    fetch(`/api/students?classId=${selectedClassId}`)
-      .then((r) => r.json())
-      .then(setStudents)
-      .catch(() => {})
+    fetch(`/api/students?classId=${selectedClassId}&paginate=false`)
+      .then(res => res.json())
+      .then(data => {
+        const arr = Array.isArray(data) ? data : (data.data || [])
+        setStudents(arr)
+        if (arr.length > 0 && !selectedStudentId) {
+          setSelectedStudentId(arr[0].id)
+        }
+      })
   }, [selectedClassId])
 
   // ── Init grade rows when subjects load ──
