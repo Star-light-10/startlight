@@ -161,13 +161,15 @@ export default function HomePage() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12 pt-10 border-t border-white/10">
+          <div className="flex flex-wrap justify-center gap-10 mt-12 pt-10 border-t border-white/10">
             {[
-              { value: "500+", label: "Students" },
-              { value: "98%",   label: "Pass Rate" },
-              { value: "10+",   label: "Years" },
+              { value: "500+", label: "Students Enrolled", icon: "🎓" },
+              { value: "98%",  label: "Exam Pass Rate",    icon: "🏆" },
+              { value: "100%", label: "Digital Records",   icon: "💻" },
+              { value: "24/7", label: "Portal Access",     icon: "📱" },
             ].map((stat) => (
-              <div key={stat.label}>
+              <div key={stat.label} className="text-center">
+                <p className="text-lg mb-1">{stat.icon}</p>
                 <p className="text-2xl font-black text-[#FFA500]">{stat.value}</p>
                 <p className="text-xs text-blue-200 uppercase tracking-wider">{stat.label}</p>
               </div>
@@ -186,22 +188,21 @@ export default function HomePage() {
             <div>
               <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">About Us</span>
               <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                Shaping the Leaders <br /> of Oyo Tomorrow
+                Oyo's First <br /> <span className="text-[#000080] dark:text-blue-400">Tech-Powered</span> School
               </h2>
               <p className="mt-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                Starlight Model School was founded with a singular vision: to provide every child in Oyo town and its
-                surrounding communities with the tools, knowledge, and moral character to excel. Located in the heart
-                of Oyo, Oyo State, we serve Yoruba families who believe in the power of quality education blended with
-                strong Islamic and cultural values.
+                Starlight Model School is Oyo town's leading community school — where <strong>Yoruba values meet cutting-edge technology</strong>.
+                Parents track results on their phones via WhatsApp. Teachers mark attendance digitally. Students access their timetables and results 24/7 online.
+                All from right here in Oyo, Oyo State.
               </p>
-              <div className="mt-8 grid grid-cols-2 gap-6">
+              <div className="mt-8 grid grid-cols-2 gap-5">
                 {[
-                  { icon: "🎯", title: "Our Mission", desc: "To inspire excellence through quality education, discipline, and Yoruba cultural pride." },
-                  { icon: "🌟", title: "Our Vision", desc: "To be Oyo State's most trusted and technology-driven community school." },
-                  { icon: "📚", title: "Curriculum", desc: "Oyo State curriculum with WAEC, NECO and BECE preparation." },
-                  { icon: "🏆", title: "Excellence", desc: "Consistent top performances in Local, State & National examinations." },
+                  { icon: "📱", title: "Mobile Portal",     desc: "Parents check results, fees & attendance from any phone — no data plan needed via WhatsApp." },
+                  { icon: "🖥️", title: "Digital Records",  desc: "All student records, report cards & invoices stored securely in the cloud." },
+                  { icon: "📊", title: "Live Dashboards",  desc: "Admin sees real-time stats — enrolment, fees collected, attendance rate." },
+                  { icon: "🎓", title: "Online Admission", desc: "Parents apply for admission 100% online — no need to visit campus first." },
                 ].map((item) => (
-                  <div key={item.title} className="flex gap-3">
+                  <div key={item.title} className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 hover:border-[#000080] dark:hover:border-blue-500 transition-colors">
                     <span className="text-2xl flex-shrink-0">{item.icon}</span>
                     <div>
                       <h4 className="font-bold text-gray-900 dark:text-white text-sm">{item.title}</h4>
@@ -264,6 +265,37 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ===== TECH FEATURES STRIP ===== */}
+      <section className="py-16 bg-gray-950 dark:bg-black" id="features">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">🚀 Powered by Technology</span>
+            <h2 className="mt-2 text-3xl md:text-4xl font-black text-white">
+              A Full School Management Platform — <span className="text-[#FFA500]">Right in Oyo</span>
+            </h2>
+            <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-sm">
+              From admissions to graduation — every process is digital, automated, and accessible from any phone.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { icon: "🏫", label: "Online Admissions",   desc: "Apply from home" },
+              { icon: "📊", label: "Live Attendance",      desc: "Daily digital register" },
+              { icon: "📝", label: "Result Entry",         desc: "Auto-grade calculation" },
+              { icon: "🧾", label: "Fee Invoices",         desc: "Track & pay online" },
+              { icon: "📋", label: "Report Cards",         desc: "PDF auto-generated" },
+              { icon: "📱", label: "Parent Alerts",        desc: "WhatsApp notifications" },
+            ].map((f) => (
+              <div key={f.label} className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FFA500]/50 rounded-2xl p-5 text-center transition-all duration-300 group cursor-default">
+                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">{f.icon}</div>
+                <p className="text-white font-bold text-xs mb-1">{f.label}</p>
+                <p className="text-gray-500 text-[10px]">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===== ADMISSIONS SECTION ===== */}
       <section
         className="py-24"
@@ -302,32 +334,40 @@ export default function HomePage() {
       <section className="py-24 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-[#FFA500] font-bold text-sm uppercase tracking-widest">Testimonials</span>
-          <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white mb-12">What Our Community Says</h2>
+          <h2 className="mt-2 text-4xl font-black text-gray-900 dark:text-white mb-12">What Our Oyo Community Says</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 name: "Alhaji & Alhaja Yusuf Adegoke",
                 role: "Parent — Oyo Town",
-                msg: "Ẹ jẹ ki omo wa kọ! Starlight School ti yi igbesi aye ọmọ wa pada. Awọn olukọ wa ni igbẹkẹle ati ẹbun, ati pẹlu portal oni-nọmba titun, o rọrun pupọ lati tọpa ilọsiwaju rẹ lati ile.",
+                tag: "📱 WhatsApp Alerts",
+                msg: "Mo n gba WhatsApp message lẹsẹkẹsẹ nigba ti ọmọ mi ba fi orúkọ sí ibi idarí. Mo tun ri ìpèsè owo ati àbájáde rẹ lori foonu mi. Eyi ni imọ-ẹrọ gidi! (I get WhatsApp alerts instantly. This is real technology!)",
               },
               {
                 name: "Aisha Abdullahi Lawal",
                 role: "SS3 Student — Oyo, Oyo State",
-                msg: "I love that I can check my results, see my timetable and track my fees right from my phone. As a student from Oyo, I am proud that our school is this modern!",
+                tag: "💻 Online Results",
+                msg: "I check my results, timetable and download my report card PDF directly from my phone. Even in Oyo, we now have the same tech as schools in Lagos. Starlight is ahead of everyone!",
               },
               {
                 name: "Mrs. Khadijat Salawu",
                 role: "Class Teacher — Oyo, Oyo State",
-                msg: "This system has saved me so much time. Taking attendance, uploading results and generating report cards for our Oyo children is now just a few clicks. Ẹ o péré!",
+                tag: "📊 Digital Attendance",
+                msg: "I mark attendance on the dashboard, enter exam scores and the system automatically calculates grades and positions. The PDF report cards print perfectly. Ẹ o péré — this is the future!",
               },
             ].map((t) => (
-              <div key={t.name} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 text-left">
-                <div className="flex gap-1 mb-4">
+              <div key={t.name} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 text-left hover:border-[#000080] dark:hover:border-blue-500 hover:shadow-xl transition-all duration-300 group">
+                {/* Tech tag badge */}
+                <div className="inline-flex items-center gap-1.5 bg-[#000080]/10 dark:bg-blue-900/30 text-[#000080] dark:text-blue-300 text-[10px] font-black px-3 py-1 rounded-full mb-3 tracking-wide">
+                  {t.tag}
+                </div>
+                {/* Stars */}
+                <div className="flex gap-1 mb-3">
                   {[...Array(5)].map((_, i) => <span key={i} className="text-[#FFA500]">★</span>)}
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6">"{t.msg}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center text-white font-bold text-sm">
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#4169E1] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {t.name.charAt(0)}
                   </div>
                   <div>
