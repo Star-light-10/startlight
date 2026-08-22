@@ -42,9 +42,9 @@ export async function PATCH(
           data: { status: "ACCEPTED" },
         })
 
-        // 2. Find target class ID
+        // 2. Find or create target class
         // The application classApplyingFor contains the class name, e.g. "JSS 1"
-        const targetClass = await tx.class.findFirst({
+        let targetClass = await tx.class.findFirst({
           where: { 
             name: updatedApp.classApplyingFor,
             tenantId: updatedApp.tenantId || undefined
@@ -52,7 +52,13 @@ export async function PATCH(
         })
 
         if (!targetClass) {
-          throw new Error(`Class '${updatedApp.classApplyingFor}' does not exist. Create it first.`)
+          // Auto-create the class if it doesn't exist yet
+          targetClass = await tx.class.create({
+            data: {
+              name: updatedApp.classApplyingFor,
+              tenantId: updatedApp.tenantId || undefined
+            }
+          })
         }
 
         // 3. Generate Admission Number (e.g. SMS/26/0001)
