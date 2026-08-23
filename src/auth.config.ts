@@ -17,5 +17,17 @@ export default {
         return null
       },
     }),
+
+    // Student portal login stub (Edge Runtime — no DB access here)
+    Credentials({
+      id: "student-credentials",
+      credentials: {
+        admissionNumber: { label: "Admission Number", type: "text" },
+        surname: { label: "Surname", type: "text" },
+      },
+      async authorize() {
+        return null
+      },
+    }),
   ],
 } satisfies NextAuthConfig

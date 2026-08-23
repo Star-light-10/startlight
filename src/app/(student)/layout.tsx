@@ -1,8 +1,9 @@
 "use client"
 
 import { useSession, signOut } from "next-auth/react"
+import { useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { StarlightLogo } from "@/components/starlight-logo"
 
 export default function StudentLayout({
@@ -12,8 +13,16 @@ export default function StudentLayout({
 }) {
   const { data: session, status } = useSession()
   const pathname = usePathname()
+  const router = useRouter()
 
-  if (status === "loading") {
+  // ── Auth Guard ────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/student-login")
+    }
+  }, [status, router])
+
+  if (status === "loading" || status === "unauthenticated") {
     return <div className="min-h-screen flex items-center justify-center bg-gray-50">Loading portal...</div>
   }
 
@@ -64,7 +73,7 @@ export default function StudentLayout({
                   <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Student</p>
                 </div>
                 <button 
-                  onClick={() => signOut({ callbackUrl: '/login' })}
+                  onClick={() => signOut({ callbackUrl: '/student-login' })}
                   className="w-8 h-8 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
                   title="Sign out"
                 >

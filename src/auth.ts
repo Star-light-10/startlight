@@ -41,6 +41,46 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return null
       },
     }),
+
+    // ── Student Portal Login ──────────────────────────────────────────────────
+    // Students log in with their admission number + surname (no email/password needed)
+    Credentials({
+      id: "student-credentials",
+      credentials: {
+        admissionNumber: { label: "Admission Number", type: "text" },
+        surname: { label: "Surname", type: "text" },
+      },
+      async authorize(credentials) {
+        const admissionNumber = (credentials?.admissionNumber as string)?.trim()
+        const surname = (credentials?.surname as string)?.trim()
+
+        if (!admissionNumber || !surname) return null
+
+        // Find the student profile by admission number
+        const profile = await prisma.studentProfile.findUnique({
+          where: { admissionNumber },
+          include: { user: true },
+        })
+
+        if (!profile || !profile.user) return null
+
+        // Verify surname (case-insensitive check against any part of the name)
+        const nameParts = (profile.user.name ?? "").toLowerCase().split(/\s+/)
+        const surnameMatch = nameParts.some(
+          (part) => part === surname.toLowerCase()
+        )
+
+        if (!surnameMatch) return null
+
+        return {
+          id: profile.user.id,
+          email: profile.user.email,
+          name: profile.user.name,
+          role: profile.user.role,
+          tenantId: profile.user.tenantId,
+        }
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {

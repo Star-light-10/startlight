@@ -124,8 +124,8 @@ export default function LoginPage() {
               {[
                 { label: "Admin", href: "/dashboard" },
                 { label: "Teacher", href: "/teacher" },
-                { label: "Student", href: "/student" },
-                { label: "Parent", href: "/parent" },
+                { label: "Student", href: "/student-login" },
+                { label: "Parent", href: "/parent-login" },
               ].map((p) => (
                 <Link
                   key={p.label}
