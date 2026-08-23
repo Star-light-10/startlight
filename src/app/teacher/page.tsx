@@ -5,16 +5,21 @@ export default async function TeacherDashboard() {
   const session = await auth()
   
   // Fetch unread notices
-  const announcements = await prisma.announcement.findMany({
-    where: {
-      OR: [
-        { audience: "ALL" },
-        { audience: "STAFF" }
-      ]
-    },
-    orderBy: { createdAt: "desc" },
-    take: 3
-  })
+  let announcements = []
+  try {
+    announcements = await prisma.announcement.findMany({
+      where: {
+        OR: [
+          { audience: "ALL" },
+          { audience: "STAFF" }
+        ]
+      },
+      orderBy: { createdAt: "desc" },
+      take: 3
+    })
+  } catch (error) {
+    console.error("Failed to fetch announcements (table might be missing):", error)
+  }
 
   return (
     <div className="space-y-6">
