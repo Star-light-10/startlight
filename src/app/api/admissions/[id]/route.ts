@@ -80,10 +80,18 @@ export async function PATCH(
         const count = await tx.studentProfile.count()
         admissionNumber = `SMS/26/${String(count + 1).padStart(4, '0')}`
 
-        // 4. Create User
-        // Use a dummy email if parent didn't provide one, or unique one
-        uniqueEmail = updatedApp.parentEmail || `student_${admissionNumber.replace(/\//g, '')}@starlight.edu.ng`
-        
+        // 4. Create User Account
+        // Always generate a unique school email for login — parent email is for notification only
+        const firstName = updatedApp.firstName.toLowerCase().replace(/\s+/g, '')
+        const lastName = updatedApp.lastName.toLowerCase().replace(/\s+/g, '')
+        uniqueEmail = `${firstName}.${lastName}.${String(count + 1)}@starlight.edu.ng`
+
+        // Check if this generated email already exists and make it unique
+        const existingUser = await tx.user.findUnique({ where: { email: uniqueEmail } })
+        if (existingUser) {
+          uniqueEmail = `${firstName}.${lastName}.${Date.now()}@starlight.edu.ng`
+        }
+
         plainPassword = Math.random().toString(36).slice(-8) + "!";
         const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
