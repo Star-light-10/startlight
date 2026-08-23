@@ -5,7 +5,7 @@ export default async function TeacherDashboard() {
   const session = await auth()
   
   // Fetch unread notices
-  let announcements = []
+  let announcements: any[] = []
   try {
     announcements = await prisma.announcement.findMany({
       where: {
