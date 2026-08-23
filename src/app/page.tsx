@@ -107,33 +107,33 @@ export default function HomePage() {
             
             {/* Left Column: Typography & CTA */}
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                <span className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse"></span>
-                <span className="text-sm font-semibold tracking-[0.15em] text-slate-300 uppercase">Premium Islamic Education in Oyo</span>
+              <div className="inline-flex items-center gap-3 border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                <span className="text-xs font-semibold tracking-wider text-slate-300 uppercase">Quality Islamic Education in Oyo</span>
               </div>
 
-              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-playfair text-white leading-[1.1] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair text-white leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                 Where <span className="text-gold italic">Deen</span> meets <br />
-                Digital Excellence.
+                Modern Learning.
               </h1>
               
-              <p className="text-xl sm:text-2xl text-slate-300 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-                Nurturing the next generation with profound Islamic morals, outstanding academic rigor, and a seamlessly integrated technology platform.
+              <p className="text-lg sm:text-xl text-slate-300 font-light leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+                Raising students with good Islamic morals, excellent academics, and modern technology.
               </p>
 
-              <div className="mt-14 flex flex-wrap items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+              <div className="mt-10 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                 <Link
                   href="/admissions"
-                  className="px-10 py-5 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-base md:text-lg tracking-wider uppercase transition-all rounded-md flex items-center gap-3 group shadow-xl"
+                  className="px-8 py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-wider uppercase transition-all rounded-md flex items-center gap-3 group shadow-xl"
                 >
-                  Begin Enrollment
+                  Enroll Now
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
                 <Link
                   href="#about"
-                  className="px-10 py-5 border-2 border-white/20 hover:border-gold hover:text-gold text-white font-bold text-base md:text-lg tracking-wider uppercase transition-all rounded-md"
+                  className="px-8 py-4 border-2 border-white/20 hover:border-gold hover:text-gold text-white font-bold text-sm tracking-wider uppercase transition-all rounded-md"
                 >
-                  Discover Starlight
+                  Learn More
                 </Link>
               </div>
             </div>
@@ -169,10 +169,10 @@ export default function HomePage() {
           </div>
 
           {/* ── SLEEK PORTAL CARDS ── */}
-          <div className="mt-32 grid grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
+          <div className="mt-24 grid grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
             {[
-              { title: "Administrator",   desc: "Command Center",   icon: "🏛", href: "/login" },
-              { title: "Educator",        desc: "Classroom Hub",    icon: "🖋", href: "/login" },
+              { title: "Admin",           desc: "Command Center",   icon: "🏛", href: "/login" },
+              { title: "Teacher",         desc: "Classroom Hub",    icon: "🖋", href: "/login" },
               { title: "Student",         desc: "Learning Portal",  icon: "📚", href: "/login" },
               { title: "Parent",          desc: "Progress Tracker", icon: "🤝", href: "/login" },
             ].map((portal, idx) => (
@@ -200,14 +200,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
             {[
-              { value: "500+", label: "Elite Scholars" },
-              { value: "98%",  label: "Board Pass Rate" },
-              { value: "100%", label: "Digital Integration" },
-              { value: "24/7", label: "Global Access" },
+              { value: "500+", label: "Happy Students" },
+              { value: "98%",  label: "Exam Pass Rate" },
+              { value: "100%", label: "Digital Learning" },
+              { value: "24/7", label: "Online Access" },
             ].map((stat, i) => (
               <div key={i} className="text-center px-4">
                 <p className="text-3xl md:text-4xl font-playfair text-white mb-2">{stat.value}</p>
-                <p className="text-[9px] text-gold uppercase tracking-[0.2em] font-semibold">{stat.label}</p>
+                <p className="text-[10px] text-gold uppercase tracking-widest font-semibold">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
               <div className="relative w-full h-full rounded-md overflow-hidden">
                 <Image
                   src="/images/school-1.jpg"
-                  alt="Starlight Architecture"
+                  alt="Starlight School Building"
                   fill
                   className="object-cover opacity-60 mix-blend-luminosity hover:mix-blend-normal hover:opacity-100 transition-all duration-1000"
                 />
@@ -230,16 +230,16 @@ export default function HomePage() {
             </div>
             
             <div className="order-1 lg:order-2">
-              <h4 className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-4">
+              <h4 className="text-gold text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-4">
                 <span className="w-8 h-[1px] bg-gold"></span>
-                Our Philosophy
+                About Us
               </h4>
               <h2 className="text-4xl lg:text-5xl font-playfair text-white leading-tight mb-8">
-                A legacy of intellect, <br />
+                A tradition of learning, <br />
                 <span className="text-slate-400 italic">grounded in faith.</span>
               </h2>
               <p className="text-slate-400 leading-relaxed font-light mb-6 text-lg">
-                Located in the heart of Oyo State, Starlight Model School redefines modern education for the Muslim child. We fuse strict adherence to Islamic morals with a world-class, technology-driven curriculum.
+                Located in Oyo State, Starlight Model School offers excellent education for the Muslim child. We combine good Islamic morals with a modern, tech-driven curriculum.
               </p>
               <blockquote className="border-l-2 border-gold pl-6 py-2 my-10">
                 <p className="text-white font-playfair text-xl italic mb-2">
@@ -299,28 +299,28 @@ export default function HomePage() {
       {/* ===== TESTIMONIALS ===== */}
       <section className="py-32 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h4 className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-4">Endorsements</h4>
-          <h2 className="text-4xl md:text-5xl font-playfair text-white mb-16">Voices of Prestige</h2>
+          <h4 className="text-gold text-xs font-bold uppercase tracking-widest mb-4">Testimonials</h4>
+          <h2 className="text-4xl md:text-5xl font-playfair text-white mb-16">What Parents Say</h2>
           
           <div className="grid md:grid-cols-3 gap-8 text-left">
             {[
               {
                 name: "Alh. Yusuf Adegoke",
                 role: "Parent",
-                tag: "Real-Time Tracking",
-                msg: "The level of transparency is unprecedented. Receiving live updates on my phone ensures I am always connected to my child's academic journey.",
+                tag: "Fast Updates",
+                msg: "The school is very transparent. I get fast updates on my phone about my child's performance and attendance.",
               },
               {
                 name: "Aisha A. Lawal",
                 role: "Senior Prefect",
-                tag: "Digital Empowerment",
-                msg: "Having our results, schedules, and resources available 24/7 on a secure portal places us on par with the most elite institutions globally.",
+                tag: "Modern Tools",
+                msg: "We can check our results, schedules, and notes anytime online. It makes learning so much easier for us.",
               },
               {
                 name: "Mrs. K. Salawu",
                 role: "Educator",
-                tag: "Operational Efficiency",
-                msg: "The automation of grading and attendance allows us to focus entirely on what matters most: delivering high-quality, impactful teaching.",
+                tag: "Easy Grading",
+                msg: "The automatic grading and attendance system saves us a lot of time. Now I can focus more on teaching my students.",
               },
             ].map((t) => (
               <div key={t.name} className="glass-panel p-8 rounded-lg flex flex-col justify-between min-h-[300px]">
@@ -343,17 +343,17 @@ export default function HomePage() {
       {/* ===== ADMISSIONS CTA ===== */}
       <section className="py-32 bg-gold relative overflow-hidden" id="admissions">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-playfair text-[#020617] font-black mb-8 leading-tight">
-            Secure their future.<br /> Apply for 2026.
+          <h2 className="text-4xl md:text-5xl font-playfair text-[#020617] font-black mb-8 leading-tight">
+            Join Starlight Model School.<br /> Apply for 2026.
           </h2>
           <p className="text-[#020617]/80 text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto">
-            Join Oyo State's most prestigious Islamic educational institution. The admissions process is entirely digital and strictly merit-based.
+            Get quality Islamic education for your child. Our admission process is simple, fast, and entirely online.
           </p>
           <Link
             href="/admissions"
-            className="inline-flex items-center justify-center px-10 py-5 bg-[#020617] text-white hover:bg-slate-800 font-bold text-sm tracking-widest uppercase transition-all rounded-sm shadow-2xl"
+            className="inline-flex items-center justify-center px-8 py-4 bg-[#020617] text-white hover:bg-slate-800 font-bold text-sm tracking-wider uppercase transition-all rounded-sm shadow-2xl"
           >
-            Commence Application
+            Apply Now
           </Link>
         </div>
       </section>
@@ -371,7 +371,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-slate-400 text-xs leading-loose max-w-md">
-                An institution of uncompromising standards. Delivering premium Islamic education and technological excellence to the elite families of Oyo town.
+                A great school providing quality Islamic education and modern learning to families in Oyo.
               </p>
             </div>
             <div>
