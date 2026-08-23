@@ -64,7 +64,7 @@ export default function LoginPage() {
         <div className="text-center mb-8 flex flex-col items-center">
           <StarlightLogo className="w-16 h-16 mb-4 drop-shadow-2xl" />
           <h1 className="text-white font-playfair font-black text-3xl tracking-wide">STARLIGHT</h1>
-          <p className="text-gold text-[10px] tracking-[0.3em] uppercase mt-1">Model School</p>
+          <p className="text-[#FFA500] text-[10px] tracking-[0.3em] uppercase mt-1">Model School</p>
         </div>
 
         {/* Login Card */}
@@ -88,7 +88,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
+                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all"
                 placeholder="your@email.com"
               />
             </div>
@@ -97,14 +97,14 @@ export default function LoginPage() {
                 <label className="block text-xs font-bold text-slate-300 uppercase tracking-widest">
                   Password
                 </label>
-                <a href="#" className="text-xs text-gold hover:text-[#FFD700] hover:underline transition-all">Forgot password?</a>
+                <a href="#" className="text-xs text-[#FFA500] hover:text-[#FFD700] hover:underline transition-all">Forgot password?</a>
               </div>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
+                className="w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFA500] focus:border-transparent transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-gold hover:bg-[#b5952f] text-[#020617] font-bold text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg mt-4 disabled:opacity-50"
+              className="w-full py-4 bg-[#FFA500] hover:bg-[#e69400] text-white font-black text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg mt-4 disabled:opacity-50"
             >
               {loading ? "Verifying..." : "Login to Portal"}
             </button>
@@ -130,7 +130,7 @@ export default function LoginPage() {
                 <Link
                   key={p.label}
                   href={p.href}
-                  className="py-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 text-slate-300 hover:text-gold text-xs font-bold tracking-wider uppercase text-center transition-all"
+                  className="py-3 rounded-xl bg-white/5 hover:bg-[#FFA500]/10 border border-white/10 hover:border-[#FFA500]/30 text-slate-300 hover:text-[#FFA500] text-xs font-bold tracking-wider uppercase text-center transition-all"
                 >
                   {p.label}
                 </Link>
@@ -141,7 +141,7 @@ export default function LoginPage() {
 
         <p className="text-center text-slate-400 text-xs mt-8 tracking-widest">
           © 2026 Starlight Model School •{" "}
-          <Link href="/" className="text-gold hover:text-white hover:underline transition-colors font-bold">
+          <Link href="/" className="text-[#FFA500] hover:text-white hover:underline transition-colors font-bold">
             Back to Website
           </Link>
         </p>

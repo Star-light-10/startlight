@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import prisma from "@/lib/db"
+import Link from "next/link"
 
 export default async function TeacherDashboard() {
   const session = await auth()
@@ -35,21 +36,21 @@ export default async function TeacherDashboard() {
         <div className="md:col-span-2 space-y-6">
           {/* Quick Actions */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <Link href="/teacher/attendance" className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer block">
               <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-2xl mb-4">
                 📝
               </div>
               <h3 className="font-bold text-gray-900">Mark Attendance</h3>
               <p className="text-sm text-gray-500 mt-1">Record today's register</p>
-            </div>
+            </Link>
             
-            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <Link href="/teacher/results" className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer block">
               <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4">
                 📈
               </div>
               <h3 className="font-bold text-gray-900">Enter Scores</h3>
               <p className="text-sm text-gray-500 mt-1">Update terminal results</p>
-            </div>
+            </Link>
           </div>
 
           {/* Today's Schedule (Placeholder) */}
