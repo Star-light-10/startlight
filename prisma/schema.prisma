@@ -58,23 +58,26 @@ model Tenant {
 }
 
 model User {
-  id               String          @id @default(cuid())
-  tenantId         String?
-  tenant           Tenant?         @relation(fields: [tenantId], references: [id])
-  name             String?
-  email            String?         @unique
-  emailVerified    DateTime?
-  image            String?
-  password         String?
-  role             Role            @default(STUDENT)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  accounts         Account[]
-  sessions         Session[]
-  studentProfile   StudentProfile?
-  teacherProfile   TeacherProfile?
-  announcements    Announcement[]
-  attendanceMarked Attendance[]
+  id                    String            @id @default(cuid())
+  tenantId              String?
+  tenant                Tenant?           @relation(fields: [tenantId], references: [id])
+  name                  String?
+  email                 String?           @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  Role              @default(STUDENT)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  accounts              Account[]
+  sessions              Session[]
+  studentProfile        StudentProfile?
+  teacherProfile        TeacherProfile?
+  announcements         Announcement[]
+  attendanceMarked      Attendance[]
+  sentMessages          Message[]         @relation("SentMessages")
+  receivedMessages      Message[]         @relation("ReceivedMessages")
+  staffAttendanceMarked StaffAttendance[] @relation("MarkedStaffAttendance")
 }
 
 model Account {
@@ -125,6 +128,7 @@ model Class {
   feeStructures FeeStructure[]
   attendances   Attendance[]
   timetables    Timetable[]
+  assignments   Assignment[]
 }
 
 model Subject {
@@ -138,6 +142,7 @@ model Subject {
   enrollments SubjectEnrollment[]
   grades      Grade[]
   timeSlots   TimeSlot[]
+  assignments Assignment[]
 }
 
 model AcademicTerm {
@@ -155,6 +160,7 @@ model AcademicTerm {
   invoices      Invoice[]
   reportCards   ReportCard[]
   timetables    Timetable[]
+  assignments   Assignment[]
 }
 
 model AdmissionApplication {
@@ -195,31 +201,34 @@ model StudentProfile {
   classId         String
   class           Class  @relation(fields: [classId], references: [id])
 
-  isActive        Boolean   @default(true)
-  leftAt          DateTime?
+  isActive Boolean   @default(true)
+  leftAt   DateTime?
 
   enrollments    SubjectEnrollment[]
   invoices       Invoice[]
   manualPayments ManualPayment[]
   attendances    Attendance[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  reportCards ReportCard[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  reportCards           ReportCard[]
+  assignmentSubmissions AssignmentSubmission[]
 }
 
 model TeacherProfile {
-  id         String     @id @default(cuid())
-  userId     String     @unique
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  employeeId String     @unique
-  
-  isActive   Boolean    @default(true)
-  leftAt     DateTime?
-  
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  timeSlots  TimeSlot[]
+  id         String @id @default(cuid())
+  userId     String @unique
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeId String @unique
+
+  isActive Boolean   @default(true)
+  leftAt   DateTime?
+
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  timeSlots        TimeSlot[]
+  assignments      Assignment[]
+  staffAttendances StaffAttendance[]
 }
 
 model SubjectEnrollment {
@@ -405,6 +414,94 @@ model TimeSlot {
   subject   Subject?        @relation(fields: [subjectId], references: [id])
   teacherId String?
   teacher   TeacherProfile? @relation(fields: [teacherId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ------------------------------------------------------
+// Phase 6: Core Daily Features
+// ------------------------------------------------------
+
+enum AssignmentStatus {
+  PENDING
+  SUBMITTED
+  GRADED
+}
+
+enum StaffAttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  ON_LEAVE
+}
+
+model Assignment {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  dueDate     DateTime
+
+  subjectId String
+  subject   Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId String
+  teacher   TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  termId    String
+  term      AcademicTerm   @relation(fields: [termId], references: [id], onDelete: Cascade)
+
+  submissions AssignmentSubmission[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model AssignmentSubmission {
+  id           String         @id @default(cuid())
+  assignmentId String
+  assignment   Assignment     @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  contentUrl  String?
+  grade       Float?
+  feedback    String?
+  status      AssignmentStatus @default(PENDING)
+  submittedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([assignmentId, studentId])
+}
+
+model StaffAttendance {
+  id        String                @id @default(cuid())
+  date      DateTime
+  teacherId String
+  teacher   TeacherProfile        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  status    StaffAttendanceStatus @default(PRESENT)
+  notes     String?
+
+  markedById String
+  markedBy   User   @relation("MarkedStaffAttendance", fields: [markedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, teacherId])
+}
+
+model Message {
+  id         String    @id @default(cuid())
+  senderId   String
+  sender     User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User      @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  subject    String?
+  body       String
+  isRead     Boolean   @default(false)
+  readAt     DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

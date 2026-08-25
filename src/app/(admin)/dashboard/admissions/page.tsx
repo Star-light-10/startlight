@@ -129,11 +129,22 @@ export default function AdmissionsDashboard() {
       const method = isEditMode ? "PUT" : "POST";
       const url = isEditMode ? `/api/admissions/${formData.id}` : "/api/admissions";
       
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      let reqOptions: RequestInit = { method };
+
+      if (method === "PUT") {
+        reqOptions.headers = { "Content-Type": "application/json" };
+        reqOptions.body = JSON.stringify(formData);
+      } else {
+        const payload = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            payload.append(key, String(value));
+          }
+        });
+        reqOptions.body = payload;
+      }
+      
+      const res = await fetch(url, reqOptions);
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save");
