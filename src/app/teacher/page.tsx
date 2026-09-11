@@ -5,7 +5,6 @@ import Link from "next/link"
 export default async function TeacherDashboard() {
   const session = await auth()
   
-  // Fetch unread notices
   let announcements: any[] = []
   try {
     announcements = await prisma.announcement.findMany({
@@ -20,6 +19,47 @@ export default async function TeacherDashboard() {
     })
   } catch (error) {
     console.error("Failed to fetch announcements (table might be missing):", error)
+  }
+
+  // Fetch today's classes
+  let todayClasses: any[] = []
+  try {
+    if (session?.user?.id) {
+      const teacherProfile = await prisma.teacherProfile.findUnique({
+        where: { userId: session.user.id }
+      })
+
+      if (teacherProfile) {
+        const dayOfWeek = new Date().getDay() // 0 = Sunday, 1 = Monday, etc.
+        
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+          todayClasses = await prisma.timeSlot.findMany({
+            where: {
+              teacherId: teacherProfile.id,
+              dayOfWeek: dayOfWeek,
+              timetable: {
+                term: {
+                  isActive: true
+                }
+              }
+            },
+            include: {
+              subject: true,
+              timetable: {
+                include: {
+                  class: true
+                }
+              }
+            },
+            orderBy: {
+              startTime: 'asc'
+            }
+          })
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Failed to fetch timetable:", error)
   }
 
   return (
@@ -53,14 +93,32 @@ export default async function TeacherDashboard() {
             </Link>
           </div>
 
-          {/* Today's Schedule (Placeholder) */}
+          {/* Today's Schedule */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span className="text-[#FFA500]">📅</span> Today's Classes
             </h2>
-            <div className="text-center py-8 text-sm text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
-              Timetable module not yet configured.
-            </div>
+            {todayClasses.length === 0 ? (
+              <div className="text-center py-8 text-sm text-gray-400 border-2 border-dashed border-gray-100 rounded-xl">
+                No classes scheduled for today.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {todayClasses.map((slot) => (
+                  <div key={slot.id} className="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors">
+                    <div className="flex-shrink-0 w-20 text-center">
+                      <div className="text-sm font-bold text-gray-900">{slot.startTime}</div>
+                      <div className="text-xs text-gray-500">{slot.endTime}</div>
+                    </div>
+                    <div className="w-1 h-12 bg-blue-100 rounded-full"></div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-900">{slot.subject?.name || 'Unknown Subject'}</h3>
+                      <p className="text-sm text-gray-500">{slot.timetable.class.name} {slot.timetable.class.section || ''}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
