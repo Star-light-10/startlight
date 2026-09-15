@@ -99,7 +99,6 @@ export default function AdmissionsDashboard() {
         setSelected({ ...selected, ...data })
       }
     } catch (e: any) {
-      alert(e.message)
       setErrorMsg(e.message)
     } finally {
       setProcessingId(null)
@@ -396,7 +395,7 @@ export default function AdmissionsDashboard() {
                     </button>
                   </>
                 )}
-                <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                <button onClick={() => { setSelected(null); setErrorMsg(null) }} className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>

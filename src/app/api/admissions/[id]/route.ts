@@ -76,9 +76,16 @@ export async function PATCH(
           })
         }
 
-        // 3. Generate Admission Number (e.g. SMS/26/0001)
+        // 3. Generate a unique Admission Number (e.g. SMS/26/0001)
+        // Loop until we find a number not already taken, to avoid races / gaps from deleted records
         const count = await tx.studentProfile.count()
-        admissionNumber = `SMS/26/${String(count + 1).padStart(4, '0')}`
+        let candidate = count + 1
+        while (true) {
+          admissionNumber = `SMS/26/${String(candidate).padStart(4, '0')}`
+          const existing = await tx.studentProfile.findUnique({ where: { admissionNumber } })
+          if (!existing) break
+          candidate++
+        }
 
         // 4. Create User Account
         // Always generate a unique school email for login — parent email is for notification only
